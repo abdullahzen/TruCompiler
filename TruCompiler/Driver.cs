@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using TruCompiler.Lexical_Analyzer;
 
 namespace TruCompiler
 {
@@ -17,9 +19,17 @@ namespace TruCompiler
             InputFiles = inputFiles;
             OutputPath = outputPath;
         }
-        private void Compile()
+        public void Compile()
         {
+            foreach (string file in InputFiles)
+            {
+                IList<LexicalAnalyzer.Token> tokens = new List<LexicalAnalyzer.Token>();
+                if (File.Exists(file))
+                {
+                    tokens = LexicalAnalyzer.Tokenize(File.ReadAllLines(file));
 
+                }
+            }
         }
     }
 }
