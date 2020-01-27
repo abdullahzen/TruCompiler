@@ -23,11 +23,11 @@ namespace TruCompiler
         {
             foreach (string file in InputFiles)
             {
-                IList<LexicalAnalyzer.Token> tokens = new List<LexicalAnalyzer.Token>();
+                IDictionary<string, List<LexicalAnalyzer.Token?>> tokens = new Dictionary<string, List<LexicalAnalyzer.Token?>>();
                 if (File.Exists(file))
                 {
-                    tokens = LexicalAnalyzer.Tokenize(File.ReadAllLines(file));
-
+                    tokens.Add(file, LexicalAnalyzer.Tokenize(File.ReadAllLines(file)));
+                    
                 }
             }
         }
