@@ -2,6 +2,6 @@
 {
     public interface IValidator<T>
     {
-        public T Validate(string value, int i, string type);
+        public T Validate(string value, string type);
     }
 }

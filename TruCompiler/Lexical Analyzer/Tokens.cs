@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TruCompiler.Lexical_Analyzer
 {
@@ -270,7 +271,12 @@ namespace TruCompiler.Lexical_Analyzer
                         Location = location,
                         IsValid = true
                     };
-                
+                default:
+                    if (Regex.IsMatch(value, "/([0-9]*(.)[0-9]*(e)*(-)*)*/"))
+                    {
+                        
+                    }
+                    return null;
             }
             return null;
         }
