@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TruCompiler.Lexical_Analyzer;
-using static TruCompiler.Lexical_Analyzer.LexicalAnalyzer;
+using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompilerTests.Lexical_Analyzer
 {
@@ -114,7 +114,49 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.IsTrue(tokens[2].GetValueOrDefault().IsValid);
             Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
             Assert.AreEqual("//", tokens[1].GetValueOrDefault().Value);
-            Assert.AreEqual("if" + line + "comment\t = \t", tokens[2].GetValueOrDefault().Value);
+            Assert.AreEqual(line + "comment\t = \t", tokens[2].GetValueOrDefault().Value);
+        }
+
+        // Test data: if // comment\t = \t 
+        // if is recognized before the comment start
+        [TestMethod]
+        public void TestInlineCommentSymbolBetweenCodeAndCommentWithASapceInCommentUsingTokenizeFunction()
+        {
+            tokens = LexicalAnalyzer.Tokenize("if " + line + " comment\t = \t");
+            Assert.AreEqual(3, tokens.Count);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].GetValueOrDefault().Lexeme);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[2].GetValueOrDefault().Location);
+            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[2].GetValueOrDefault().IsValid);
+            Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual("//", tokens[1].GetValueOrDefault().Value);
+            Assert.AreEqual(line + " comment\t = \t", tokens[2].GetValueOrDefault().Value);
+        }
+
+        // Test data: if // comm//ent\t = \t 
+        // if is recognized before the comment start
+        [TestMethod]
+        public void TestInlineCommentSymbolBetweenCodeAndCommentWithASapceInCommentWithMultipleCommentSymbolsUsingTokenizeFunction()
+        {
+            tokens = LexicalAnalyzer.Tokenize("if " + line + " comm//ent\t = \t");
+            Assert.AreEqual(3, tokens.Count);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].GetValueOrDefault().Lexeme);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[2].GetValueOrDefault().Location);
+            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[2].GetValueOrDefault().IsValid);
+            Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual("//", tokens[1].GetValueOrDefault().Value);
+            Assert.AreEqual(line + " comm//ent\t = \t", tokens[2].GetValueOrDefault().Value);
         }
 
     }

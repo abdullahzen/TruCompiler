@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using TruCompiler.Lexical_Analyzer;
-using static TruCompiler.Lexical_Analyzer.LexicalAnalyzer;
+using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompilerTests.Lexical_Analyzer
 {

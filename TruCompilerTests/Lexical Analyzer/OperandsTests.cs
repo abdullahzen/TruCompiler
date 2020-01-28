@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TruCompiler.Lexical_Analyzer;
-using static TruCompiler.Lexical_Analyzer.LexicalAnalyzer;
+using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompilerTests.Lexical_Analyzer
 {

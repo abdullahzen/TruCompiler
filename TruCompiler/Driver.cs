@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using TruCompiler.Lexical_Analyzer;
+using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler
 {
@@ -23,7 +24,7 @@ namespace TruCompiler
         {
             foreach (string file in InputFiles)
             {
-                IDictionary<string, IList<LexicalAnalyzer.Token?>> tokens = new Dictionary<string, IList<LexicalAnalyzer.Token?>>();
+                IDictionary<string, IList<Token?>> tokens = new Dictionary<string, IList<Token?>>();
                 if (File.Exists(file))
                 {
                     tokens.Add(file, LexicalAnalyzer.Tokenize(File.ReadAllLines(file)));
