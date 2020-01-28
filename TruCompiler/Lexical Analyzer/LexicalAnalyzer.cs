@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TruCompiler.Lexical_Analyzer
@@ -37,29 +38,69 @@ namespace TruCompiler.Lexical_Analyzer
             floatnum, //2.2
             blockcmt, // block of comment
         }
+        public static IList<Token?> Tokenize(string line)
+        {
+            string[] arr = { line };
+            return LexicalAnalyzer.Tokenize(arr);
+        }
         public static IList<Token?> Tokenize(string[] lines)
         {
             IList<Token?> tokens = new List<Token?>();
-            if (lines != null && lines.Length == 0)
+            if (lines != null && lines.Length != 0)
             {
                 //bool comment = false;
                 //string commentcode = "";
-                for (int i = 0; i < lines.Length; i++)
+                for (int k = 0; k < lines.Length; k++)
                 {
-                    if (!String.IsNullOrEmpty(lines[i]))
+                    int i = k + 1;
+                    if (!String.IsNullOrEmpty(lines[k]))
                     {
-                        string line = CheckAndRemoveComments(lines[i], ref tokens, i);
-                        if (String.IsNullOrEmpty(line))
+                        /*string line = CheckInlineComments(lines[k], ref tokens, i);
+                        line = CheckBlockComments(line, ref tokens, i);*/
+                        if (String.IsNullOrEmpty(lines[k]))
                         {
                             continue;
                         }
-                        string[] values = line.Split(' ');
+                        string[] values = lines[k].Split();
+                        bool inlinecmt = false;
+                        string commentContent = "";
+                        int charCount = 0;
                         for (int j = 0; j < values.Length; j++)
                         {
                             if (!String.IsNullOrEmpty(values[j]))
                             {
-                                tokens.Add(CreateToken(values[j], i));
+                                CheckInlineComments(values[j], ref tokens, i, ref inlinecmt);
+
+                                if (!inlinecmt)
+                                {
+                                    tokens.Add(CreateToken(values[j], i));
+                                } else
+                                {
+                                    if (lines[k][charCount] == 32 || lines[k][charCount] == '\t')
+                                    {
+                                        commentContent += lines[k][charCount].ToString() + values[j];
+                                        charCount++;
+                                    }
+                                    else
+                                    {
+                                        commentContent += values[j];
+                                    }
+                                    charCount += values[j].Length;
+                                }
                             }
+                            else
+                            {
+                                if (inlinecmt)
+                                {
+                                    commentContent += lines[k][charCount].ToString();
+                                    charCount++;
+                                }
+                            }
+                        }
+
+                        if (inlinecmt)
+                        {
+                            AddInlineComment(commentContent, ref tokens, i);
                         }
                     }
                     else
@@ -305,22 +346,76 @@ namespace TruCompiler.Lexical_Analyzer
             }
             return null;
         }
-
-        public static string CheckAndRemoveComments(string line, ref IList<Token?> tokens, int i)
+        public static void CheckInlineComments(string value, ref IList<Token?> tokens, int i, ref bool inlinecmt)
         {
-            //inline comment
+            string[] splittedComment;
+            if (value.StartsWith("//") && !inlinecmt)
+            {
+                splittedComment = value.Split("//");
+                tokens.Add(CreateToken("//", i));
+                inlinecmt = true;
+            }
+            else if (value.Contains("//") && inlinecmt)
+            {
+                splittedComment = value.Split("//");
+                tokens.Add(CreateToken(splittedComment[0], i));
+                tokens.Add(CreateToken("//", i));
+                if (splittedComment.Length > 1)
+                {
+                    tokens.Add(CreateToken(splittedComment[1], i));
+                }
+                inlinecmt = true;
+            }
+            /*//inline comment
             if (line.StartsWith("//"))
             {
                 tokens.Add(CreateToken(line.Substring(0, 2), i));
-                tokens.Add(new Token()
+                if (line.TrimStart('/').Length > 0)
                 {
-                    Lexeme = Lexeme.inlinecmt,
-                    Value = line,
-                    Location = i,
-                    IsValid = true
-                });
+                    tokens.Add(new Token()
+                    {
+                        Lexeme = Lexeme.inlinecmt,
+                        Value = line,
+                        Location = i,
+                        IsValid = true
+                    });
+                }
                 return string.Empty;
+            } else if (line.Contains("//"))
+            {
+                tokens.Add(CreateToken(line.Substring(line.IndexOf("//"), 2), i));
+                List<string> splitted = line.Split("//").ToList<string>();
+                line = splitted[0];
+                splitted.RemoveAt(0);
+                string comment = String.Join("//", splitted);
+                if (comment.Trim('/').Length > 0)
+                {
+                    tokens.Add(new Token()
+                    {
+                        Lexeme = Lexeme.inlinecmt,
+                        Value = comment,
+                        Location = i,
+                        IsValid = true
+                    });
+                }
+                return line;
             }
+            return line;*/
+        }
+
+        public static void AddInlineComment(string comment, ref IList<Token?> tokens, int i)
+        {
+            tokens.Add(new Token()
+            {
+                Lexeme = Lexeme.inlinecmt,
+                Value = comment,
+                Location = i,
+                IsValid = true
+            });
+        }
+        public static string CheckBlockComments(string line, ref IList<Token?> tokens, int i)
+        {
+            
             // block comment
             if (line.StartsWith("/*") && line.EndsWith("*/"))
             {
@@ -349,7 +444,7 @@ namespace TruCompiler.Lexical_Analyzer
                 });
                 tokens.Add(CreateToken(line.Substring(line.IndexOf("*/"), 2), i));
                 line = line.Substring(line.IndexOf("*/") + 1, (line.Length - line.IndexOf("*/") + 1));
-                return CheckAndRemoveComments(line, ref tokens, i);
+                return CheckBlockComments(line, ref tokens, i);
             }
             // code before block cmt
             else if (line.Contains("/*") && line.EndsWith("*/"))
@@ -365,7 +460,7 @@ namespace TruCompiler.Lexical_Analyzer
                 });
                 tokens.Add(CreateToken(line.Substring(line.Length - 2, 2), i));
                 line = line.Substring(line.LastIndexOf("/*") - 1, (line.Length - line.LastIndexOf("/*") + 1));
-                return CheckAndRemoveComments(line, ref tokens, i);
+                return CheckBlockComments(line, ref tokens, i);
             }
             else if (line.Contains("/*") && line.Contains("*/"))
             {
