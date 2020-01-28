@@ -74,6 +74,8 @@ namespace TruCompiler.Lexical_Analyzer
                                 if (!inlinecmt)
                                 {
                                     tokens.Add(CreateToken(values[j], i));
+                                    charCount += values[j].Length;
+                                    charCount++;
                                 } else
                                 {
                                     if (lines[k][charCount] == 32 || lines[k][charCount] == '\t')
@@ -98,7 +100,7 @@ namespace TruCompiler.Lexical_Analyzer
                             }
                         }
 
-                        if (inlinecmt)
+                        if (inlinecmt && commentContent.Length > 2)
                         {
                             AddInlineComment(commentContent, ref tokens, i);
                         }
@@ -355,15 +357,11 @@ namespace TruCompiler.Lexical_Analyzer
                 tokens.Add(CreateToken("//", i));
                 inlinecmt = true;
             }
-            else if (value.Contains("//") && inlinecmt)
+            else if (value.Contains("//") && !inlinecmt)
             {
                 splittedComment = value.Split("//");
                 tokens.Add(CreateToken(splittedComment[0], i));
                 tokens.Add(CreateToken("//", i));
-                if (splittedComment.Length > 1)
-                {
-                    tokens.Add(CreateToken(splittedComment[1], i));
-                }
                 inlinecmt = true;
             }
             /*//inline comment
