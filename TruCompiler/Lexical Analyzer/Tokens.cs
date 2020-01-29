@@ -272,13 +272,36 @@ namespace TruCompiler.Lexical_Analyzer
                         IsValid = true
                     };
                 default:
-                    if (Regex.IsMatch(value, "/([0-9]*(.)[0-9]*(e)*(-)*)*/"))
+                    DynamicLexValidator dynamicLexValidator = new DynamicLexValidator();
+                    if (Regex.IsMatch(value, "^([0-9]*[^.])$"))
                     {
-                        
+                        return new Token()
+                        {
+                            Lexeme = Lexeme.intnum,
+                            Value = value,
+                            Location = location,
+                            IsValid = dynamicLexValidator.Validate(value, "Integer")
+                        };
+                    } else if (Regex.IsMatch(value, "^([0-9]*(\\.)[0-9]*(e)*[0-9]*[-|+]*[0-9]*)*$"))
+                    {
+                        return new Token()
+                        {
+                            Lexeme = Lexeme.floatnum,
+                            Value = value,
+                            Location = location,
+                            IsValid = dynamicLexValidator.Validate(value, "Float")
+                        };
+                    } else
+                    {
+                        return new Token()
+                        {
+                            Lexeme = Lexeme.id,
+                            Value = value,
+                            Location = location,
+                            IsValid = dynamicLexValidator.Validate(value, "Identifier")
+                        };
                     }
-                    return null;
             }
-            return null;
         }
 
         public struct Token
@@ -287,6 +310,35 @@ namespace TruCompiler.Lexical_Analyzer
             public string Value { get; set; }
             public int Location { get; set; }
             public bool IsValid { get; set; }
+        }
+
+        public static string ToString(IEnumerable<Token?> tokens)
+        {
+            string result = "";
+            int lastLineNum = 1;    
+            foreach (Token token in tokens)
+            {
+                if (lastLineNum != token.Location)
+                {
+                    result += "\n";
+                } else
+                {
+                    result += " ";
+                }
+                if (token.Lexeme == Lexeme.keyword && token.IsValid)
+                {
+                    result += String.Format("[{0}, {1}, {2}]", token.Value, token.Value, token.Location);
+                } else if (token.IsValid)
+                {
+                    result += String.Format("[{0}, {1}, {2}]", token.Lexeme, token.Value, token.Location);
+                } else
+                {
+                    result += String.Format("[invalid{0}, {1}, {2}]", token.Lexeme, token.Value, token.Location);
+                }
+                lastLineNum = token.Location;
+            }
+            result = result.TrimStart();
+            return result;
         }
     }
 }
