@@ -4,9 +4,9 @@
   <a href="https://github.com/abdullahzen/TruCompiler/actions"><img alt="GitHub Actions status" src="https://github.com/abdullahzen/TruCompiler/workflows/Build/badge.svg"></a>
 </p>
 
-#SOEN 442 Compiler Design: Assignments and Project 
+# SOEN 442 Compiler Design: Assignments and Project 
 
-##Assignment 1 Run Instructions:
+## Assignment 1 Run Instructions:
 
 1. Make sure you have `dotnet` core installed on your machine. If it's not installed, you may do so from [here](https://dotnet.microsoft.com/download).
 1. It's best if the program is run on a windows machine.
