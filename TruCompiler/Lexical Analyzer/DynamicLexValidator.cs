@@ -25,7 +25,7 @@ namespace TruCompiler.Lexical_Analyzer
 
         private bool ValidateInteger(string value)
         {
-            if (Regex.IsMatch(value, "/^[1-9]+[0-9]*/"))
+            if (Regex.IsMatch(value, "^[1-9]+[0-9]*$"))
             {
                 return true;
             } else if (value.Length == 1 && value.StartsWith("0"))
@@ -36,7 +36,11 @@ namespace TruCompiler.Lexical_Analyzer
         }
 
         private bool ValidateIdentifier(string value)
-        {
+        { 
+            if (Regex.IsMatch(value, "^([a-z]+|[A-Z]+)([a-z]*[A-Z]*[0-9]*(_)*)*$"))
+            {
+                return true;
+            }
             return false;
         }
 
@@ -44,13 +48,13 @@ namespace TruCompiler.Lexical_Analyzer
         {
             if (value.Length > 0 && ValidateInteger(""+value[0]))
             {
-                if (Regex.IsMatch(value, "/[1-9]+[0-9]*(.)0/"))
+                if (Regex.IsMatch(value, "^[1-9]+[0-9]*(\\.)0$"))
                 {
                     return true;
-                } else if (Regex.IsMatch(value, "/[1-9]+[0-9]*(.)[0-9]*[1-9]+/"))
+                } else if (Regex.IsMatch(value, "^[1-9]+[0-9]*(\\.)[0-9]*[1-9]+$"))
                 {
                     return true;
-                } else if (Regex.IsMatch(value, "/[1-9]+[0-9]*(.)[0-9]*[1-9]+(e)[+--][1-9]+[0-9]*/"))
+                } else if (Regex.IsMatch(value, "^[1-9]+[0-9]*(\\.)[0-9]*[1-9]+(e)[+|-][1-9]+[0-9]*$"))
                 {
                     return true;
                 }
