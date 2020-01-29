@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using TruCompiler.Lexical_Analyzer;
 using static TruCompiler.Lexical_Analyzer.Tokens;
@@ -22,15 +23,44 @@ namespace TruCompiler
         }
         public void Compile()
         {
-            foreach (string file in InputFiles)
+            try
             {
-                IDictionary<string, IList<Token?>> tokens = new Dictionary<string, IList<Token?>>();
-                if (File.Exists(file))
+                foreach (string file in InputFiles)
                 {
-                    tokens.Add(file, LexicalAnalyzer.Tokenize(File.ReadAllLines(file)));
-                    
+                    IDictionary<string, IList<Token?>> tokens = new Dictionary<string, IList<Token?>>();
+                    if (File.Exists(file))
+                    {
+                        tokens.Add(file, LexicalAnalyzer.Tokenize(File.ReadAllLines(file)));
+                        string outlextokens = Tokens.ToString(tokens[file].Where<Token?>(t => t.GetValueOrDefault().IsValid));
+                        string outlexerrors = Tokens.ToString(tokens[file].Where<Token?>(t => t != null && !t.GetValueOrDefault().IsValid));
+
+                        if (String.IsNullOrEmpty(OutputPath))
+                        {
+                            OutputPath = file.Substring(0, file.LastIndexOf("\\"));
+                        }
+
+                        if (Directory.Exists(OutputPath))
+                        {
+                            string outlextokensFile = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outlextokens";
+                            string outlexerrorsFile = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outlexerrors";
+
+                            WriteToFile(outlextokensFile, outlextokens);
+                            WriteToFile(outlexerrorsFile, outlexerrors);
+                        }   
+                    }
                 }
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+        }
+        private void WriteToFile(string filePath, string input)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath, false))
+            {
+                writer.Write(input);
             }
         }
     }
 }
+
