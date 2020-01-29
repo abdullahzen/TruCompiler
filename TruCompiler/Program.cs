@@ -55,7 +55,7 @@ namespace TruCompiler
         private void Run()
         {
             //Call driver with parsed args
-            Driver driver = new Driver(parsedArgs["inputFiles"], parsedArgs["outputPath"][0]);
+            Driver driver = new Driver(parsedArgs["inputFiles"], "");
             driver.Compile();
         }
     }

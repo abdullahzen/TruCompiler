@@ -2,7 +2,7 @@
   "profiles": {
     "TruCompiler": {
       "commandName": "Project",
-      "commandLineArgs": "-input \"C:\\Users\\abdul\\Downloads\\Assignment1.COMP442-6421.paquet.2020.4\\Assignment1.COMP442-6421.paquet.2020.4\\assignment1.COMP442-6421.paquet.2020.4\\lexpositivegrading.src\" -output \"f\""
+      "commandLineArgs": "-input \"C:\\Users\\abdul\\Downloads\\Assignment1.COMP442-6421.paquet.2020.4\\Assignment1.COMP442-6421.paquet.2020.4\\assignment1.COMP442-6421.paquet.2020.4\\output\\lexpositivegrading.src\""
     }
   }
 }
