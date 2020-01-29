@@ -9,6 +9,7 @@ namespace TruCompiler
     class Program
     {
         private Dictionary<string, string[]> parsedArgs = new Dictionary<string, string[]>();
+        public Dictionary<string, string[]> ParsedArgs { get => parsedArgs; set => parsedArgs = value; }
         private Program(string[] args)
         {
             try
@@ -18,11 +19,11 @@ namespace TruCompiler
                     switch (args[i])
                     {
                         case "-input":
-                            parsedArgs.Add("inputFiles", args[i + 1].Split(','));
+                            ParsedArgs.Add("inputFiles", args[i + 1].Split(','));
                             i++;
                             break;
                         case "-output":
-                            parsedArgs.Add("outputPath", args[i + 1].Split(','));
+                            ParsedArgs.Add("outputPath", args[i + 1].Split(','));
                             i++;
                             break;
                     }
@@ -32,12 +33,14 @@ namespace TruCompiler
                 throw new ArgumentException();
             } finally
             {
-                if (parsedArgs.Count == 0)
+                if (ParsedArgs.Count == 0)
                 {
                     throw new ArgumentException();
                 }
             }
         }
+
+
         public static void Main(string[] args)
         {
             try
@@ -55,7 +58,7 @@ namespace TruCompiler
         private void Run()
         {
             //Call driver with parsed args
-            Driver driver = new Driver(parsedArgs["inputFiles"], "");
+            Driver driver = new Driver(ParsedArgs["inputFiles"], "");
             driver.Compile();
         }
     }

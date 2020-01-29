@@ -82,7 +82,9 @@ namespace TruCompiler.Lexical_Analyzer
                 tokens.Add(new Token()
                 {
                     Lexeme = Lexeme.blockcmt,
-                    Value = splitted[splitted.Length - 1].Substring(0, splitted[splitted.Length - 1].Length - 3),
+                    // ^1 notation is for the length - 1 index
+                    // range operator 0..^3 is from 0 to length - 3
+                    Value = splitted[^1][0..^3],
                     Location = i,
                     IsValid = true
                 });

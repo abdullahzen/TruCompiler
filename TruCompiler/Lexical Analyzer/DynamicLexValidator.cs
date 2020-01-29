@@ -10,17 +10,13 @@ namespace TruCompiler.Lexical_Analyzer
     {
         public bool Validate(string value, string type)
         {
-            switch (type)
+            return type switch
             {
-                case "Integer":
-                    return ValidateInteger(value);
-                case "Float":
-                    return ValidateFloat(value);
-                case "Identifier":
-                    return ValidateIdentifier(value);
-                default:
-                    throw new Exception("Argument type cannot be empty or null", new ArgumentNullException(type));
-            }
+                "Integer" => ValidateInteger(value),
+                "Float" => ValidateFloat(value),
+                "Identifier" => ValidateIdentifier(value),
+                _ => throw new Exception("Argument type cannot be empty or null", new ArgumentNullException(type)),
+            };
         }
 
         private bool ValidateInteger(string value)
