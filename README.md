@@ -20,3 +20,5 @@
 `dotnet test --configuration Release`
 
 >Please note that all the test cases include accepted, edge and extreme cases in the TruCompilerTests.
+
+Private github repo: https://github.com/abdullahzen/TruCompiler
