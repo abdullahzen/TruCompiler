@@ -21,10 +21,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         [TestMethod]
         public void TestKeywordEq()
         {
-            tokens = LexicalAnalyzer.Tokenize("==");
+            tokens = LexicalAnalyzer.Tokenize("=");
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.eq, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual("==", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual("=", tokens[0].GetValueOrDefault().Value);
             Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
@@ -41,11 +41,11 @@ namespace TruCompilerTests.Lexical_Analyzer
         }
 
         [TestMethod]
-        public void TestKeywordIf()
+        public void TestKeywordEqEq()
         {
             tokens = LexicalAnalyzer.Tokenize("==");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.eq, tokens[0].GetValueOrDefault().Lexeme);
+            Assert.AreEqual(Lexeme.eqeq, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("==", tokens[0].GetValueOrDefault().Value);
             Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
@@ -136,18 +136,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
-
-        [TestMethod]
-        public void TestKeywordEq2()
-        {
-            tokens = LexicalAnalyzer.Tokenize("=");
-            Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.eq, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual("=", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-        }
-
+      
         [TestMethod]
         public void TestKeywordOpenPar()
         {

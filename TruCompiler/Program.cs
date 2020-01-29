@@ -22,10 +22,10 @@ namespace TruCompiler
                             ParsedArgs.Add("inputFiles", args[i + 1].Split(','));
                             i++;
                             break;
-                        case "-output":
+                       /* case "-output":
                             ParsedArgs.Add("outputPath", args[i + 1].Split(','));
                             i++;
-                            break;
+                            break;*/
                     }
                 }
             } catch (Exception)
@@ -50,7 +50,7 @@ namespace TruCompiler
             {
                 Console.WriteLine("Error occurred when parsing the passed arguemnts.\n" +
                     "Please follow the following usage:\n" +
-                    "TruCompiler -input \"filesToCompileSeparatedByCommas\" -output \"OutputFolderPath\"\r\n");
+                    "TruCompiler -input \"filesToCompileSeparatedByCommas\"\r\n");
                 Console.WriteLine(e.StackTrace);
             }
         }

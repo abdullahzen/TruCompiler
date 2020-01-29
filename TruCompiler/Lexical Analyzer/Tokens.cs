@@ -9,7 +9,8 @@ namespace TruCompiler.Lexical_Analyzer
     {
         public enum Lexeme
         {
-            eq, //==
+            eq, //=
+            eqeq,//==
             plus, //+
             openpar, //(
             keyword, // if do read then end write else public return while private main class or inherits integer and local float not
@@ -74,7 +75,7 @@ namespace TruCompiler.Lexical_Analyzer
                 case "==":
                     return new Token()
                     {
-                        Lexeme = Lexeme.eq,
+                        Lexeme = Lexeme.eqeq,
                         Value = value,
                         Location = location,
                         IsValid = true

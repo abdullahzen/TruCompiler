@@ -31,6 +31,8 @@ namespace TruCompiler
                     if (File.Exists(file))
                     {
                         tokens.Add(file, LexicalAnalyzer.Tokenize(File.ReadAllLines(file)));
+
+                        //Output to file by default the file location is in the same location as the source file
                         string outlextokens = Tokens.ToString(tokens[file].Where<Token?>(t => t.GetValueOrDefault().IsValid));
                         string outlexerrors = Tokens.ToString(tokens[file].Where<Token?>(t => t != null && !t.GetValueOrDefault().IsValid));
 
