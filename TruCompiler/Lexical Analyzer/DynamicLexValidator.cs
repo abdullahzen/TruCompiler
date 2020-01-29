@@ -48,13 +48,13 @@ namespace TruCompiler.Lexical_Analyzer
         {
             if (value.Length > 0 && ValidateInteger(""+value[0]))
             {
-                if (Regex.IsMatch(value, "^[1-9]+[0-9]*(\\.)0$"))
+                if (Regex.IsMatch(value, "^([1-9]+[0-9]*|0)(\\.)0$"))
                 {
                     return true;
-                } else if (Regex.IsMatch(value, "^[1-9]+[0-9]*(\\.)[0-9]*[1-9]+$"))
+                } else if (Regex.IsMatch(value, "^([1-9]+[0-9]*|0)(\\.)[0-9]*[1-9]+$"))
                 {
                     return true;
-                } else if (Regex.IsMatch(value, "^[1-9]+[0-9]*(\\.)[0-9]*[1-9]+(e)[+|-][1-9]+[0-9]*$"))
+                } else if (Regex.IsMatch(value, "^([1-9]+[0-9]*|0)(\\.)[0-9]*[1-9]+(e)[+|-]([1-9]+[0-9]*|0)$"))
                 {
                     return true;
                 }
