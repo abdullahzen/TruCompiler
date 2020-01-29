@@ -48,9 +48,11 @@ namespace TruCompiler
                 new Program(args).Run();
             } catch (ArgumentException e)
             {
-                Console.WriteLine("Error occurred when parsing the passed arguemnts.\n" +
+                Console.WriteLine("Error occurred when parsing the passed arguemnts.\n\n" +
+                    "=====================================================================\n" +
                     "Please follow the following usage:\n" +
-                    "TruCompiler -input \"filesToCompileSeparatedByCommas\"\r\n");
+                    "dotnet run -input \"filesPathsToCompileSeparatedByCommas\"\r\n"
+                    + "=====================================================================\n");
                 Console.WriteLine(e.StackTrace);
             }
         }
