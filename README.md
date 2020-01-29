@@ -7,6 +7,7 @@
 SOEN 442 Compiler Design: Assignments and Project 
 
 Assignment 1 Run Instructions:
+
 1. Make sure you have `dotnet` core installed on your machine. If it's not installed, you may do so from [here](https://dotnet.microsoft.com/download).
 1. It's best if the program is run on a windows machine.
 1. CD to the root project directory and execute the following for the project to build:
@@ -18,3 +19,4 @@ Assignment 1 Run Instructions:
 6. In order to run the unit tests, you may use the following command at the root of the project where the .sln file exists:
 `dotnet test --configuration Release`
 
+>Please note that all the test cases include accepted, edge and extreme cases in the TruCompiler.Tests.
