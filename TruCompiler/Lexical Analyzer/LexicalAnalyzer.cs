@@ -72,7 +72,7 @@ namespace TruCompiler.Lexical_Analyzer
                     if (!String.IsNullOrEmpty(values[j]))
                     {
                         //regular tokens
-                        tokens.Add(CreateToken(values[j], i));   
+                        tokens.Add(CreateToken(values[j], i, ref tokens));   
                     }
                 }
             }

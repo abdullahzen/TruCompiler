@@ -41,7 +41,7 @@ namespace TruCompiler.Lexical_Analyzer
             blockcmt, // block of comment
         }
 
-        public static Token? CreateToken(string value, int location)
+        public static Token? CreateToken(string value, int location, ref IList<Token?> tokens)
         {
             switch (value)
             {
@@ -292,7 +292,7 @@ namespace TruCompiler.Lexical_Analyzer
                             Location = location,
                             IsValid = dynamicLexValidator.Validate(value, "Float")
                         };
-                    } else
+                    } else if (dynamicLexValidator.Validate(value, "Identifier"))
                     {
                         return new Token()
                         {
@@ -301,7 +301,14 @@ namespace TruCompiler.Lexical_Analyzer
                             Location = location,
                             IsValid = dynamicLexValidator.Validate(value, "Identifier")
                         };
-                    }
+                    } else
+                    {
+                        foreach (char chr in value)
+                        {
+                            tokens.Add(CreateToken(chr+"", location, ref tokens));
+                        }
+                        return null;
+                    } 
             }
         }
 

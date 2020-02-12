@@ -13,13 +13,13 @@ namespace TruCompiler.Lexical_Analyzer
            
             if (value.StartsWith("//"))
             {
-                tokens.Add(CreateToken("//", i));
+                tokens.Add(CreateToken("//", i, ref tokens));
             }
             else if (value.Contains("//"))
             {
                 splittedComment = value.Split("//");
                 ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
-                tokens.Add(CreateToken("//", i));
+                tokens.Add(CreateToken("//", i, ref tokens));
                 value = String.Join("//", splittedComment);
                 value = value.Substring(value.IndexOf("//"), value.Length - splittedComment[0].Length);
             }
@@ -34,41 +34,41 @@ namespace TruCompiler.Lexical_Analyzer
             string[] splittedComment;
             if (value.StartsWith("/*") && value.EndsWith("*/"))
             {
-                tokens.Add(CreateToken("/*", i));
+                tokens.Add(CreateToken("/*", i, ref tokens));
                 AddBlockCommentContent(value, ref tokens, i);
-                tokens.Add(CreateToken("*/", i));
+                tokens.Add(CreateToken("*/", i, ref tokens));
             }
             else if (value.StartsWith("/*") && value.Contains("*/"))
             {
-                tokens.Add(CreateToken("/*", i));
+                tokens.Add(CreateToken("/*", i, ref tokens));
                 splittedComment = value.Split("*/");
                 value = String.Join("*/", splittedComment);
                 value = value.Substring(0, value.IndexOf("*/") + 2);
                 AddBlockCommentContent(value, ref tokens, i);
-                tokens.Add(CreateToken("*/", i));
+                tokens.Add(CreateToken("*/", i, ref tokens));
                 ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
             } else if (value.Contains("/*") && value.EndsWith("*/"))
             {
                 splittedComment = value.Split("/*");
                 ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
-                tokens.Add(CreateToken("/*", i));
+                tokens.Add(CreateToken("/*", i, ref tokens));
                 value = String.Join("/*", splittedComment);
                 value = value.Substring(value.IndexOf("/*"), value.Length - splittedComment[0].Length);
                 AddBlockCommentContent(value, ref tokens, i);
-                tokens.Add(CreateToken("*/", i));
+                tokens.Add(CreateToken("*/", i, ref tokens));
             }
             else if (value.Contains("/*") && value.Contains("*/"))
             {
                 splittedComment = value.Split("/*");
                 ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
-                tokens.Add(CreateToken("/*", i));
+                tokens.Add(CreateToken("/*", i, ref tokens));
                 value = String.Join("/*", splittedComment);
                 value = value.Substring(value.IndexOf("/*"), value.Length - splittedComment[0].Length);
                 splittedComment = value.Split("*/");
                 value = String.Join("*/", splittedComment);
                 value = value.Substring(0, value.IndexOf("*/") + 2);
                 AddBlockCommentContent(value, ref tokens, i);
-                tokens.Add(CreateToken("*/", i));
+                tokens.Add(CreateToken("*/", i, ref tokens));
                 ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
             }
         }
@@ -103,14 +103,14 @@ namespace TruCompiler.Lexical_Analyzer
             string[] splittedComment;
             if (value.StartsWith("/*"))
             {
-                tokens.Add(CreateToken("/*", i));
+                tokens.Add(CreateToken("/*", i, ref tokens));
                 return value;
             }
             else if (value.Contains("/*"))
             {
                 splittedComment = value.Split("/*");
                 ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
-                tokens.Add(CreateToken("/*", i));
+                tokens.Add(CreateToken("/*", i, ref tokens));
                 value = String.Join("/*", splittedComment);
                 value = value.Substring(value.IndexOf("/*"), value.Length - splittedComment[0].Length);
                 return value;
@@ -125,7 +125,7 @@ namespace TruCompiler.Lexical_Analyzer
             if (value.EndsWith("*/"))
             {
                 AddBlockCommentContent(value, ref tokens, count);
-                tokens.Add(CreateToken("*/", i));
+                tokens.Add(CreateToken("*/", i, ref tokens));
                 return;
             }
             else if (value.Contains("*/"))
@@ -134,7 +134,7 @@ namespace TruCompiler.Lexical_Analyzer
                 value = String.Join("*/", splittedComment);
                 value = value.Substring(0, value.IndexOf("*/") + 2);
                 AddBlockCommentContent(value, ref tokens, count);
-                tokens.Add(CreateToken("*/", i));
+                tokens.Add(CreateToken("*/", i, ref tokens));
                 ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
             }
         }
