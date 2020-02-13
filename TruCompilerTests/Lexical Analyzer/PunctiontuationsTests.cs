@@ -23,7 +23,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.semi, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual(";", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -34,7 +34,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.comma, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual(",", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -45,7 +45,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.dot, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual(".", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -56,7 +56,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.colon, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual(":", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -67,7 +67,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.coloncolon, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("::", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
     }

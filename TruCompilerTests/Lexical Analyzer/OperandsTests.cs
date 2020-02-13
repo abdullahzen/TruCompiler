@@ -25,7 +25,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.eq, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("=", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -36,7 +36,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.noteq, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("<>", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -47,7 +47,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.eqeq, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("==", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
         [TestMethod]
@@ -57,7 +57,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.lt, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("<", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -68,7 +68,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.gt, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual(">", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -79,7 +79,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.leq, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("<=", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -90,7 +90,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.geq, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual(">=", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
         [TestMethod]
@@ -100,7 +100,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.plus, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("+", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -111,7 +111,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.minus, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("-", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -122,7 +122,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.mult, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("*", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -133,7 +133,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.div, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("/", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
       
@@ -144,7 +144,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.openpar, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("(", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -155,7 +155,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.closepar, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual(")", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -166,7 +166,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.opencbr, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("{", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
         [TestMethod]
@@ -176,7 +176,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.closecbr, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("}", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -187,7 +187,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.opensqbr, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("[", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -198,7 +198,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.closesqbr, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("]", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -209,7 +209,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.opencmt, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("/*", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -220,7 +220,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.closecmt, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("*/", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
 
@@ -231,7 +231,7 @@ namespace TruCompilerTests.Lexical_Analyzer
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.inlinecmt, tokens[0].GetValueOrDefault().Lexeme);
             Assert.AreEqual("//", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
         }
     }

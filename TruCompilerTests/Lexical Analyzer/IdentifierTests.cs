@@ -30,7 +30,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("validID", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
@@ -45,7 +45,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("validID123_1valid", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
@@ -60,7 +60,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("VALI_12l2idID123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
@@ -75,7 +75,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("_1VALI_12l2idID123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -90,7 +90,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("1VALI_12l2idID123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -105,7 +105,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("@VA$LI_12l2%idID^123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -120,7 +120,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("VA$LI_12l2%idID^123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);

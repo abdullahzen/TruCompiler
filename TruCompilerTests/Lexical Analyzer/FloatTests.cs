@@ -30,7 +30,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("0.0", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
@@ -45,7 +45,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("0.56", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
@@ -60,7 +60,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("0.560", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -75,7 +75,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("0123.23", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -90,7 +90,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
             Assert.AreEqual("1238.4333", tokens[0].GetValueOrDefault().Value);
         }
@@ -104,7 +104,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("1238.43.33", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -119,7 +119,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
             Assert.AreEqual("12384.333e+98", tokens[0].GetValueOrDefault().Value);
         }
@@ -133,7 +133,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
             Assert.AreEqual("94084.023e-98", tokens[0].GetValueOrDefault().Value);
         }
@@ -147,7 +147,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("45.3e543", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -162,7 +162,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("234.3450", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -177,7 +177,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("234.3450e+94", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -192,7 +192,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("0.345e+0", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
@@ -207,7 +207,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("234.345e+094", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);

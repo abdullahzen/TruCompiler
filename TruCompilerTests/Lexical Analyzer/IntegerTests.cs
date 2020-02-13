@@ -30,7 +30,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
             Assert.AreEqual("0", tokens[0].GetValueOrDefault().Value);
         }
@@ -44,7 +44,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.AreEqual("0123", tokens[0].GetValueOrDefault().Value);
 
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
@@ -59,7 +59,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
             Assert.AreEqual("12384333", tokens[0].GetValueOrDefault().Value);
         }
@@ -73,7 +73,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
             Assert.AreEqual("1238e4333", tokens[0].GetValueOrDefault().Value);
         }
@@ -87,7 +87,7 @@ namespace TruCompilerTests.Lexical_Analyzer
 
             Assert.AreEqual(1, tokens.Count);
             Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Location);
+            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
             Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
             Assert.AreEqual("102030490", tokens[0].GetValueOrDefault().Value);
         }

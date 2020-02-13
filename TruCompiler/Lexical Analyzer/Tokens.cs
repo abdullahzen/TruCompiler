@@ -69,7 +69,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.keyword,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "==":
@@ -77,7 +77,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.eqeq,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "<>":
@@ -85,7 +85,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.noteq,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "<":
@@ -93,7 +93,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.lt,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case ">":
@@ -101,7 +101,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.gt,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "<=":
@@ -109,7 +109,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.leq,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case ">=":
@@ -117,7 +117,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.geq,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "+":
@@ -125,7 +125,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.plus,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "-":
@@ -133,7 +133,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.minus,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "*":
@@ -141,7 +141,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.mult,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "/":
@@ -149,7 +149,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.div,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "=":
@@ -157,7 +157,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.eq,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "(":
@@ -165,7 +165,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.openpar,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case ")":
@@ -173,7 +173,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.closepar,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "{":
@@ -181,7 +181,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.opencbr,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "}":
@@ -189,7 +189,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.closecbr,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "[":
@@ -197,7 +197,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.opensqbr,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "]":
@@ -205,7 +205,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.closesqbr,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case ";":
@@ -213,7 +213,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.semi,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case ",":
@@ -221,7 +221,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.comma,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case ".":
@@ -229,7 +229,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.dot,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case ":":
@@ -237,7 +237,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.colon,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "::":
@@ -245,7 +245,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.coloncolon,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "//":
@@ -253,7 +253,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.inlinecmt,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "/*":
@@ -261,7 +261,7 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.opencmt,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 case "*/":
@@ -269,18 +269,18 @@ namespace TruCompiler.Lexical_Analyzer
                     {
                         Lexeme = Lexeme.closecmt,
                         Value = value,
-                        Location = location,
+                        Line = location,
                         IsValid = true
                     };
                 default:
                     DynamicLexValidator dynamicLexValidator = new DynamicLexValidator();
-                    if (Regex.IsMatch(value, "^([0-9]*[^.])$"))
+                    if (Regex.IsMatch(value, "^([0-9]*)$"))
                     {
                         return new Token()
                         {
                             Lexeme = Lexeme.intnum,
                             Value = value,
-                            Location = location,
+                            Line = location,
                             IsValid = dynamicLexValidator.Validate(value, "Integer")
                         };
                     } else if (Regex.IsMatch(value, "^([0-9]*(\\.)[0-9]*(e)*[0-9]*[-|+]*[0-9]*)*$"))
@@ -289,7 +289,7 @@ namespace TruCompiler.Lexical_Analyzer
                         {
                             Lexeme = Lexeme.floatnum,
                             Value = value,
-                            Location = location,
+                            Line = location,
                             IsValid = dynamicLexValidator.Validate(value, "Float")
                         };
                     } else if (dynamicLexValidator.Validate(value, "Identifier"))
@@ -298,25 +298,65 @@ namespace TruCompiler.Lexical_Analyzer
                         {
                             Lexeme = Lexeme.id,
                             Value = value,
-                            Location = location,
+                            Line = location,
                             IsValid = dynamicLexValidator.Validate(value, "Identifier")
                         };
                     } else
                     {
-                        foreach (char chr in value)
+                        List<string> splitSingleWord = SplitSingleWord(value);
+                        if (splitSingleWord != null && splitSingleWord.Count > 0)
                         {
-                            tokens.Add(CreateToken(chr+"", location, ref tokens));
+                            foreach (string part in splitSingleWord)
+                            {
+                                if (!String.IsNullOrEmpty(part))
+                                {
+                                    tokens.Add(CreateToken(part, location, ref tokens));
+                                }
+                            }
+                            Token? lastToken = ((List<Token?>)tokens).FindLast(t => true);
+                            ((List<Token?>)tokens).Remove(lastToken);
+                            return lastToken;
+                        } 
+                        else
+                        {
+                            return new Token()
+                            {
+                                Lexeme = Lexeme.id,
+                                Value = value,
+                                Line = location,
+                                IsValid = dynamicLexValidator.Validate(value, "Identifier")
+                            };
                         }
-                        return null;
                     } 
             }
+        }
+
+        private static List<string> SplitSingleWord(string value)
+        {
+            List<string> splitString = new List<string>();
+            String[] reservedkeywords = {"if", "then", "else", "while", "class", "integer", "float", "do",
+            "end", "public", "private", "or", "and", "not", "read", "write", "return", "main", "inherits",
+            "local", "==", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "=", "(", ")", "{", "}", "[", "]",
+            ";", ":", ",", ":", "::"};
+
+            foreach (string reserved in reservedkeywords)
+            {
+                if (value.Contains(reserved, StringComparison.InvariantCulture))
+                {
+                    splitString.Add(value.Substring(0, value.IndexOf(reserved)));
+                    splitString.Add(value.Substring(value.IndexOf(reserved), reserved.Length));
+                    splitString.Add(value.Substring(value.IndexOf(reserved) + reserved.Length));
+                    break;
+                }
+            }
+            return splitString;
         }
 
         public struct Token
         {
             public Lexeme Lexeme { get; set; }
             public string Value { get; set; }
-            public int Location { get; set; }
+            public int Line { get; set; }
             public bool IsValid { get; set; }
         }
 
@@ -326,7 +366,7 @@ namespace TruCompiler.Lexical_Analyzer
             int lastLineNum = 1;    
             foreach (Token token in tokens)
             {
-                if (lastLineNum != token.Location)
+                if (lastLineNum != token.Line)
                 {
                     result += "\n";
                 } else
@@ -335,15 +375,15 @@ namespace TruCompiler.Lexical_Analyzer
                 }
                 if (token.Lexeme == Lexeme.keyword && token.IsValid)
                 {
-                    result += String.Format("[{0}, {1}, {2}]", token.Value, token.Value, token.Location);
+                    result += String.Format("[{0}, {1}, {2}]", token.Value, token.Value, token.Line);
                 } else if (token.IsValid)
                 {
-                    result += String.Format("[{0}, {1}, {2}]", token.Lexeme, token.Value, token.Location);
+                    result += String.Format("[{0}, {1}, {2}]", token.Lexeme, token.Value, token.Line);
                 } else
                 {
-                    result += String.Format("[invalid{0}, {1}, {2}]", token.Lexeme, token.Value, token.Location);
+                    result += String.Format("[invalid{0}, {1}, {2}]", token.Lexeme, token.Value, token.Line);
                 }
-                lastLineNum = token.Location;
+                lastLineNum = token.Line;
             }
             result = result.TrimStart();
             return result;

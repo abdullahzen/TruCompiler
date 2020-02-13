@@ -79,7 +79,7 @@ namespace TruCompiler.Lexical_Analyzer
             {
                 Lexeme = Lexeme.inlinecmt,
                 Value = comment,
-                Location = i,
+                Line = i,
                 IsValid = true
             });
         }
@@ -92,7 +92,7 @@ namespace TruCompiler.Lexical_Analyzer
                 {
                     Lexeme = Lexeme.blockcmt,
                     Value = comment,
-                    Location = i,
+                    Line = i,
                     IsValid = true
                 });
             }
