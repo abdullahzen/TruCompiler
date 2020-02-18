@@ -41,7 +41,7 @@ namespace TruCompiler.Lexical_Analyzer
             blockcmt, // block of comment
         }
 
-        public static Token? CreateToken(string value, int location, ref IList<Token?> tokens)
+        public static Token CreateToken(string value, int location, ref IList<Token> tokens)
         {
             switch (value)
             {
@@ -313,8 +313,8 @@ namespace TruCompiler.Lexical_Analyzer
                                     tokens.Add(CreateToken(part, location, ref tokens));
                                 }
                             }
-                            Token? lastToken = ((List<Token?>)tokens).FindLast(t => true);
-                            ((List<Token?>)tokens).Remove(lastToken);
+                            Token lastToken = ((List<Token>)tokens).FindLast(t => true);
+                            ((List<Token>)tokens).Remove(lastToken);
                             return lastToken;
                         } 
                         else
@@ -352,15 +352,45 @@ namespace TruCompiler.Lexical_Analyzer
             return splitString;
         }
 
-        public struct Token
+        public class Token
         {
             public Lexeme Lexeme { get; set; }
             public string Value { get; set; }
             public int Line { get; set; }
             public bool IsValid { get; set; }
+
+            public Token() { }
+
+            public Token(Lexeme lexeme, string value)
+            {
+                Lexeme = lexeme;
+                Value = value;
+            }
+            public Token(Lexeme lexeme)
+            {
+                Lexeme = lexeme;
+            }
+            public override bool Equals(object obj)
+            {
+                if (obj != null)
+                {
+                    Token second = (Token)obj;
+                    if (this.Lexeme == Lexeme.keyword && second.Lexeme == Lexeme.keyword)
+                    {
+                        if (this.Value == second.Value)
+                        {
+                            return true;
+                        }
+                    } else if (this.Lexeme == second.Lexeme)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
-        public static string ToString(IEnumerable<Token?> tokens)
+        public static string ToString(IEnumerable<Token> tokens)
         {
             string result = "";
             int lastLineNum = 1;    

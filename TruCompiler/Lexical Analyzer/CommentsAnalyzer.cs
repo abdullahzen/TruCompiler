@@ -7,7 +7,7 @@ namespace TruCompiler.Lexical_Analyzer
 {
     public class CommentsAnalyzer
     {
-        public static void CheckInlineComments(string value, ref IList<Token?> tokens, int i)
+        public static void CheckInlineComments(string value, ref IList<Token> tokens, int i)
         {
             string[] splittedComment;
            
@@ -18,7 +18,7 @@ namespace TruCompiler.Lexical_Analyzer
             else if (value.Contains("//"))
             {
                 splittedComment = value.Split("//");
-                ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
+                ((List<Token>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
                 tokens.Add(CreateToken("//", i, ref tokens));
                 value = String.Join("//", splittedComment);
                 value = value.Substring(value.IndexOf("//"), value.Length - splittedComment[0].Length);
@@ -29,7 +29,7 @@ namespace TruCompiler.Lexical_Analyzer
             }
         }
 
-        public static void CheckLineBlockComments(string value, ref IList<Token?> tokens, int i)
+        public static void CheckLineBlockComments(string value, ref IList<Token> tokens, int i)
         {
             string[] splittedComment;
             if (value.StartsWith("/*") && value.EndsWith("*/"))
@@ -46,11 +46,11 @@ namespace TruCompiler.Lexical_Analyzer
                 value = value.Substring(0, value.IndexOf("*/") + 2);
                 AddBlockCommentContent(value, ref tokens, i);
                 tokens.Add(CreateToken("*/", i, ref tokens));
-                ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
+                ((List<Token>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
             } else if (value.Contains("/*") && value.EndsWith("*/"))
             {
                 splittedComment = value.Split("/*");
-                ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
+                ((List<Token>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
                 tokens.Add(CreateToken("/*", i, ref tokens));
                 value = String.Join("/*", splittedComment);
                 value = value.Substring(value.IndexOf("/*"), value.Length - splittedComment[0].Length);
@@ -60,7 +60,7 @@ namespace TruCompiler.Lexical_Analyzer
             else if (value.Contains("/*") && value.Contains("*/"))
             {
                 splittedComment = value.Split("/*");
-                ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
+                ((List<Token>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
                 tokens.Add(CreateToken("/*", i, ref tokens));
                 value = String.Join("/*", splittedComment);
                 value = value.Substring(value.IndexOf("/*"), value.Length - splittedComment[0].Length);
@@ -69,11 +69,11 @@ namespace TruCompiler.Lexical_Analyzer
                 value = value.Substring(0, value.IndexOf("*/") + 2);
                 AddBlockCommentContent(value, ref tokens, i);
                 tokens.Add(CreateToken("*/", i, ref tokens));
-                ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
+                ((List<Token>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
             }
         }
 
-        public static void AddInlineCommentContent(string comment, ref IList<Token?> tokens, int i)
+        public static void AddInlineCommentContent(string comment, ref IList<Token> tokens, int i)
         {
             tokens.Add(new Token()
             {
@@ -84,7 +84,7 @@ namespace TruCompiler.Lexical_Analyzer
             });
         }
 
-        public static void AddBlockCommentContent(string comment, ref IList<Token?> tokens, int i)
+        public static void AddBlockCommentContent(string comment, ref IList<Token> tokens, int i)
         {
             if (!String.IsNullOrEmpty(comment) && comment.Length > 4)
             {
@@ -98,7 +98,7 @@ namespace TruCompiler.Lexical_Analyzer
             }
         }
 
-        public static string CheckMultiLineBlockComments(string value, ref IList<Token?> tokens, int i)
+        public static string CheckMultiLineBlockComments(string value, ref IList<Token> tokens, int i)
         {
             string[] splittedComment;
             if (value.StartsWith("/*"))
@@ -109,7 +109,7 @@ namespace TruCompiler.Lexical_Analyzer
             else if (value.Contains("/*"))
             {
                 splittedComment = value.Split("/*");
-                ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
+                ((List<Token>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[0], i));
                 tokens.Add(CreateToken("/*", i, ref tokens));
                 value = String.Join("/*", splittedComment);
                 value = value.Substring(value.IndexOf("/*"), value.Length - splittedComment[0].Length);
@@ -118,7 +118,7 @@ namespace TruCompiler.Lexical_Analyzer
             return value;
         }
 
-        public static void CheckMultiLineBlockCommentsEndAndAdd(string value, ref IList<Token?> tokens, int i)
+        public static void CheckMultiLineBlockCommentsEndAndAdd(string value, ref IList<Token> tokens, int i)
         {
             string[] splittedComment;
             int count = i - value.Split("\\n").Length + 1;
@@ -135,7 +135,7 @@ namespace TruCompiler.Lexical_Analyzer
                 value = value.Substring(0, value.IndexOf("*/") + 2);
                 AddBlockCommentContent(value, ref tokens, count);
                 tokens.Add(CreateToken("*/", i, ref tokens));
-                ((List<Token?>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
+                ((List<Token>)tokens).AddRange(LexicalAnalyzer.Tokenize(splittedComment[1], i));
             }
         }
     }       

@@ -10,13 +10,13 @@ namespace TruCompilerTests.Lexical_Analyzer
     [TestClass]
     public class InlineCommentsTests
     {
-        IList<Token?> tokens;
+        IList<Token> tokens;
         string line;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            tokens = new List<Token?>();
+            tokens = new List<Token>();
             line = "//";
         }
 
@@ -27,14 +27,14 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize(line + "this is a comment inline");
             Assert.AreEqual(2, tokens.Count);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
-            Assert.AreEqual("//", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(line+"this is a comment inline", tokens[1].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[0].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual(1, tokens[1].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.IsTrue(tokens[1].IsValid);
+            Assert.AreEqual("//", tokens[0].Value);
+            Assert.AreEqual(line+"this is a comment inline", tokens[1].Value);
         }
 
         // Test data: if = //this is a comment inline
@@ -44,22 +44,22 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("if = " + line + "this is a comment inline");
             Assert.AreEqual(4, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.eq, tokens[1].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[3].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[2].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[3].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[2].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[3].GetValueOrDefault().IsValid);
-            Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual("=", tokens[1].GetValueOrDefault().Value);
-            Assert.AreEqual("//", tokens[2].GetValueOrDefault().Value);
-            Assert.IsTrue("//this is a comment inline".Equals(tokens[3].GetValueOrDefault().Value));
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(Lexeme.eq, tokens[1].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[3].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual(1, tokens[1].Line);
+            Assert.AreEqual(1, tokens[2].Line);
+            Assert.AreEqual(1, tokens[3].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.IsTrue(tokens[1].IsValid);
+            Assert.IsTrue(tokens[2].IsValid);
+            Assert.IsTrue(tokens[3].IsValid);
+            Assert.AreEqual("if", tokens[0].Value);
+            Assert.AreEqual("=", tokens[1].Value);
+            Assert.AreEqual("//", tokens[2].Value);
+            Assert.IsTrue("//this is a comment inline".Equals(tokens[3].Value));
         }
 
         // Test data: //this\tis a comment inlineif = 
@@ -69,14 +69,14 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize(line + "this\tis a comment inline" + "if = ");
             Assert.AreEqual(2, tokens.Count);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
-            Assert.AreEqual("//", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual("//this\tis a comment inlineif = ", tokens[1].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[0].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual(1, tokens[1].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.IsTrue(tokens[1].IsValid);
+            Assert.AreEqual("//", tokens[0].Value);
+            Assert.AreEqual("//this\tis a comment inlineif = ", tokens[1].Value);
         }
 
         // Test data: //this\tis a\tcomment\tinlineif = \t
@@ -86,14 +86,14 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize(line + "this\tis a\tcomment\tinline" + "if = \t");
             Assert.AreEqual(2, tokens.Count);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
-            Assert.AreEqual("//", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual(line + "this\tis a\tcomment\tinline" + "if = \t", tokens[1].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[0].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual(1, tokens[1].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.IsTrue(tokens[1].IsValid);
+            Assert.AreEqual("//", tokens[0].Value);
+            Assert.AreEqual(line + "this\tis a\tcomment\tinline" + "if = \t", tokens[1].Value);
         }
 
         // Test data: if//comment\t = \t 
@@ -103,18 +103,18 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("if" + line + "comment\t = \t");
             Assert.AreEqual(3, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[2].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[2].GetValueOrDefault().IsValid);
-            Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual("//", tokens[1].GetValueOrDefault().Value);
-            Assert.AreEqual(line + "comment\t = \t", tokens[2].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual(1, tokens[1].Line);
+            Assert.AreEqual(1, tokens[2].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.IsTrue(tokens[1].IsValid);
+            Assert.IsTrue(tokens[2].IsValid);
+            Assert.AreEqual("if", tokens[0].Value);
+            Assert.AreEqual("//", tokens[1].Value);
+            Assert.AreEqual(line + "comment\t = \t", tokens[2].Value);
         }
 
         // Test data: if // comment\t = \t 
@@ -124,18 +124,18 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("if " + line + " comment\t = \t");
             Assert.AreEqual(3, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[2].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[2].GetValueOrDefault().IsValid);
-            Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual("//", tokens[1].GetValueOrDefault().Value);
-            Assert.AreEqual(line + " comment\t = \t", tokens[2].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual(1, tokens[1].Line);
+            Assert.AreEqual(1, tokens[2].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.IsTrue(tokens[1].IsValid);
+            Assert.IsTrue(tokens[2].IsValid);
+            Assert.AreEqual("if", tokens[0].Value);
+            Assert.AreEqual("//", tokens[1].Value);
+            Assert.AreEqual(line + " comment\t = \t", tokens[2].Value);
         }
 
         // Test data: if // comm//ent\t = \t 
@@ -145,18 +145,18 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("if " + line + " comm//ent\t = \t");
             Assert.AreEqual(3, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[1].GetValueOrDefault().Line);
-            Assert.AreEqual(1, tokens[2].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[1].GetValueOrDefault().IsValid);
-            Assert.IsTrue(tokens[2].GetValueOrDefault().IsValid);
-            Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
-            Assert.AreEqual("//", tokens[1].GetValueOrDefault().Value);
-            Assert.AreEqual(line + " comm//ent\t = \t", tokens[2].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[1].Lexeme);
+            Assert.AreEqual(Lexeme.inlinecmt, tokens[2].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual(1, tokens[1].Line);
+            Assert.AreEqual(1, tokens[2].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.IsTrue(tokens[1].IsValid);
+            Assert.IsTrue(tokens[2].IsValid);
+            Assert.AreEqual("if", tokens[0].Value);
+            Assert.AreEqual("//", tokens[1].Value);
+            Assert.AreEqual(line + " comm//ent\t = \t", tokens[2].Value);
         }
 
     }

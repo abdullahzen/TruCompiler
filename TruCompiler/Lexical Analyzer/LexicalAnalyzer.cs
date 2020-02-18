@@ -7,9 +7,9 @@ namespace TruCompiler.Lexical_Analyzer
 {
     public class LexicalAnalyzer
     {
-        public static IList<Token?> Tokenize(string[] lines)
+        public static IList<Token> Tokenize(string[] lines)
         {
-            IList<Token?> tokens = new List<Token?>();
+            IList<Token> tokens = new List<Token>();
             if (lines != null && lines.Length != 0)
             {
                 //Loop through all the lines and find the tokens.
@@ -37,7 +37,7 @@ namespace TruCompiler.Lexical_Analyzer
                             } while (commented && k < lines.Length);
                         } else
                         {
-                            ((List<Token?>)tokens).AddRange(Tokenize(lines[k], i));
+                            ((List<Token>)tokens).AddRange(Tokenize(lines[k], i));
                         }
                     }
                 }
@@ -45,9 +45,9 @@ namespace TruCompiler.Lexical_Analyzer
             return tokens;
         }
         
-        public static IList<Token?> Tokenize(string line, int i = 1)
+        public static IList<Token> Tokenize(string line, int i = 1)
         {
-            IList<Token?> tokens = new List<Token?>();
+            IList<Token> tokens = new List<Token>();
             if (!String.IsNullOrEmpty(line))
             {
                 //handle inline comments

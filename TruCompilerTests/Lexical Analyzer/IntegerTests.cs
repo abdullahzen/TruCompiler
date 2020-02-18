@@ -10,14 +10,14 @@ namespace TruCompilerTests.Lexical_Analyzer
     [TestClass]
     public class IntegerTests
     {
-        IList<Token?> tokens;
+        IList<Token> tokens;
         DynamicLexValidator dynamicLexValidator;
         
 
         [TestInitialize]
         public void TestInitialize()
         {
-            tokens = new List<Token?>();
+            tokens = new List<Token>();
             dynamicLexValidator = new DynamicLexValidator();
         }
 
@@ -29,10 +29,10 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("0");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("0", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.intnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("0", tokens[0].Value);
         }
 
         // Test data: 0123
@@ -43,11 +43,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("0123");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("0123", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.intnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("0123", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 12384333
@@ -58,10 +58,10 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("12384333");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("12384333", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.intnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("12384333", tokens[0].Value);
         }
 
         // Test data: 1238e4333
@@ -72,10 +72,10 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("1238e4333");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("1238e4333", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsFalse(tokens[0].IsValid);
+            Assert.AreEqual("1238e4333", tokens[0].Value);
         }
 
         // Test data: 102030490
@@ -86,10 +86,10 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("102030490");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.intnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("102030490", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.intnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("102030490", tokens[0].Value);
         }
 
         // Test data: 102030490

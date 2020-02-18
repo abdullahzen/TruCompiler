@@ -10,14 +10,14 @@ namespace TruCompilerTests.Lexical_Analyzer
     [TestClass]
     public class FloatTests
     {
-        IList<Token?> tokens;
+        IList<Token> tokens;
         DynamicLexValidator dynamicLexValidator;
 
 
         [TestInitialize]
         public void TestInitialize()
         {
-            tokens = new List<Token?>();
+            tokens = new List<Token>();
             dynamicLexValidator = new DynamicLexValidator();
         }
 
@@ -29,11 +29,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("0.0");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("0.0", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("0.0", tokens[0].Value);
 
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[0].IsValid);
         }
 
         // Test data: 0.56
@@ -44,11 +44,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("0.56");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("0.56", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("0.56", tokens[0].Value);
 
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[0].IsValid);
         }
 
         // Test data: 0.560
@@ -59,11 +59,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("0.560");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("0.560", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("0.560", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 0123.23
@@ -74,11 +74,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("0123.23");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("0123.23", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("0123.23", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 1238.4333
@@ -89,10 +89,10 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("1238.4333");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("1238.4333", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("1238.4333", tokens[0].Value);
         }
 
         // Test data: 1238.43.33
@@ -103,11 +103,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("1238.43.33");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("1238.43.33", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("1238.43.33", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 12384.333e+98
@@ -118,10 +118,10 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("12384.333e+98");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("12384.333e+98", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("12384.333e+98", tokens[0].Value);
         }
 
         // Test data: 94084.023e-98
@@ -132,10 +132,10 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("94084.023e-98");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("94084.023e-98", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("94084.023e-98", tokens[0].Value);
         }
 
         // Test data: 45.3e543
@@ -146,11 +146,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("45.3e543");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("45.3e543", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("45.3e543", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 234.3450
@@ -161,11 +161,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("234.3450");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("234.3450", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("234.3450", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 234.3450e+94
@@ -176,11 +176,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("234.3450e+94");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("234.3450e+94", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("234.3450e+94", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 0.345e+0
@@ -191,11 +191,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("0.345e+0");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("0.345e+0", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("0.345e+0", tokens[0].Value);
 
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[0].IsValid);
         }
 
         // Test data: 234.345e+094
@@ -206,11 +206,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("234.345e+094");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.floatnum, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("234.345e+094", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.floatnum, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("234.345e+094", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 0.0

@@ -10,14 +10,14 @@ namespace TruCompilerTests.Lexical_Analyzer
     [TestClass]
     public class IdentifierTests
     {
-        IList<Token?> tokens;
+        IList<Token> tokens;
         DynamicLexValidator dynamicLexValidator;
 
 
         [TestInitialize]
         public void TestInitialize()
         {
-            tokens = new List<Token?>();
+            tokens = new List<Token>();
             dynamicLexValidator = new DynamicLexValidator();
         }
 
@@ -29,11 +29,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("validID");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("validID", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("validID", tokens[0].Value);
 
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[0].IsValid);
         }
 
         // Test data: validID123_1valid
@@ -44,11 +44,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("validID123_1valid");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("validID123_1valid", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("validID123_1valid", tokens[0].Value);
 
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[0].IsValid);
         }
 
         // Test data: VALI_12l2idID123_1va3lid4_
@@ -59,11 +59,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("VALI_12l2idID123_1va3lid4_");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("VALI_12l2idID123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("VALI_12l2idID123_1va3lid4_", tokens[0].Value);
 
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsTrue(tokens[0].IsValid);
         }
 
         // Test data: _1VALI_12l2idID123_1va3lid4_
@@ -74,11 +74,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("_1VALI_12l2idID123_1va3lid4_");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("_1VALI_12l2idID123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("_1VALI_12l2idID123_1va3lid4_", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: 1VALI_12l2idID123_1va3lid4_
@@ -89,11 +89,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("1VALI_12l2idID123_1va3lid4_");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("1VALI_12l2idID123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("1VALI_12l2idID123_1va3lid4_", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: @VA$LI_12l2%idID^123_1va3lid4_
@@ -104,11 +104,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("@VA$LI_12l2%idID^123_1va3lid4_");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("@VA$LI_12l2%idID^123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("@VA$LI_12l2%idID^123_1va3lid4_", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: VA$LI_12l2%idID^123_1va3lid4_
@@ -119,11 +119,11 @@ namespace TruCompilerTests.Lexical_Analyzer
             tokens = LexicalAnalyzer.Tokenize("VA$LI_12l2%idID^123_1va3lid4_");
 
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.id, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.AreEqual("VA$LI_12l2%idID^123_1va3lid4_", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.id, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.AreEqual("VA$LI_12l2%idID^123_1va3lid4_", tokens[0].Value);
 
-            Assert.IsFalse(tokens[0].GetValueOrDefault().IsValid);
+            Assert.IsFalse(tokens[0].IsValid);
         }
 
         // Test data: validID

@@ -9,12 +9,12 @@ namespace TruCompilerTests.Lexical_Analyzer
     public class KeywordsTests
     {
 
-        IList<Token?> tokens;
+        IList<Token> tokens;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            tokens = new List<Token?>();
+            tokens = new List<Token>();
         }
 
         [TestMethod]
@@ -22,10 +22,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("if");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("if", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("if", tokens[0].Value);
         }
 
         [TestMethod]
@@ -33,10 +33,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("then");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("then", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("then", tokens[0].Value);
         }
 
         [TestMethod]
@@ -44,10 +44,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("else");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("else", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("else", tokens[0].Value);
         }
 
         [TestMethod]
@@ -55,10 +55,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("while");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("while", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("while", tokens[0].Value);
         }
 
         [TestMethod]
@@ -66,10 +66,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("class");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("class", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("class", tokens[0].Value);
         }
 
         [TestMethod]
@@ -77,10 +77,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("integer");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("integer", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("integer", tokens[0].Value);
         }
 
         [TestMethod]
@@ -88,10 +88,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("float");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("float", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("float", tokens[0].Value);
         }
 
         [TestMethod]
@@ -99,10 +99,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("do");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("do", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("do", tokens[0].Value);
         }
 
         [TestMethod]
@@ -110,10 +110,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("end");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("end", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("end", tokens[0].Value);
         }
 
         [TestMethod]
@@ -121,10 +121,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("public");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("public", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("public", tokens[0].Value);
         }
 
         [TestMethod]
@@ -132,10 +132,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("private");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("private", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("private", tokens[0].Value);
         }
 
         [TestMethod]
@@ -143,10 +143,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("or");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("or", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("or", tokens[0].Value);
         }
 
         [TestMethod]
@@ -154,10 +154,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("and");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("and", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("and", tokens[0].Value);
         }
 
         [TestMethod]
@@ -165,10 +165,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("not");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("not", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("not", tokens[0].Value);
         }
 
         [TestMethod]
@@ -176,10 +176,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("read");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("read", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("read", tokens[0].Value);
         }
 
         [TestMethod]
@@ -187,10 +187,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("write");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("write", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("write", tokens[0].Value);
         }
 
         [TestMethod]
@@ -198,10 +198,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("return");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("return", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("return", tokens[0].Value);
         }
 
         [TestMethod]
@@ -209,10 +209,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("main");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("main", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("main", tokens[0].Value);
         }
 
         [TestMethod]
@@ -220,10 +220,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("inherits");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("inherits", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("inherits", tokens[0].Value);
         }
 
         [TestMethod]
@@ -231,10 +231,10 @@ namespace TruCompilerTests.Lexical_Analyzer
         {
             tokens = LexicalAnalyzer.Tokenize("local");
             Assert.AreEqual(1, tokens.Count);
-            Assert.AreEqual(Lexeme.keyword, tokens[0].GetValueOrDefault().Lexeme);
-            Assert.AreEqual(1, tokens[0].GetValueOrDefault().Line);
-            Assert.IsTrue(tokens[0].GetValueOrDefault().IsValid);
-            Assert.AreEqual("local", tokens[0].GetValueOrDefault().Value);
+            Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
+            Assert.AreEqual(1, tokens[0].Line);
+            Assert.IsTrue(tokens[0].IsValid);
+            Assert.AreEqual("local", tokens[0].Value);
         }
     }
 }
