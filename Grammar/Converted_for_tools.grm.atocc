@@ -18,7 +18,7 @@ afterFuncDecl -> 'void' ';'
 afterFuncHead -> type 
 afterFuncHead -> 'void' 
 
-afterIdnest -> rept-idnest0Factor 
+afterIdnest -> rept-idnest0 
 afterIdnest -> indice variable 
 afterIdnest -> functionCall 
 
@@ -51,7 +51,7 @@ fParams -> EPSILON
 
 fParamsTail -> ',' type 'id' rept-fParamsTail3 
 
-factor -> idnest0Factor 
+factor -> idnest0
 factor -> 'intNum' 
 factor -> 'floatNum' 
 factor -> '(' arithExpr ')' 
@@ -68,7 +68,7 @@ funcHead -> 'id' opt-funcHead0 '(' fParams ')' ':' afterFuncHead
 
 functionCall -> '(' aParams ')' 
 
-idnest0Factor -> 'id' afterIdnest 
+idnest0 -> 'id' afterIdnest 
 
 idnest2 -> variable 
 idnest2 -> functionCall 
@@ -120,8 +120,8 @@ rept-fParamsTail3 -> EPSILON
 rept-funcBody2 -> statement rept-funcBody2 
 rept-funcBody2 -> EPSILON 
 
-rept-idnest0Factor -> '.' 'id' idnest2 
-rept-idnest0Factor -> EPSILON 
+rept-idnest0 -> '.' 'id' idnest2 
+rept-idnest0 -> EPSILON 
 
 rept-opt-classDecl22 -> ',' 'id' rept-opt-classDecl22 
 rept-opt-classDecl22 -> EPSILON 
