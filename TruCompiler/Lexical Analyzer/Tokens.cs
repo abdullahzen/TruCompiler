@@ -13,7 +13,7 @@ namespace TruCompiler.Lexical_Analyzer
             eqeq,//==
             plus, //+
             openpar, //(
-            keyword, // if do read then end write else public return while private main class or inherits integer and local float not
+            keyword, // if do read then end write else public return while private main class or inherits integer and local float not void
             noteq, //<>
             minus, //-
             closepar, //)
@@ -39,6 +39,7 @@ namespace TruCompiler.Lexical_Analyzer
             intnum, // 123
             floatnum, //2.2
             blockcmt, // block of comment
+            sr, // ?? serial? static?
         }
 
         public static Token CreateToken(string value, int location, ref IList<Token> tokens)
@@ -65,6 +66,7 @@ namespace TruCompiler.Lexical_Analyzer
                 case "main":
                 case "inherits":
                 case "local":
+                case "void":
                     return new Token()
                     {
                         Lexeme = Lexeme.keyword,
@@ -313,9 +315,8 @@ namespace TruCompiler.Lexical_Analyzer
                                     tokens.Add(CreateToken(part, location, ref tokens));
                                 }
                             }
-                            Token lastToken = ((List<Token>)tokens).FindLast(t => true);
-                            ((List<Token>)tokens).Remove(lastToken);
-                            return lastToken;
+                            //done with every token
+                            return null;
                         } 
                         else
                         {
@@ -336,8 +337,8 @@ namespace TruCompiler.Lexical_Analyzer
             List<string> splitString = new List<string>();
             String[] reservedkeywords = {"if", "then", "else", "while", "class", "integer", "float", "do",
             "end", "public", "private", "or", "and", "not", "read", "write", "return", "main", "inherits",
-            "local", "==", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "=", "(", ")", "{", "}", "[", "]",
-            ";", ":", ",", ":", "::"};
+            "local", "void", "==", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "=", "(", ")", "{", "}", "[", "]",
+            ";", ",", "::", ":", "."};
 
             foreach (string reserved in reservedkeywords)
             {
@@ -387,6 +388,34 @@ namespace TruCompiler.Lexical_Analyzer
                     }
                 }
                 return false;
+            }
+
+            public override string ToString()
+            {
+                if (this.Lexeme == Lexeme.keyword && this.IsValid)
+                {
+                    return String.Format("[{0}, {1}, {2}]", this.Value, this.Value, this.Line);
+                }
+                else if (this.IsValid)
+                {
+                    return String.Format("[{0}, {1}, {2}]", this.Lexeme, this.Value, this.Line);
+                }
+                else
+                {
+                    return String.Format("[invalid{0}, {1}, {2}]", this.Lexeme, this.Value, this.Line);
+                }
+            }
+
+            public Token Clone()
+            {
+                Token copy = new Token()
+                {
+                    Lexeme = this.Lexeme,
+                    IsValid = this.IsValid,
+                    Line = this.Line,
+                    Value = this.Value
+                };
+                return copy;
             }
         }
 

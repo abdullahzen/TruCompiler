@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 using TruCompiler.Lexical_Analyzer;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 
@@ -23,6 +24,7 @@ namespace TruCompilerTests.Lexical_Analyzer
         public void TestIfStatement()
         {
             tokens = LexicalAnalyzer.Tokenize("if(abc==1){}");
+            tokens = tokens.Where(t => t != null).ToList();
             Assert.AreEqual(8, tokens.Count);
             Assert.AreEqual(Lexeme.keyword, tokens[0].Lexeme);
             Assert.AreEqual(Lexeme.openpar, tokens[1].Lexeme);
@@ -64,6 +66,7 @@ namespace TruCompilerTests.Lexical_Analyzer
         public void TestNoSpaces()
         {
             tokens = LexicalAnalyzer.Tokenize("<>::<if==>x");
+            tokens = tokens.Where(t => t != null).ToList();
             Assert.AreEqual(7, tokens.Count);
             Assert.AreEqual(Lexeme.noteq, tokens[0].Lexeme);
             Assert.AreEqual(Lexeme.coloncolon, tokens[1].Lexeme);
@@ -101,6 +104,7 @@ namespace TruCompilerTests.Lexical_Analyzer
         public void TestNoSpacesIllegalId()
         {
             tokens = LexicalAnalyzer.Tokenize("<>::<if==>_x");
+            tokens = tokens.Where(t => t != null).ToList();
             Assert.AreEqual(7, tokens.Count);
             Assert.AreEqual(Lexeme.noteq, tokens[0].Lexeme);
             Assert.AreEqual(Lexeme.coloncolon, tokens[1].Lexeme);

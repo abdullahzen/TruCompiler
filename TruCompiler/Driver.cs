@@ -31,12 +31,13 @@ namespace TruCompiler
                 {
                     //Generate Tokens through the lexical analyzer
                     IDictionary<string, IList<Token>> tokens = new Dictionary<string, IList<Token>>();
+                    TreeNode<Token> syntaxTree = null;
                     if (File.Exists(file))
                     {
                         tokens.Add(file, LexicalAnalyzer.Tokenize(File.ReadAllLines(file)));
 
                         //Output to file by default the file location is in the same location as the source file
-                        string outlextokens = Tokens.ToString(tokens[file].Where<Token>(t => t.IsValid));
+                        string outlextokens = Tokens.ToString(tokens[file].Where<Token>(t => t != null && t.IsValid));
                         string outlexerrors = Tokens.ToString(tokens[file].Where<Token>(t => t != null && !t.IsValid));
 
                         if (String.IsNullOrEmpty(OutputPath))
@@ -63,11 +64,35 @@ namespace TruCompiler
                         && t.Lexeme != Lexeme.closecmt
                         && t.Lexeme != Lexeme.opencmt).ToList();
                         TokenScanner tokenScanner = new TokenScanner(nonNullableTokens);
-                        SyntacticalAnalyzer.AnalyzeSyntax(tokenScanner);
+                        syntaxTree = SyntacticalAnalyzer.AnalyzeSyntax(tokenScanner);
+                    }
+                    string result = "digraph name {\n";
+                    int index = 0;
+                    string[] arr = SyntacticalAnalyzer.GenerateDiGraph(syntaxTree, ref index);
+                    result += arr[0];
+                    result += arr[1];
+                    result += "}";
+
+                    string derivation = Tokens.ToString(syntaxTree.Flatten().ToList());
+
+                    if (String.IsNullOrEmpty(OutputPath))
+                    {
+                        OutputPath = file.Substring(0, file.LastIndexOf("\\"));
+                    }
+
+                    if (Directory.Exists(OutputPath))
+                    {
+                        string outastFile = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outast";
+                        string outderivation = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outderivation";
+                        
+                        WriteToFile(outastFile, result);
+                        WriteToFile(outderivation, derivation);
                     }
                 }
             } catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
+                Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
             }
         }

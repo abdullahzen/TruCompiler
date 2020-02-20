@@ -36,10 +36,8 @@ namespace TruCompiler.Sentactical_Analyzer
             if (hasNext())
             {
                 return Tokens.ElementAt(index + 1);
-            } else
-            {
-                throw new FormatException();
             }
+            return new Token();
         }
 
         public bool hasNext()
