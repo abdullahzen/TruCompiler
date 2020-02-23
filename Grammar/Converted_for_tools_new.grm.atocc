@@ -18,15 +18,8 @@ afterFuncDecl -> 'void' ';'
 afterFuncHead -> type 
 afterFuncHead -> 'void' 
 
-afterIdnest -> rept-idnest0 
-afterIdnest -> indice variable 
-afterIdnest -> functionCall 
-
 afterMemberDecl -> varDecl 
 afterMemberDecl -> funcDecl 
-
-afterStatment -> assignStat ';' 
-afterStatment -> ';' 
 
 arithExpr -> term rightrec-arithExpr 
 
@@ -36,8 +29,6 @@ arraySizeValue -> 'intNum'
 arraySizeValue -> EPSILON 
 
 assignOp -> '=' 
-
-assignStat -> assignOp expr 
 
 before-varDeclNotId -> typeInt 
 before-varDeclNotId -> typeFloat 
@@ -51,7 +42,7 @@ fParams -> EPSILON
 
 fParamsTail -> ',' type 'id' rept-fParamsTail3 
 
-factor -> idnest0
+factor -> functionCallOrVariable 
 factor -> 'intNum' 
 factor -> 'floatNum' 
 factor -> '(' arithExpr ')' 
@@ -66,17 +57,25 @@ funcDef -> funcHead funcBody ';'
 
 funcHead -> 'id' opt-funcHead0 '(' fParams ')' ':' afterFuncHead 
 
-functionCall -> '(' aParams ')' 
+functionCallOrAssignment -> 'id' idnest moreMemberCalls functionEndOrAssignment ';' 
 
-idnest0 -> 'id' afterIdnest 
+functionCallOrVariable -> 'id' idnest moreMemberCalls ';' 
 
-idnest2 -> variable 
-idnest2 -> functionCall 
+functionEndOrAssignment -> assignOp expr 
+functionEndOrAssignment -> EPSILON 
 
-indice -> '[' arithExpr ']' 
+idnest -> 'id' idnestTail 
+
+idnest-variableOnly -> 'id' rept-indexing '.' 
+
+idnestTail -> rept-indexing '.' 
+idnestTail -> '(' aParams ')' '.' 
 
 memberDecl -> 'id' afterMemberDecl 
 memberDecl -> before-varDeclNotId varDecl 
+
+moreMemberCalls -> '.' 'id' idnest moreMemberCalls 
+moreMemberCalls -> EPSILON 
 
 multOp -> '*' 
 multOp -> '/' 
@@ -120,8 +119,8 @@ rept-fParamsTail3 -> EPSILON
 rept-funcBody2 -> statement rept-funcBody2 
 rept-funcBody2 -> EPSILON 
 
-rept-idnest0 -> '.' 'id' idnest2 
-rept-idnest0 -> EPSILON 
+rept-indexing -> '[' arithExpr ']' rept-indexing 
+rept-indexing -> EPSILON 
 
 rept-opt-classDecl22 -> ',' 'id' rept-opt-classDecl22 
 rept-opt-classDecl22 -> EPSILON 
@@ -142,9 +141,6 @@ rept-statBlock1 -> EPSILON
 rept-varDecl2 -> arraySize rept-varDecl2 
 rept-varDecl2 -> EPSILON 
 
-rept-variable2 -> indice rept-variable2 
-rept-variable2 -> EPSILON 
-
 rightrec-arithExpr -> EPSILON 
 rightrec-arithExpr -> addOp term rightrec-arithExpr 
 
@@ -158,12 +154,13 @@ statBlock -> 'do' rept-statBlock1 'end'
 statBlock -> statement 
 statBlock -> EPSILON 
 
-statement -> idnest0 afterStatment 
+statement -> functionCallOrAssignment 
 statement -> 'if' '(' arithExpr relExpr ')' 'then' statBlock 'else' statBlock ';' 
 statement -> 'while' '(' arithExpr relExpr ')' statBlock ';' 
-statement -> 'read' '(' idnest0 ')' ';' 
+statement -> 'read' '(' variable ')' ';' 
 statement -> 'write' '(' expr ')' ';' 
 statement -> 'return' '(' expr ')' ';' 
+statement -> functionCall ';' 
 
 term -> factor rightrec-term 
 
@@ -179,7 +176,7 @@ typeInt -> 'integer'
 
 varDecl -> 'id' rept-varDecl2 ';' 
 
-variable -> rept-variable2 
+variable -> 'id' idnest-variableOnly 
 
 visibility -> 'public' 
 visibility -> 'private' 
