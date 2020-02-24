@@ -28,8 +28,11 @@ namespace TruCompiler.Sentactical_Analyzer
             foreach (var child in node.Children)
             {
                 index++;
-                result[0] += String.Format("{0}[label=\"{1}\"]\n", index, GetValueFromNode(child.Value));
-                result[1] += String.Format("{0}->{1}\n", parent, index);
+                if (child.Value != null)
+                {
+                    result[0] += String.Format("{0}[label=\"{1}\"]\n", index, GetValueFromNode(child.Value));
+                    result[1] += String.Format("{0}->{1}\n", parent, index);
+                }
                 if (child.Children.Count > 0)
                 {
                     string[] arr = new string[2];

@@ -140,7 +140,6 @@
 <statement> ::= 'read' '(' <variable> ')' ';' 
 <statement> ::= 'write' '(' <expr> ')' ';' 
 <statement> ::= 'return' '(' <expr> ')' ';' 
-<statement> ::= <functionCall> ';' 
 
 <term> ::= <factor> <rightrec-term> 
 
@@ -159,12 +158,14 @@
 <visibility> ::= 'public' 
 <visibility> ::= 'private' 
 
-<variable> ::= 'id' <idnest-variableOnly>
-<idnest-variableOnly> ::= 'id' <rept-indexing> '.'
+<variable> ::= 'id' <idnest-variableOnly> <moreVariableCalls>
+<idnest-variableOnly> ::= <rept-indexing>
+<moreVariableCalls> ::= '.' 'id' <idnest-variableOnly> <moreVariableCalls>
+<moreVariableCalls> ::= EPSILON
 
-<idnest> ::= 'id' <idnestTail>
-<idnestTail> ::= <rept-indexing> '.'
-<idnestTail> ::= '(' <aParams> ')' '.'
+<idnest> ::= <idnestTail>
+<idnestTail> ::= <rept-indexing>
+<idnestTail> ::= '(' <aParams> ')'
 <rept-indexing> ::= '[' <arithExpr> ']' <rept-indexing>
 <rept-indexing> ::= EPSILON
 

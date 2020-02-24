@@ -2,7 +2,7 @@
   "profiles": {
     "TruCompiler": {
       "commandName": "Project",
-      "commandLineArgs": "-input \"C:\\Users\\abdul\\OneDrive - Concordia University - Canada\\School\\assignment2.COMP442-6421.paquet.2020.4\\assignment2.COMP442-6421.paquet.2020.4\\polynomial.src\""
+      "commandLineArgs": "-input \"C:\\Users\\abdul\\test\\simpleMain.src\""
     }
   }
 }

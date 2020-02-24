@@ -73,7 +73,7 @@ namespace TruCompiler
                     result += arr[1];
                     result += "}";
 
-                    string derivation = Tokens.ToString(syntaxTree.Flatten().ToList());
+                    //string derivation = Tokens.ToString(syntaxTree.Flatten().ToList());
 
                     if (String.IsNullOrEmpty(OutputPath))
                     {
@@ -86,7 +86,7 @@ namespace TruCompiler
                         string outderivation = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outderivation";
                         
                         WriteToFile(outastFile, result);
-                        WriteToFile(outderivation, derivation);
+                        //WriteToFile(outderivation, derivation);
                     }
                 }
             } catch (Exception e)
