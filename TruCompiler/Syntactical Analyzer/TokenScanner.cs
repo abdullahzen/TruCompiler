@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 
-namespace TruCompiler.Sentactical_Analyzer
+namespace TruCompiler.Syntactical_Analyzer
 {
     public class TokenScanner
     {

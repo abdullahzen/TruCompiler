@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using TruCompiler.Lexical_Analyzer;
-using TruCompiler.Sentactical_Analyzer;
+using TruCompiler.Syntactical_Analyzer;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler
