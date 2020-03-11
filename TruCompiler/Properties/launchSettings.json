@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "TruCompiler": {
-      "commandName": "Project",
-      "commandLineArgs": "-input \"C:\\Users\\abdul\\test\\simpleMain.src\""
-    }
-  }
-}
