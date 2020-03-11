@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,6 +11,7 @@ namespace TruCompiler.Syntactical_Analyzer
     {
         private T _value;
         private List<TreeNode<T>> _children = new List<TreeNode<T>>();
+        private TreeNode<T> _parent;
 
         public TreeNode()
         {
@@ -31,7 +32,7 @@ namespace TruCompiler.Syntactical_Analyzer
             get { return _children[i]; }
         }
 
-        public TreeNode<T> Parent { get; private set; }
+        public TreeNode<T> Parent { get { return _parent; } set { _parent = value; } }
 
         public T Value { get { return _value; } set { _value = value; } }
 
@@ -40,13 +41,18 @@ namespace TruCompiler.Syntactical_Analyzer
             get { return _children; }
         }
 
-        public TreeNode<T> AddChild(T value)
+        public TreeNode<T> AddChild(T value, bool returnChild = false)
         {
             var node = new TreeNode<T>(value) { Parent = this };
             _children.Add(node);
-            return this;
+            if (returnChild)
+            {
+                return node;
+            } else
+            {
+                return this;
+            }
         }
-
         public TreeNode<T> AddChild(TreeNode<T> node)
         {
             if (node.Value == null && node.Children.Count > 0)
@@ -74,6 +80,11 @@ namespace TruCompiler.Syntactical_Analyzer
         public bool RemoveChild(TreeNode<T> node)
         {
             return _children.Remove(node);
+        }
+
+        public void RemoveAt(int num)
+        {
+            _children.RemoveAt(num);
         }
 
         public void Traverse(Action<T> action)

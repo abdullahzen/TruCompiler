@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,28 @@ namespace TruCompiler.Syntactical_Analyzer
             Rules rules = new Rules(tokenScanner);
             TreeNode<Token> tree = rules.Start();
             return tree;
+        }
+
+        public static void CleanEmptyChildren(TreeNode<Token> node, ref TreeNode<Token> newnode)
+        {
+            if (node.Value != null)
+            {
+                newnode.Parent = node.Parent;
+                newnode.Value = node.Value;
+            }
+            foreach (var child in node.Children)
+            {
+                var temp = new TreeNode<Token>();
+                if (child.Value != null)
+                {
+                    temp = newnode.AddChild(child.Value.Clone(), true);
+                }
+                if (child.Children.Count > 0)
+                {
+                    CleanEmptyChildren(child, ref temp);
+                }
+            }
+            return;
         }
 
         public static string[] GenerateDiGraph(TreeNode<Token> node, ref int index)

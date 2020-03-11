@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -66,9 +66,11 @@ namespace TruCompiler
                         TokenScanner tokenScanner = new TokenScanner(nonNullableTokens);
                         syntaxTree = SyntacticalAnalyzer.AnalyzeSyntax(tokenScanner);
                     }
+                    TreeNode<Token> newSyntaxTree = new TreeNode<Token>();
+                    SyntacticalAnalyzer.CleanEmptyChildren(syntaxTree, ref newSyntaxTree);
                     string result = "digraph name {\n";
                     int index = 0;
-                    string[] arr = SyntacticalAnalyzer.GenerateDiGraph(syntaxTree, ref index);
+                    string[] arr = SyntacticalAnalyzer.GenerateDiGraph(newSyntaxTree, ref index);
                     result += arr[0];
                     result += arr[1];
                     result += "}";
@@ -83,11 +85,16 @@ namespace TruCompiler
                     if (Directory.Exists(OutputPath))
                     {
                         string outastFile = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outast";
-                        string outderivation = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outderivation";
+                        //string outderivation = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outderivation";
                         
                         WriteToFile(outastFile, result);
                         //WriteToFile(outderivation, derivation);
                     }
+
+                    //TODO: ADD OUTDERIVATIONERRORS AND OUTDERIVATION BEFORE FINAL PROJECT
+
+                    //Semantic Analyzer
+                   
                 }
             } catch (Exception e)
             {
