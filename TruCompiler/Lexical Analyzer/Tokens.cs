@@ -366,10 +366,12 @@ namespace TruCompiler.Lexical_Analyzer
             {
                 Lexeme = lexeme;
                 Value = value;
+                IsValid = true;
             }
             public Token(Lexeme lexeme)
             {
                 Lexeme = lexeme;
+                IsValid = true;
             }
             public override bool Equals(object obj)
             {

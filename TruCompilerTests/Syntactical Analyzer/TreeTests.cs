@@ -12,13 +12,13 @@ namespace TruCompilerTests.Syntactical_Analyzer
     [TestClass]
     public class TreeTests
     {
-        TreeNode<Token> syntaxTree;
+        Node<Token> syntaxTree;
 
 
         [TestInitialize]
         public void TestInitialize()
         {
-            syntaxTree = new TreeNode<Token>(new Token(Lexeme.keyword, "testNode"));
+            syntaxTree = new Node<Token>(new Token(Lexeme.keyword, "testNode"));
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace TruCompilerTests.Syntactical_Analyzer
         [TestMethod]
         public void TestAddChildAsTreeNode()
         {
-            TreeNode<Token> testToken = new TreeNode<Token>(new Token(Lexeme.id));
+            Node<Token> testToken = new Node<Token>(new Token(Lexeme.id));
             syntaxTree.AddChild(testToken);
             Assert.IsTrue(syntaxTree.Children.Count > 0);
             Assert.IsTrue(syntaxTree.Children.Contains(testToken));

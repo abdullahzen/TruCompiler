@@ -7,43 +7,57 @@ using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler.Syntactical_Analyzer
 {
-    public class TreeNode<T>
+    public class Node<T>
     {
         private T _value;
-        private List<TreeNode<T>> _children = new List<TreeNode<T>>();
-        private TreeNode<T> _parent;
+        private List<Node<T>> _children = new List<Node<T>>();
+        private Node<T> _parent;
 
-        public TreeNode()
+        public Node()
         {
         }
-        public TreeNode(T value)
+        public Node(T value)
         {
             _value = value;
         }
 
-        public TreeNode(TreeNode<T> subtree)
+        public Node(Node<T> subtree)
         {
             subtree.Parent = this;
             AddChild(subtree);
         }
 
-        public TreeNode<T> this[int i]
+        public Node(Node<T> subtree, Node<T> parent, T value)
+        {
+            subtree.Parent = this;
+            AddChild(subtree);
+            this.Parent = parent;
+            this.Value = value;
+        }
+
+        protected Node(Node<T> parent, Node<T> current)
+        {
+            this.Parent = parent;
+            this.Value = current.Value;
+        }
+
+        public Node<T> this[int i]
         {
             get { return _children[i]; }
         }
 
-        public TreeNode<T> Parent { get { return _parent; } set { _parent = value; } }
+        public Node<T> Parent { get { return _parent; } set { _parent = value; } }
 
         public T Value { get { return _value; } set { _value = value; } }
 
-        public List<TreeNode<T>> Children
+        public List<Node<T>> Children
         {
             get { return _children; }
         }
 
-        public TreeNode<T> AddChild(T value, bool returnChild = false)
+        public Node<T> AddChild(T value, bool returnChild = false)
         {
-            var node = new TreeNode<T>(value) { Parent = this };
+            var node = new Node<T>(value) { Parent = this };
             _children.Add(node);
             if (returnChild)
             {
@@ -53,7 +67,22 @@ namespace TruCompiler.Syntactical_Analyzer
                 return this;
             }
         }
-        public TreeNode<T> AddChild(TreeNode<T> node)
+
+        public Node<T> AddChild(Node<T> node, bool returnChild)
+        {
+            node.Parent = this;
+            _children.Add(node);
+            if (returnChild)
+            {
+                return node;
+            }
+            else
+            {
+                return this;
+            }
+        }
+
+        public Node<T> AddChild(Node<T> node)
         {
             if (node.Value == null && node.Children.Count > 0)
             {
@@ -71,13 +100,13 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public List<TreeNode<T>> AddChildren(List<TreeNode<T>> values)
+        public List<Node<T>> AddChildren(List<Node<T>> values)
         {
             Children.AddRange(values);
             return Children;
         }
 
-        public bool RemoveChild(TreeNode<T> node)
+        public bool RemoveChild(Node<T> node)
         {
             return _children.Remove(node);
         }

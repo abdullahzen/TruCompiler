@@ -17,9 +17,9 @@ namespace TruCompiler.Syntactical_Analyzer
         //===========================================//
         //              Recursive Rules
         //===========================================//
-        public TreeNode<Token> Start()
+        public Node<Token> Start()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             node.Value = new Token(Lexeme.keyword, "Start");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "class")))
@@ -38,21 +38,21 @@ namespace TruCompiler.Syntactical_Analyzer
               return node; 
         }
 
-        public TreeNode<Token> Prog()
+        public Node<Token> Prog()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             node.Value = new Token(Lexeme.keyword, "Program");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "class")))
             {
-                TreeNode<Token> classes = new TreeNode<Token>(new Token(Lexeme.keyword, "Classes"));
+                Node<Token> classes = new Node<Token>(new Token(Lexeme.keyword, "Classes"));
                 classes = classes.AddChild(Rept_Prog0());
                 node = node.AddChild(classes);
-                TreeNode<Token> funcdef = new TreeNode<Token>();
+                Node<Token> funcdef = new Node<Token>();
                 funcdef.Value = new Token(Lexeme.keyword, "FunctionDefinitions");
                 funcdef = funcdef.AddChild(Rept_Prog1());
                 node = node.AddChild(funcdef);
-                TreeNode<Token> main = new TreeNode<Token>(TokenScanner.Peek().Clone());
+                Node<Token> main = new Node<Token>(TokenScanner.Peek().Clone());
                 Match(new Token(Lexeme.keyword, "main"));
                 main = main.AddChild(FuncBody());
                 node = node.AddChild(main);
@@ -60,11 +60,11 @@ namespace TruCompiler.Syntactical_Analyzer
             }
             else if (lookahead.Equals(new Token(Lexeme.id)))
             {
-                TreeNode<Token> funcdef = new TreeNode<Token>();
+                Node<Token> funcdef = new Node<Token>();
                 funcdef.Value = new Token(Lexeme.keyword, "FunctionDefinitions");
                 funcdef = funcdef.AddChild(Rept_Prog1());
                 node = node.AddChild(funcdef);
-                TreeNode<Token> main = new TreeNode<Token>(TokenScanner.Peek().Clone());
+                Node<Token> main = new Node<Token>(TokenScanner.Peek().Clone());
                 Match(new Token(Lexeme.keyword, "main"));
                 main = main.AddChild(FuncBody());
                 node = node.AddChild(main);
@@ -72,7 +72,7 @@ namespace TruCompiler.Syntactical_Analyzer
             }
             else if (lookahead.Equals(new Token(Lexeme.keyword, "main")))
             {
-                TreeNode<Token> main = new TreeNode<Token>(TokenScanner.Peek().Clone());
+                Node<Token> main = new Node<Token>(TokenScanner.Peek().Clone());
                 Match(new Token(Lexeme.keyword, "main"));
                 main = main.AddChild(FuncBody());
                 node = node.AddChild(main);
@@ -84,9 +84,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FuncBody()
+        public Node<Token> FuncBody()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             node.Value = new Token(Lexeme.keyword, "FuncBody");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "do")))
@@ -113,9 +113,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_FuncBody2()
+        public Node<Token> Rept_FuncBody2()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "if")))
             {
@@ -155,9 +155,9 @@ namespace TruCompiler.Syntactical_Analyzer
             return node;
         }
 
-        public TreeNode<Token> Statement()
+        public Node<Token> Statement()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             node.Value = new Token(Lexeme.keyword, "Statement");
             if (lookahead.Equals(new Token(Lexeme.keyword, "if")))
@@ -231,9 +231,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FunctionCallOrAssignment()
+        public Node<Token> FunctionCallOrAssignment()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -251,10 +251,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FunctionEndOrAssignment()
+        public Node<Token> FunctionEndOrAssignment()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            TreeNode<Token> assign = new TreeNode<Token>(new Token(Lexeme.keyword, "Assign"));
+            Node<Token> node = new Node<Token>();
+            Node<Token> assign = new Node<Token>(new Token(Lexeme.keyword, "Assign"));
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.eq)))
             {
@@ -270,10 +270,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> MoreMemberCalls()
+        public Node<Token> MoreMemberCalls()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            TreeNode<Token> dot = new TreeNode<Token>(new Token(Lexeme.dot));
+            Node<Token> node = new Node<Token>();
+            Node<Token> dot = new Node<Token>(new Token(Lexeme.dot));
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.dot)))
             {
@@ -294,9 +294,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> StatBlock()
+        public Node<Token> StatBlock()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             node.Value = new Token(Lexeme.keyword, "StatBlock");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "do")))
@@ -345,9 +345,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_StatBlock1()
+        public Node<Token> Rept_StatBlock1()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "if")))
             {
@@ -392,9 +392,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AssignOp()
+        public Node<Token> AssignOp()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.eq)))
             {
@@ -409,9 +409,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> ArithExpr()
+        public Node<Token> ArithExpr()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             node.Value = new Token(Lexeme.keyword, "ArithExpr");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.intnum)))
@@ -463,9 +463,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rightrec_ArithExpr()
+        public Node<Token> Rightrec_ArithExpr()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.plus)))
             {
@@ -495,9 +495,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AddOp()
+        public Node<Token> AddOp()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.plus)))
             {
@@ -524,9 +524,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Term()
+        public Node<Token> Term()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.intnum)))
             {
@@ -577,9 +577,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rightrec_Term()
+        public Node<Token> Rightrec_Term()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.mult)))
             {
@@ -608,9 +608,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> MultOp()
+        public Node<Token> MultOp()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.mult)))
             {
@@ -637,9 +637,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Factor()
+        public Node<Token> Factor()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.intnum)))
             {
@@ -691,9 +691,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FunctionCallOrVariable()
+        public Node<Token> FunctionCallOrVariable()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -710,9 +710,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Variable()
+        public Node<Token> Variable()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -730,10 +730,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> MoreVariableCalls()
+        public Node<Token> MoreVariableCalls()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            TreeNode<Token> dot = new TreeNode<Token>(new Token(Lexeme.dot));
+            Node<Token> node = new Node<Token>();
+            Node<Token> dot = new Node<Token>(new Token(Lexeme.dot));
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.dot)))
             {
@@ -753,9 +753,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Idnest_VariableOnly()
+        public Node<Token> Idnest_VariableOnly()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -771,9 +771,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Sign()
+        public Node<Token> Sign()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             node.Value = new Token(Lexeme.keyword, "Sign");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.plus)))
@@ -794,9 +794,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Idnest()
+        public Node<Token> Idnest()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.openpar)))
             {
@@ -814,9 +814,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> IdnestTail()
+        public Node<Token> IdnestTail()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.openpar)))
             {
@@ -837,14 +837,14 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_Indexing()
+        public Node<Token> Rept_Indexing()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.opensqbr)))
             {
                 Match(new Token(Lexeme.opensqbr));
-                node = node.AddChild(ArithExpr());
+                node = node.AddChild(ArraySize());
                 Match(new Token(Lexeme.closesqbr));
                 node = node.AddChild(Rept_Indexing());
                 return node;
@@ -856,9 +856,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AParams()
+        public Node<Token> AParams()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             node.Value = new Token(Lexeme.keyword, "AParams");
             if (lookahead.Equals(new Token(Lexeme.intnum)))
@@ -910,9 +910,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_AParams1()
+        public Node<Token> Rept_AParams1()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.comma)))
             {
@@ -926,9 +926,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AParamsTail()
+        public Node<Token> AParamsTail()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.comma)))
             {
@@ -943,9 +943,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Expr()
+        public Node<Token> Expr()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             node.Value = new Token(Lexeme.keyword, "Expr");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.intnum)))
@@ -997,9 +997,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AfterExpr()
+        public Node<Token> AfterExpr()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.eq)))
             {
@@ -1037,9 +1037,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> RelExpr()
+        public Node<Token> RelExpr()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.eq)))
             {
@@ -1084,9 +1084,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> RelOp()
+        public Node<Token> RelOp()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.eq)))
             {
@@ -1131,9 +1131,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Opt_FuncBody0()
+        public Node<Token> Opt_FuncBody0()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "local")))
             {
@@ -1148,10 +1148,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_Opt_FuncBody01()
+        public Node<Token> Rept_Opt_FuncBody01()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            TreeNode<Token> variable = new TreeNode<Token>(new Token(Lexeme.keyword, "Variable"));
+            Node<Token> node = new Node<Token>();
+            Node<Token> variable = new Node<Token>(new Token(Lexeme.keyword, "Variable"));
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "integer")))
             {
@@ -1228,9 +1228,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_Prog0()
+        public Node<Token> Rept_Prog0()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "class")))
             {
@@ -1248,10 +1248,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_Prog1()
+        public Node<Token> Rept_Prog1()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            TreeNode<Token> function = new TreeNode<Token>(new Token(Lexeme.keyword, "Function"));
+            Node<Token> node = new Node<Token>();
+            Node<Token> function = new Node<Token>(new Token(Lexeme.keyword, "Function"));
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -1271,9 +1271,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FuncDef()
+        public Node<Token> FuncDef()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -1289,16 +1289,16 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FuncHead()
+        public Node<Token> FuncHead()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
                 node.Value = new Token(Lexeme.keyword, "FuncHead");
                 node = node.AddChild(TokenScanner.Peek().Clone());
                 Match(new Token(Lexeme.id));
-                Opt_ClassDecl2_FuncHead0();
+                node = node.AddChild(Opt_ClassDecl2_FuncHead0());
                 Match(new Token(Lexeme.openpar));
                 node = node.AddChild(FParams());
                 Match(new Token(Lexeme.closepar));
@@ -1313,9 +1313,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AfterFuncHead()
+        public Node<Token> AfterFuncHead()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "void")))
             {
@@ -1339,37 +1339,40 @@ namespace TruCompiler.Syntactical_Analyzer
             return node;
         }
 
-        public bool Opt_ClassDecl2_FuncHead0()
+        public Node<Token> Opt_ClassDecl2_FuncHead0()
         {
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.coloncolon))) {
                 Match(new Token(Lexeme.coloncolon));
+                node = node.AddChild(TokenScanner.Peek().Clone());
                 Match(new Token(Lexeme.id));
-                return true;
+                return node;
             } else
             {
-                return true;
+                //true
+                return node;
             }
         }
 
-        public TreeNode<Token> ClassDecl()
+        public Node<Token> ClassDecl()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "class")))
             {
-                node = new TreeNode<Token>(TokenScanner.Peek().Clone());
+                node = new Node<Token>(TokenScanner.Peek().Clone());
                 Match(new Token(Lexeme.keyword, "class"));
                 node = node.AddChild(TokenScanner.Peek().Clone());
                 Match(new Token(Lexeme.id));
                 if (TokenScanner.Peek().Equals(new Token(Lexeme.keyword, "inherits")))
                 {
-                    TreeNode<Token> inheritanceList = new TreeNode<Token>(new Token(Lexeme.keyword, "InheritanceList"));
+                    Node<Token> inheritanceList = new Node<Token>(new Token(Lexeme.keyword, "InheritanceList"));
                     inheritanceList = inheritanceList.AddChild(Opt_ClassDecl2());
                     node = node.AddChild(inheritanceList);
                 }
                 Match(new Token(Lexeme.opencbr));
-                TreeNode<Token> classMembers = new TreeNode<Token>(new Token(Lexeme.keyword, "ClassMembers"));
+                Node<Token> classMembers = new Node<Token>(new Token(Lexeme.keyword, "ClassMembers"));
                 classMembers = classMembers.AddChild(Rept_ClassDecl4());
                 node = node.AddChild(classMembers);
                 Match(new Token(Lexeme.closecbr));
@@ -1383,13 +1386,13 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_ClassDecl4()
+        public Node<Token> Rept_ClassDecl4()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "public")))
             {
-                TreeNode<Token> member = new TreeNode<Token>(new Token(Lexeme.keyword, "member"));
+                Node<Token> member = new Node<Token>(new Token(Lexeme.keyword, "member"));
                 member = member.AddChild(Visibility());
                 member = member.AddChild(MemberDecl());
                 node = node.AddChild(member);
@@ -1401,7 +1404,7 @@ namespace TruCompiler.Syntactical_Analyzer
                 return node;
             } else if (lookahead.Equals(new Token(Lexeme.keyword, "private")))
             {
-                TreeNode<Token> member = new TreeNode<Token>(new Token(Lexeme.keyword, "member"));
+                Node<Token> member = new Node<Token>(new Token(Lexeme.keyword, "member"));
                 member = member.AddChild(Visibility());
                 member = member.AddChild(MemberDecl());
                 node = node.AddChild(member);
@@ -1418,12 +1421,12 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> MemberDecl()
+        public Node<Token> MemberDecl()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
-            TreeNode<Token> function = new TreeNode<Token>(new Token(Lexeme.keyword, "Function"));
-            TreeNode<Token> variable = new TreeNode<Token>(new Token(Lexeme.keyword, "Variable"));
+            Node<Token> function = new Node<Token>(new Token(Lexeme.keyword, "Function"));
+            Node<Token> variable = new Node<Token>(new Token(Lexeme.keyword, "Variable"));
             if (lookahead.Equals(new Token(Lexeme.id))) {
                 Match(new Token(Lexeme.id));
                 if (TokenScanner.Peek().Equals(new Token(Lexeme.id)))
@@ -1455,9 +1458,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> VarDecl()
+        public Node<Token> VarDecl()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -1473,9 +1476,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_VarDecl2()
+        public Node<Token> Rept_VarDecl2()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.opensqbr)))
             {
@@ -1492,10 +1495,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> ArraySize()
+        public Node<Token> ArraySize()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            node.Value = new Token(Lexeme.keyword, "array");
+            Node<Token> node = new Node<Token>();
+            node.Value = new Token(Lexeme.keyword, "ArraySizeValue");
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.opensqbr)))
             {
@@ -1510,9 +1513,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> ArraySizeValue()
+        public Node<Token> ArraySizeValue()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.intnum)))
             {
@@ -1525,9 +1528,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Before_VarDeclNotId()
+        public Node<Token> Before_VarDeclNotId()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "integer")))
             {
@@ -1544,9 +1547,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> TypeInt()
+        public Node<Token> TypeInt()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "integer")))
             {
@@ -1561,9 +1564,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> TypeFloat()
+        public Node<Token> TypeFloat()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "float")))
             {
@@ -1578,9 +1581,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AfterMemberDecl()
+        public Node<Token> AfterMemberDecl()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -1595,14 +1598,14 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FuncDecl()
+        public Node<Token> FuncDecl()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.openpar)))
             {
                 Match(new Token(Lexeme.openpar));
-                TreeNode<Token> fparams = new TreeNode<Token>(new Token(Lexeme.keyword, "FParams"));
+                Node<Token> fparams = new Node<Token>(new Token(Lexeme.keyword, "FParams"));
                 fparams = fparams.AddChild(FParams());
                 node = node.AddChild(fparams);
                 Match(new Token(Lexeme.closepar));
@@ -1616,9 +1619,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> AfterFuncDecl()
+        public Node<Token> AfterFuncDecl()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "void")))
             {
@@ -1652,10 +1655,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_FParams3()
+        public Node<Token> Rept_FParams3()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            TreeNode<Token> param = new TreeNode<Token>(new Token(Lexeme.keyword, "Param"));
+            Node<Token> node = new Node<Token>();
+            Node<Token> param = new Node<Token>(new Token(Lexeme.keyword, "Param"));
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.comma)))
             {
@@ -1675,9 +1678,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FParamsTail()
+        public Node<Token> FParamsTail()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.comma)))
             {
@@ -1694,9 +1697,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_FParamsTail3()
+        public Node<Token> Rept_FParamsTail3()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.opensqbr)))
             {
@@ -1714,10 +1717,10 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_FParams2()
+        public Node<Token> Rept_FParams2()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
-            TreeNode<Token> param = new TreeNode<Token>(new Token(Lexeme.keyword, "Param"));
+            Node<Token> node = new Node<Token>();
+            Node<Token> param = new Node<Token>(new Token(Lexeme.keyword, "Param"));
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.opensqbr)))
             {
@@ -1735,9 +1738,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Type()
+        public Node<Token> Type()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "integer")))
             {
@@ -1761,9 +1764,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> TypeId()
+        public Node<Token> TypeId()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.id)))
             {
@@ -1777,11 +1780,11 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> FParams()
+        public Node<Token> FParams()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
-            TreeNode<Token> param = new TreeNode<Token>(new Token(Lexeme.keyword, "Param"));
+            Node<Token> param = new Node<Token>(new Token(Lexeme.keyword, "Param"));
             if (lookahead.Equals(new Token(Lexeme.keyword, "integer")))
             {
                 param = param.AddChild(Type());
@@ -1819,9 +1822,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Visibility()
+        public Node<Token> Visibility()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "public")))
             {
@@ -1838,9 +1841,9 @@ namespace TruCompiler.Syntactical_Analyzer
               return node; 
         }
 
-        public TreeNode<Token> Opt_ClassDecl2()
+        public Node<Token> Opt_ClassDecl2()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.keyword, "inherits"))) 
             {
@@ -1858,9 +1861,9 @@ namespace TruCompiler.Syntactical_Analyzer
             }
         }
 
-        public TreeNode<Token> Rept_Opt_ClassDecl22()
+        public Node<Token> Rept_Opt_ClassDecl22()
         {
-            TreeNode<Token> node = new TreeNode<Token>();
+            Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.comma)))
             {

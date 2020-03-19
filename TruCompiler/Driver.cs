@@ -31,7 +31,7 @@ namespace TruCompiler
                 {
                     //Generate Tokens through the lexical analyzer
                     IDictionary<string, IList<Token>> tokens = new Dictionary<string, IList<Token>>();
-                    TreeNode<Token> syntaxTree = null;
+                    Node<Token> syntaxTree = null;
                     if (File.Exists(file))
                     {
                         tokens.Add(file, LexicalAnalyzer.Tokenize(File.ReadAllLines(file)));
@@ -66,7 +66,7 @@ namespace TruCompiler
                         TokenScanner tokenScanner = new TokenScanner(nonNullableTokens);
                         syntaxTree = SyntacticalAnalyzer.AnalyzeSyntax(tokenScanner);
                     }
-                    TreeNode<Token> newSyntaxTree = new TreeNode<Token>();
+                    Node<Token> newSyntaxTree = new Node<Token>();
                     SyntacticalAnalyzer.CleanEmptyChildren(syntaxTree, ref newSyntaxTree);
                     string result = "digraph name {\n";
                     int index = 0;

@@ -9,14 +9,14 @@ namespace TruCompiler.Syntactical_Analyzer
 {
     public class SyntacticalAnalyzer
     { 
-        public static TreeNode<Token> AnalyzeSyntax(TokenScanner tokenScanner)
+        public static Node<Token> AnalyzeSyntax(TokenScanner tokenScanner)
         {
             Rules rules = new Rules(tokenScanner);
-            TreeNode<Token> tree = rules.Start();
+            Node<Token> tree = rules.Start();
             return tree;
         }
 
-        public static void CleanEmptyChildren(TreeNode<Token> node, ref TreeNode<Token> newnode)
+        public static void CleanEmptyChildren(Node<Token> node, ref Node<Token> newnode)
         {
             if (node.Value != null)
             {
@@ -25,7 +25,7 @@ namespace TruCompiler.Syntactical_Analyzer
             }
             foreach (var child in node.Children)
             {
-                var temp = new TreeNode<Token>();
+                var temp = new Node<Token>();
                 if (child.Value != null)
                 {
                     temp = newnode.AddChild(child.Value.Clone(), true);
@@ -38,7 +38,7 @@ namespace TruCompiler.Syntactical_Analyzer
             return;
         }
 
-        public static string[] GenerateDiGraph(TreeNode<Token> node, ref int index)
+        public static string[] GenerateDiGraph(Node<Token> node, ref int index)
         {
             string[] result = new string[]{ "", ""};
             int parent = index;

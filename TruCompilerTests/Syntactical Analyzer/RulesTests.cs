@@ -14,7 +14,7 @@ namespace TruCompilerTests.Syntactical_Analyzer
     {
         IList<Token> tokens;
         TokenScanner tokenScanner;
-        TreeNode<Token> syntaxTree;
+        Node<Token> syntaxTree;
 
 
         [TestInitialize]
