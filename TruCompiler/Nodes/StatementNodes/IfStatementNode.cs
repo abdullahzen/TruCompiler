@@ -15,9 +15,9 @@ namespace TruCompiler.Nodes
         public IfStatementNode(Node<Token> parent, Node<Token> current) : base(parent, current, "IfStatement")
         {
             RelExpr = new RelExprNode(
-                new ArithExprNode(current[1]),
-                new RelOpNode(current[2]),
-                new ArithExprNode(current[3]));
+                new ArithExprNode(this, current[1]),
+                current[2],
+                new ArithExprNode(this, current[3]));
             this.AddChild(RelExpr, false);
             ThenStatBlock = new StatBlockNode(this, current[5], "ThenStatBlock");
             ElseStatBlock = new StatBlockNode(this, current[7], "ElseStatBlock");

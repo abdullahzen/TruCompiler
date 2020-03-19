@@ -9,8 +9,10 @@ namespace TruCompiler.Nodes
 {
     public class FunctionCallStatementNode : StatementNode
     {
-        public FunctionCallStatementNode(Node<Token> parent, Node<Token> current) : base(parent, current)
+        public FunctionCallNode Function { get; set; }
+        public FunctionCallStatementNode(Node<Token> parent, Node<Token> current) : base(parent, current, "FunctionCallStatement")
         {
+            Function = (FunctionCallNode)this.AddChild(new FunctionCallNode(this, current[0]),true);
         }
 
         public bool IsValid()

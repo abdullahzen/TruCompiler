@@ -71,6 +71,9 @@ namespace TruCompiler.Nodes
                             }
                         }
                     }
+                } else if (current.Children.Count == 1 && current[0].Value.Value == "AParams")
+                {
+                    AParams = (AParamsNode)this.AddChild(new AParamsNode(this, current[0]), true);
                 }
             }
         }

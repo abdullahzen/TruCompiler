@@ -7,14 +7,16 @@ using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler.Nodes
 {
-    public class WriteStatementNode : StatementNode
+    public class ExprNode : Node<Token>
     {
-        public ExprNode Expression { get; set; }
-        public WriteStatementNode(Node<Token> parent, Node<Token> current) : base(parent, current, "WriteStatement")
+        public ExprNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
-            if (current.Children.Count > 1 && current[0].Value.Value == "write" && current[1].Value.Value == "Expr")
+            if (current.Children.Count == 1)
             {
-                Expression = (ExprNode)this.AddChild(new ExprNode(this, current[1]), true);
+                this.AddChild(new ArithExprNode(this, current[0]), true);
+            } else if (current.Children.Count > 1)
+            {
+                this.AddChild(new RelExprNode(new ArithExprNode(this, current[0]), current[1], new ArithExprNode(this, current[0])));
             }
         }
 

@@ -11,8 +11,8 @@ namespace TruCompiler.Nodes
     {
         public ArithExprNode LeftArithExpr { get; set; }
         public ArithExprNode RightArithExpr { get; set; }
-        public RelOpNode RelOp { get; set; }
-        public RelExprNode(ArithExprNode leftArithExpr, RelOpNode relOp, ArithExprNode rightArithExpr) : base ()
+        public Node<Token> RelOp { get; set; }
+        public RelExprNode(ArithExprNode leftArithExpr, Node<Token> relOp, ArithExprNode rightArithExpr) : base ()
         {
             this.Value = new Token(Lexeme.keyword, "RelExpr");
             leftArithExpr.Parent = this;

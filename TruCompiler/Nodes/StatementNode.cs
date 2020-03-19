@@ -74,6 +74,11 @@ namespace TruCompiler.Nodes
                                     Statements.Add((StatementNode)thisNode.AddChild(new FunctionCallStatementNode(thisNode, current[i]), true));
                                     break;
                                 }
+                                else if (current[i][0].Children.Count == 2 && current[i][0][0].Value.Lexeme == Lexeme.dot)
+                                {
+                                    Statements.Add((StatementNode)thisNode.AddChild(new AssignStatementNode(thisNode, current[i]), true));
+                                    break;
+                                }
                                 else if (current[i][0].Children.Count == 2 && current[i][0][1].Value.Value == "Assign")
                                 {
                                     Statements.Add((StatementNode)thisNode.AddChild(new AssignStatementNode(thisNode, current[i]), true));

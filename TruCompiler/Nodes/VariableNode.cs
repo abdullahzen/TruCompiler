@@ -11,9 +11,15 @@ namespace TruCompiler.Nodes
     {
         public string Name { get; set; }
         public ArraySizeNode ArraySizeValue { get; set; }
-        public VariableNode(Node<Token> parent, Node<Token> current) : base(parent, current)
+        public VariableNode(Node<Token> parent, Node<Token> current) : base(parent, new Node<Token>(new Token(Lexeme.keyword, "Variable")))
         {
-            Name = this.AddChild(new IdNode(this, current), true).Value.Value;
+            if (current.Value.Lexeme == Lexeme.id)
+            {
+                Name = this.AddChild(new IdNode(this, current), true).Value.Value;
+            } else
+            {
+                Name = this.AddChild(new IdNode(this, current[0]), true).Value.Value;
+            }
         }
         public VariableNode(Node<Token> parent, Node<Token> current, Node<Token> other) : base(parent, new Node<Token>(new Token(Lexeme.keyword, "Variable")))
         {

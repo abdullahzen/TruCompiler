@@ -7,22 +7,22 @@ using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler.Nodes
 {
-    public class FParamsNode : Node<Token>
+    public class AParamsNode : Node<Token>
     {
-        public List<ParamNode> Params { get; set; }
+        public List<ExprNode> Expressions { get; set; }
         
-        public FParamsNode(Node<Token> parent, Node<Token> current) : base(parent, current)
+        public AParamsNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
-            Params = new List<ParamNode>();
+            Expressions = new List<ExprNode>();
             current.Children.ForEach(c =>
             {
-                Params.Add((ParamNode)this.AddChild(new ParamNode(this, c), true));
+                Expressions.Add((ExprNode)this.AddChild(new ExprNode(this, c), true));
             });
         }
 
         public bool IsValid()
         {
-            return Value.Equals(new Token(Lexeme.keyword, "FParams")) && Value.IsValid;
+            return Value.IsValid;
         }
 
         public void accept(Visitor visitor)
