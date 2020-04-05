@@ -9,8 +9,12 @@ namespace TruCompiler.Nodes
 {
     public class AssignStatementNode : StatementNode
     {
-        public AssignStatementNode(Node<Token> parent, Node<Token> current) : base(parent, current)
+        public VariableNode Left { get; set; }
+        public ExprNode Right { get; set; }
+        public AssignStatementNode(Node<Token> parent, Node<Token> current) : base(parent, current, "AssignmentStatement")
         {
+            Left = (VariableNode)this.AddChild(new VariableNode(this, current, current[0]), true);
+            Right = (ExprNode)this.AddChild(new ExprNode(this, current[1]), true);
         }
 
         public bool IsValid()

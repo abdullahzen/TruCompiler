@@ -27,6 +27,7 @@ namespace TruCompiler.Nodes
         {
             if (!String.IsNullOrEmpty(statementType))
             {
+                current.Value.Lexeme = Lexeme.keyword;
                 current.Value.Value = statementType;
             }
             return current;
