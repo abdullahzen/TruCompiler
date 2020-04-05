@@ -15,7 +15,7 @@ namespace TruCompiler.Nodes
             FunctionDefitions = new List<FuncDefNode>();
             current.Children.ForEach(c =>
             {
-                FunctionDefitions.Add((FuncDefNode)this.AddChild(new FuncDeclNode(this, c), true));
+                FunctionDefitions.Add((FuncDefNode)this.AddChild(new FuncDefNode(this, c), true));
             });
         }
 
@@ -24,7 +24,7 @@ namespace TruCompiler.Nodes
             return Value.Equals(new Token(Lexeme.keyword, "FunctionDefitions")) && Value.IsValid;
         }
 
-        public void accept(Visitor visitor)
+        public void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }

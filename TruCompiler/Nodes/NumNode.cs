@@ -22,7 +22,7 @@ namespace TruCompiler.Nodes
                 Type = "Integer";
             } else
             {
-                var floating = 0;
+                float floating = 0;
                 float.TryParse(current.Value.Value, out floating);
                 FloatValue = floating;
                 Type = "Float";
@@ -34,7 +34,7 @@ namespace TruCompiler.Nodes
             return Value.IsValid;
         }
 
-        public void accept(Visitor visitor)
+        public void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }

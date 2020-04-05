@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using TruCompiler.Lexical_Analyzer;
+using TruCompiler.Nodes;
+using TruCompiler.Semantic_Analyzer;
 using TruCompiler.Syntactical_Analyzer;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 
@@ -18,6 +20,8 @@ namespace TruCompiler
     {
         public string[] InputFiles { get; private set; }
         public string OutputPath { get; private set; }
+        public static string[] ASTResult { get; set; }
+        public static int ASTIndex { get; set; }
         public Driver(string[] inputFiles, string outputPath)
         {
             InputFiles = inputFiles;
@@ -94,7 +98,32 @@ namespace TruCompiler
                     //TODO: ADD OUTDERIVATIONERRORS AND OUTDERIVATION BEFORE FINAL PROJECT
 
                     //Semantic Analyzer
-                   
+                    StartNode startNode = new StartNode(null, newSyntaxTree);
+                    ASTVisitor aSTVisitor = new ASTVisitor();
+                    string r = "digraph name {\n";
+                    ASTIndex = 0;
+                    startNode.accept(aSTVisitor);
+                    r += ASTResult[0];
+                    r += ASTResult[1];
+                    r += "}";
+
+                    //string derivation = Tokens.ToString(syntaxTree.Flatten().ToList());
+
+                    if (String.IsNullOrEmpty(OutputPath))
+                    {
+                        OutputPath = file.Substring(0, file.LastIndexOf("\\"));
+                    }
+
+                    if (Directory.Exists(OutputPath))
+                    {
+                        string outastFile = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + "_new" + ".outast";
+                        //string outderivation = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outderivation";
+
+                        WriteToFile(outastFile, r);
+                        //WriteToFile(outderivation, derivation);
+                    }
+
+
                 }
             } catch (Exception e)
             {

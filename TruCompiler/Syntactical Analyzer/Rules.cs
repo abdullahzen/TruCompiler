@@ -843,9 +843,7 @@ namespace TruCompiler.Syntactical_Analyzer
             Token lookahead = TokenScanner.Peek();
             if (lookahead.Equals(new Token(Lexeme.opensqbr)))
             {
-                Match(new Token(Lexeme.opensqbr));
                 node = node.AddChild(ArraySize());
-                Match(new Token(Lexeme.closesqbr));
                 node = node.AddChild(Rept_Indexing());
                 return node;
             }

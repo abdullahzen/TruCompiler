@@ -66,7 +66,7 @@ namespace TruCompiler.Syntactical_Analyzer
             return result;
         }
 
-        private static string GetValueFromNode(Token token)
+        public static string GetValueFromNode(Token token)
         {
             if (token != null)
             {

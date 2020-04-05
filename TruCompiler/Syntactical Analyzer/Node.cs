@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using TruCompiler.Semantic_Analyzer;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler.Syntactical_Analyzer
@@ -126,6 +127,11 @@ namespace TruCompiler.Syntactical_Analyzer
         public IEnumerable<T> Flatten()
         {
             return new[] { Value }.Concat(_children.SelectMany(x => x.Flatten()));
+        }
+
+        public void accept(Visitor<T> visitor)
+        {
+            visitor.visit(this);
         }
     }
 }

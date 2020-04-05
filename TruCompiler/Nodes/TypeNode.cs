@@ -18,7 +18,7 @@ namespace TruCompiler.Nodes
             return Value.IsValid && (Value.Lexeme == Lexeme.id || (Value.Lexeme == Lexeme.keyword && (Value.Value == "float" || Value.Value == "integer")));
         }
 
-        public void accept(Visitor visitor)
+        public void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }
