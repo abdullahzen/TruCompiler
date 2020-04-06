@@ -9,20 +9,27 @@ namespace TruCompiler.Nodes
 {
     public class AddOpNode : Node<Token>
     {
-        public List<Node<Token>> Left { get; set; }
-        public List<Node<Token>> Right { get; set; }
-        public AddOpNode(Node<Token> parent, List<Node<Token>> left, List<Node<Token>> right) : base(parent, new Node<Token>(new Token(Lexeme.keyword, "AddOp")))
+        public Node<Token> Left { get; set; }
+        public Node<Token> Right { get; set; }
+        public Node<Token> Operation { get; set; }
+        public AddOpNode(Node<Token> parent, List<Node<Token>> left, List<Node<Token>> right, Node<Token> op) : base(parent, new Node<Token>(new Token(Lexeme.keyword, "AddOp")))
         {
-            Left = new List<Node<Token>>();
-            left.ForEach(c =>
-            {
-                Left.Add(this.AddChild(new ArithExprNode(this, c), true));
-            });
-            Right = new List<Node<Token>>();
-            right.ForEach(c =>
-            {
-                right.Add(this.AddChild(new ArithExprNode(this, c), true));
-            });
+            
+            Node<Token> leftFactor = new Node<Token>();
+            leftFactor.Parent = this;
+            leftFactor.Value = new Token(Lexeme.keyword, "LeftFactor");
+            leftFactor.Children = left;
+            Left = this.AddChild(new ArithExprNode(this, leftFactor), true);
+            
+            Node<Token> rightFactor = new Node<Token>();
+            rightFactor.Parent = this;
+            rightFactor.Value = new Token(Lexeme.keyword, "RightFactor");
+            rightFactor.Children = right;
+            Right = this.AddChild(new ArithExprNode(this, rightFactor), true);
+
+            Operation = op;
+            Operation.Parent = null;
+
         }
 
         public bool IsValid()

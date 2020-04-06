@@ -102,6 +102,7 @@ namespace TruCompiler
                     ASTVisitor aSTVisitor = new ASTVisitor();
                     string r = "digraph name {\n";
                     ASTIndex = 0;
+                    ASTResult = new string[2];
                     startNode.accept(aSTVisitor);
                     r += ASTResult[0];
                     r += ASTResult[1];

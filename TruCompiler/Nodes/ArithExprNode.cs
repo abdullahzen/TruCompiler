@@ -20,18 +20,23 @@ namespace TruCompiler.Nodes
                 var right = new List<Node<Token>>();
                 var foundOp = false;
                 var multOrAdd = -1;
-                current.Children.ForEach(c =>
+                Node<Token> op = null;
+                foreach(Node<Token> c in current.Children)
                 {
-                    if (c.Value.Lexeme == Lexeme.mult && !foundOp)
+                    if ((c.Value.Lexeme == Lexeme.mult || c.Value.Lexeme == Lexeme.div || (c.Value.Lexeme == Lexeme.keyword && c.Value.Value == "and")) && !foundOp)
                     {
                         multOrAdd = 0;
                         foundOp = true;
-                    }
-                    if (c.Value.Lexeme == Lexeme.plus && !foundOp)
+                        op = c;
+                        continue;
+                    } else 
+                    if ((c.Value.Lexeme == Lexeme.plus || c.Value.Lexeme == Lexeme.minus || (c.Value.Lexeme == Lexeme.keyword && c.Value.Value == "or")) && !foundOp)
                     {
                         multOrAdd = 1;
                         foundOp = true;
-                    }
+                        op = c;
+                        continue;
+                    } 
                     if (!foundOp)
                     {
                         left.Add(c);
@@ -39,13 +44,13 @@ namespace TruCompiler.Nodes
                     {
                         right.Add(c);
                     }
-                });
+                }
                 if (foundOp && multOrAdd == 0)
                 {
-                    this.AddChild(new MultOpNode(this, left, right), false);
+                    this.AddChild(new MultOpNode(this, left, right, op), false);
                 } else if (foundOp && multOrAdd == 1)
                 {
-                    this.AddChild(new AddOpNode(this, left, right), false);
+                    this.AddChild(new AddOpNode(this, left, right, op), false);
                 }
             }
         }
@@ -74,6 +79,16 @@ namespace TruCompiler.Nodes
                         else if (current[0].Value.Value == "ArithExpr")
                         {
                             thisNode.AddChild(new ArithExprNode(thisNode, current[0]), false);
+                        }
+                        else if (current[0].Value.Value == "Sign")
+                        {
+                            switch (current[0][0].Value.Lexeme)
+                            {
+                                case Lexeme.minus:
+                                case Lexeme.plus:
+                                    thisNode.AddChild(new SignNode(thisNode, current), false);
+                                    break;
+                            }
                         }
                         break;
                     case Lexeme.id:

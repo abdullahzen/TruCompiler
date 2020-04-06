@@ -32,6 +32,9 @@ namespace TruCompiler.Nodes
                         {
                             return new VariableNode(parent, current, other);
                         }
+                    }else
+                    {
+                        return new VariableNode(parent, current, other);
                     }
                 }
                 return new VariableNode(parent, current, other);

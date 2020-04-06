@@ -15,18 +15,18 @@ namespace TruCompiler.Nodes
         
         public ClassNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
-            Name = new IdNode(this, this[0]);
+            Name = new IdNode(this, current[0]);
             this.AddChild(Name, false);
-            if (Children.Count > 2)
+            if (current.Children.Count > 2)
             {
-                InheritanceList = new InheritanceListNode(this, this[1]);
+                InheritanceList = new InheritanceListNode(this, current[1]);
                 this.AddChild(InheritanceList, false);
-                ClassMembers = new ClassMembersNode(this, this[2]);
+                ClassMembers = new ClassMembersNode(this, current[2]);
                 this.AddChild(ClassMembers, false);
             } else
             {
                 InheritanceList = null;
-                ClassMembers = new ClassMembersNode(this, this[1]);
+                ClassMembers = new ClassMembersNode(this, current[1]);
                 this.AddChild(ClassMembers, false);
             }
         }

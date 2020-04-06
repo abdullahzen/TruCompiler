@@ -54,6 +54,7 @@ namespace TruCompiler.Syntactical_Analyzer
         public List<Node<T>> Children
         {
             get { return _children; }
+            set { _children = value; }
         }
 
         public Node<T> AddChild(T value, bool returnChild = false)

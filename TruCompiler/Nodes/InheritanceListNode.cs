@@ -9,7 +9,7 @@ namespace TruCompiler.Nodes
 {
     public class InheritanceListNode : Node<Token>
     {
-        public List<ClassNode> Classes { get; set; }
+        public List<IdNode> Classes { get; set; }
         public InheritanceListNode() : base(new Token(Lexeme.keyword, "InheritanceList"))
         {
         }
@@ -21,10 +21,10 @@ namespace TruCompiler.Nodes
 
         public InheritanceListNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
-            Classes = new List<ClassNode>();
+            Classes = new List<IdNode>();
             current.Children.ForEach(c =>
             {
-                Classes.Add((ClassNode)this.AddChild(new ClassNode(this, c), true));
+                Classes.Add((IdNode)this.AddChild(new IdNode(this, c), true));
             });
         }
 

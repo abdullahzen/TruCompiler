@@ -1298,7 +1298,9 @@ namespace TruCompiler.Syntactical_Analyzer
                 Match(new Token(Lexeme.id));
                 node = node.AddChild(Opt_ClassDecl2_FuncHead0());
                 Match(new Token(Lexeme.openpar));
-                node = node.AddChild(FParams());
+                Node<Token> fparams = new Node<Token>(new Token(Lexeme.keyword, "FParams"));
+                fparams = fparams.AddChild(FParams());
+                node = node.AddChild(fparams);
                 Match(new Token(Lexeme.closepar));
                 Match(new Token(Lexeme.colon));
                 node = node.AddChild(AfterFuncHead());

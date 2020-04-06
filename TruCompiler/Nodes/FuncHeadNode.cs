@@ -49,6 +49,7 @@ namespace TruCompiler.Nodes
             } else if (current.Children.Count == 4)
             {
                 ClassName = new IdNode(this, current[0]);
+                this.AddChild(ClassName, false);
                 FunctionName = new IdNode(this, current[1]);
                 this.AddChild(FunctionName, false);
                 FParams = new FParamsNode(this, current[2]);

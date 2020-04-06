@@ -12,6 +12,7 @@ namespace TruCompiler.Nodes
         public List<VariableDeclNode> Variables { get; set; }
         public LocalNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
+            Variables = new List<VariableDeclNode>();
             current.Children.ForEach(c =>
             {
                 Variables.Add((VariableDeclNode)this.AddChild(new VariableDeclNode(this, c), true));

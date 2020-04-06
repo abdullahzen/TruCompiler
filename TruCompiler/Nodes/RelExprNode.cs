@@ -22,8 +22,8 @@ namespace TruCompiler.Nodes
             this.RightArithExpr = rightArithExpr;
             this.RelOp = relOp;
             this.AddChild(leftArithExpr, false);
-            this.AddChild(rightArithExpr, false);
             this.AddChild(relOp, false);
+            this.AddChild(rightArithExpr, false);
         }
 
         public bool IsValid()

@@ -16,7 +16,7 @@ namespace TruCompiler.Nodes
                 this.AddChild(new ArithExprNode(this, current[0]), true);
             } else if (current.Children.Count > 1)
             {
-                this.AddChild(new RelExprNode(new ArithExprNode(this, current[0]), current[1], new ArithExprNode(this, current[0])));
+                this.AddChild(new RelExprNode(new ArithExprNode(this, current[0]), current[1], new ArithExprNode(this, current[2])));
             }
         }
 
