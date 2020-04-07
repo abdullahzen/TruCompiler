@@ -1,0 +1,40 @@
+
+=====================================================
+| table: global           scope offset: 0           |
+=====================================================
+| class     | POLYNOMIAL|
+|    =====================================================
+|    | table: POLYNOMIAL       scope offset: 0           |
+|    =====================================================
+|    | public    | function  | evaluate  | (System.Collections.Generic.List`1[TruCompiler.Nodes.ParamNode])| float                     |
+|    |    =====================================================
+|    |    | table: evaluate         scope offset: 0           |
+|    |    =====================================================
+|    |    =====================================================
+|    =====================================================
+| class     | LINEAR    | inherits POLYNOMIAL       |
+|    =====================================================
+|    | table: LINEAR           scope offset: 0           |
+|    =====================================================
+|    | private   | variable  | a         | float     | 0     | 0     |
+|    | private   | variable  | b         | float     | 0     | 0     |
+|    | public    | function  | build     | (System.Collections.Generic.List`1[TruCompiler.Nodes.ParamNode])| LINEAR                    |
+|    |    =====================================================
+|    |    | table: build            scope offset: 0           |
+|    |    =====================================================
+|    |    =====================================================
+|    | public    | function  | evaluate  | (System.Collections.Generic.List`1[TruCompiler.Nodes.ParamNode])| float                     |
+|    |    =====================================================
+|    |    | table: evaluate         scope offset: 0           |
+|    |    =====================================================
+|    |    =====================================================
+|    =====================================================
+| Variable  | variable  | result    | float     | 0     | 0     |
+| Variable  | variable  | s         | float     | 0     | 0     |
+| variable  | result    | float     | 0     | 0     |
+| variable  | new_function| LINEAR    | 0     | 0     |
+| variable  | new_function| QUADRATIC | 0     | 0     |
+| Variable  | variable  | f1        | linear    | 0     | 0     |
+| Variable  | variable  | f2        | quadratic | 0     | 0     |
+| Variable  | variable  | counter   | integer   | 0     | 0     |
+=====================================================

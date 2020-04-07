@@ -18,7 +18,7 @@ namespace TruCompiler.Nodes
             return Value.Value == "void" && Value.IsValid;
         }
 
-        public void accept(Visitor<Token> visitor)
+        public override void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }

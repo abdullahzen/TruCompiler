@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TruCompiler.Lexical_Analyzer;
+using TruCompiler.Nodes;
 using TruCompiler.Syntactical_Analyzer;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 
@@ -10,6 +11,27 @@ namespace TruCompiler.Semantic_Analyzer
     public class ASTVisitor : Visitor<Token>
     {
         public override void visit(Node<Token> node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(ProgNode node)
+        {
+            GenerateDiGraph(node);
+
+        }
+
+        public override void visit(ClassListNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(ClassNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public void GenerateDiGraph(Node<Token> node)
         {
             int parent = Driver.ASTIndex;
             if (node.Parent == null)
@@ -30,6 +52,61 @@ namespace TruCompiler.Semantic_Analyzer
                     child.accept(this);
                 }
             }
+        }
+
+        public override void visit(ClassMembersNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(MemberNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(FuncDeclNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(VariableDeclNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(FuncDefsNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(FuncDefNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(AddOpNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(FuncBodyNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(MultOpNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(NumNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
+        public override void visit(AssignStatementNode node)
+        {
+            GenerateDiGraph(node);
         }
     }
 }

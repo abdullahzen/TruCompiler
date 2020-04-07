@@ -1,0 +1,10 @@
+
+Semantic Error : Base class POLYNOMIAL not found for the subclass LINEAR at line 6
+Semantic Error : Base class POLYNOMIAL not found for the subclass QUADRATIC at line 14
+Semantic Error : Function evaluate at line 24 is not declared in corresponding class POLYNOMIAL
+Semantic Error : Function evaluate at line 29 is not declared in corresponding class LINEAR
+Semantic Error : Function evaluate at line 38 is not declared in corresponding class QUADRATIC
+Semantic Error : Function build at line 48 is not declared in corresponding class LINEAR
+Semantic Error : Function build at line 57 is not declared in corresponding class QUADRATIC
+Semantic Error : Variable f1 at line 71 has invalid type LINEAR
+Semantic Error : Variable f2 at line 72 has invalid type QUADRATIC

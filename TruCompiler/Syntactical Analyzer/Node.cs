@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using TruCompiler.Semantic_Analyzer;
+using TruCompiler.Semantic_Analyzer.SymbolTableClasses;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler.Syntactical_Analyzer
@@ -13,7 +14,10 @@ namespace TruCompiler.Syntactical_Analyzer
         private T _value;
         private List<Node<T>> _children = new List<Node<T>>();
         private Node<T> _parent;
-
+        public SymbolTable SymbolTable { get; set; }
+        public Entry Entry { get; set; }
+        public string TempVarName { get; set; }
+        public string Type { get; set; }
         public Node()
         {
         }
@@ -130,7 +134,7 @@ namespace TruCompiler.Syntactical_Analyzer
             return new[] { Value }.Concat(_children.SelectMany(x => x.Flatten()));
         }
 
-        public void accept(Visitor<T> visitor)
+        public virtual void accept(Visitor<T> visitor)
         {
             visitor.visit(this);
         }

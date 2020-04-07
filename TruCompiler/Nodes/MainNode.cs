@@ -23,7 +23,7 @@ namespace TruCompiler.Nodes
             return Value.Equals(new Token(Lexeme.keyword, "main")) && Value.IsValid;
         }
 
-        public void accept(Visitor<Token> visitor)
+        public override void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }

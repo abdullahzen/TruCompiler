@@ -36,9 +36,46 @@ namespace TruCompiler.Nodes
             return Value.Equals(new Token(Lexeme.keyword, "Class")) && Value.IsValid;
         }
 
-        public void accept(Visitor<Token> visitor)
+        public override void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
+        }
+
+        public bool HasCircularInheritance()
+        {
+            return HasCircularInheritance(new List<ClassNode>());
+        }
+
+        public bool HasCircularInheritance(List<ClassNode> visitedClasses)
+        {
+            bool hasCircular = false;
+            if (visitedClasses == null)
+            {
+                visitedClasses = new List<ClassNode>();
+            } 
+            if (InheritanceList != null && InheritanceList.Children.Count > 0)
+            {
+                foreach(IdNode idNode in InheritanceList.Children)
+                {
+                    ClassNode classNode = ((ClassListNode)this.Parent).Classes.Find(c => c.Name.IdValue == idNode.IdValue);
+                    if (classNode.Name.IdValue == this.Name.IdValue)
+                    {
+                        return true;
+                    }
+                    else if (!visitedClasses.Contains(classNode) && classNode != null)
+                    {
+                        visitedClasses.Add(classNode);
+                        hasCircular = classNode.HasCircularInheritance(visitedClasses);
+                    } else if (visitedClasses.Contains(classNode))
+                    {
+                        return true;
+                    }
+                }
+            } else
+            {
+                return false;
+            }
+            return false;
         }
     }
 }

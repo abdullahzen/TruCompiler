@@ -19,13 +19,13 @@ namespace TruCompiler.Nodes
                 var integer = 0;
                 int.TryParse(current.Value.Value, out integer);
                 IntValue = integer;
-                Type = "Integer";
+                Type = "int";
             } else
             {
                 float floating = 0;
                 float.TryParse(current.Value.Value, out floating);
                 FloatValue = floating;
-                Type = "Float";
+                Type = "float";
             }
         }
 
@@ -34,7 +34,7 @@ namespace TruCompiler.Nodes
             return Value.IsValid;
         }
 
-        public void accept(Visitor<Token> visitor)
+        public override void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }

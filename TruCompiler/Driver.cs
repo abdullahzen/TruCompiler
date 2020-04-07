@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using TruCompiler.FileManagement;
 using TruCompiler.Lexical_Analyzer;
 using TruCompiler.Nodes;
 using TruCompiler.Semantic_Analyzer;
@@ -16,16 +17,26 @@ namespace TruCompiler
     /// Driver class that is responsible for the main logic of TruCompiler.
     /// The below class includes calling and processing the lexical analyzer
     /// </summary>
-    class Driver
+    public class Driver
     {
         public string[] InputFiles { get; private set; }
         public string OutputPath { get; private set; }
         public static string[] ASTResult { get; set; }
         public static int ASTIndex { get; set; }
+        public static string SemanticErrors { get; set; }
+        public static IFile FileWriter { get; set; }
         public Driver(string[] inputFiles, string outputPath)
         {
             InputFiles = inputFiles;
             OutputPath = outputPath;
+            FileWriter = new FileWriter();
+        }
+
+        public Driver(IFile fileWriter, string[] inputFiles, string outputPath)
+        {
+            InputFiles = inputFiles;
+            OutputPath = outputPath;
+            FileWriter = fileWriter;
         }
         public void Compile()
         {
@@ -108,8 +119,6 @@ namespace TruCompiler
                     r += ASTResult[1];
                     r += "}";
 
-                    //string derivation = Tokens.ToString(syntaxTree.Flatten().ToList());
-
                     if (String.IsNullOrEmpty(OutputPath))
                     {
                         OutputPath = file.Substring(0, file.LastIndexOf("\\"));
@@ -118,11 +127,33 @@ namespace TruCompiler
                     if (Directory.Exists(OutputPath))
                     {
                         string outastFile = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + "_new" + ".outast";
-                        //string outderivation = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outderivation";
 
                         WriteToFile(outastFile, r);
-                        //WriteToFile(outderivation, derivation);
                     }
+
+                    //Generate symbol table from AST first run
+                    if (String.IsNullOrEmpty(OutputPath))
+                    {
+                        OutputPath = file.Substring(0, file.LastIndexOf("\\"));
+                    }
+                    string symTablePath = "";
+                    if (Directory.Exists(OutputPath))
+                    {
+                        symTablePath = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outsymboltable";
+                    }
+
+                    SemanticErrors = "";
+                    SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(symTablePath);
+                    startNode.accept(symbolTableVisitor);
+
+                    
+                    if (Directory.Exists(OutputPath))
+                    {
+                        string outsemanticerros = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outsemanticerrors";
+
+                        WriteToFile(outsemanticerros, SemanticErrors);
+                    }
+
 
 
                 }
@@ -133,12 +164,9 @@ namespace TruCompiler
                 Console.WriteLine(e.StackTrace);
             }
         }
-        private void WriteToFile(string filePath, string input)
+        public static void WriteToFile(string filePath, string input)
         {
-            using (StreamWriter writer = new StreamWriter(filePath, false))
-            {
-                writer.Write(input);
-            }
+            FileWriter.Write(filePath, input);
         }
     }
 }

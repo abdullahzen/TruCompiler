@@ -1,0 +1,80 @@
+
+=====================================================
+| table: global           scope offset: 0           |
+=====================================================
+| class     | POLYNOMIAL|
+|    =====================================================
+|    | table: POLYNOMIAL       scope offset: 0           |
+|    =====================================================
+|    | public    | function  | evaluate  | (float x)  | float       |
+|    |    =====================================================
+|    |    | table: evaluate         scope offset: 0           |
+|    |    =====================================================
+|    |    |           | parameter | x         | float     | 0     | 0|
+|    |    |           | litval    | t1        | int       | 0     | 0|
+|    |    =====================================================
+|    =====================================================
+| class     | LINEAR    | inherits POLYNOMIAL       |
+|    =====================================================
+|    | table: LINEAR           scope offset: 0           |
+|    =====================================================
+|    | private   | variable  | a         | float     | 0     | 0|
+|    | private   | variable  | b         | float     | 0     | 0|
+|    | public    | function  | build     | (float A,float B)  | LINEAR      |
+|    |    =====================================================
+|    |    | table: build            scope offset: 0           |
+|    |    =====================================================
+|    |    |           | parameter | A         | float     | 0     | 0|
+|    |    |           | parameter | B         | float     | 0     | 0|
+|    |    |           | variable  | new_function| LINEAR    | 0     | 0| linked to LINEAR|
+|    |    =====================================================
+|    | public    | function  | evaluate  | (float x)  | float       |
+|    |    =====================================================
+|    |    | table: evaluate         scope offset: 0           |
+|    |    =====================================================
+|    |    |           | parameter | x         | float     | 0     | 0|
+|    |    |           | variable  | result    | float     | 0     | 0|
+|    |    |           | litval    | t2        | float     | 0     | 0|
+|    |    |           | tempvar   | t3        | float     | 0     | 0|
+|    |    |           | tempvar   | t4        | float     | 0     | 0|
+|    |    =====================================================
+|    =====================================================
+| class     | QUADRATIC | inherits POLYNOMIAL       |
+|    =====================================================
+|    | table: QUADRATIC        scope offset: 0           |
+|    =====================================================
+|    | private   | variable  | a         | float     | 0     | 0|
+|    | private   | variable  | b         | float     | 0     | 0|
+|    | private   | variable  | c         | float     | 0     | 0|
+|    | public    | function  | build     | (float A,float B,float C)  | QUADRATIC   |
+|    |    =====================================================
+|    |    | table: build            scope offset: 0           |
+|    |    =====================================================
+|    |    |           | parameter | A         | float     | 0     | 0|
+|    |    |           | parameter | B         | float     | 0     | 0|
+|    |    |           | parameter | C         | float     | 0     | 0|
+|    |    |           | variable  | new_function| QUADRATIC | 0     | 0| linked to QUADRATIC|
+|    |    =====================================================
+|    | public    | function  | evaluate  | (float x)  | float       |
+|    |    =====================================================
+|    |    | table: evaluate         scope offset: 0           |
+|    |    =====================================================
+|    |    |           | parameter | x         | float     | 0     | 0|
+|    |    |           | variable  | result    | float     | 0     | 0|
+|    |    |           | tempvar   | t5        | float     | 0     | 0|
+|    |    |           | tempvar   | t6        | float     | 0     | 0|
+|    |    |           | tempvar   | t7        | float     | 0     | 0|
+|    |    |           | tempvar   | t8        | float     | 0     | 0|
+|    |    =====================================================
+|    =====================================================
+| Variable  | variable  | f1        | LINEAR    | 0     | 0| linked to LINEAR|
+| Variable  | variable  | f2        | QUADRATIC | 0     | 0| linked to QUADRATIC|
+| Variable  | variable  | counter   | integer   | 0     | 0|
+|           | litval    | t9        | int       | 0     | 0|
+|           | litval    | t10       | float     | 0     | 0|
+|           | litval    | t11       | float     | 0     | 0|
+|           | litval    | t12       | float     | 0     | 0|
+|           | litval    | t13       | float     | 0     | 0|
+|           | litval    | t14       | int       | 0     | 0|
+|           | litval    | t15       | int       | 0     | 0|
+=====================================================

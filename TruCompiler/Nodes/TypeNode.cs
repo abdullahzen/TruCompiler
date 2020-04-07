@@ -11,6 +11,13 @@ namespace TruCompiler.Nodes
     {
         public TypeNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
+            if (Value.Lexeme == Lexeme.keyword)
+            {
+                Type = Value.Value;
+            } else if (Value.Lexeme == Lexeme.id)
+            {
+                Type = Value.Value;
+            }
         }
 
         public bool IsValid()
@@ -18,7 +25,7 @@ namespace TruCompiler.Nodes
             return Value.IsValid && (Value.Lexeme == Lexeme.id || (Value.Lexeme == Lexeme.keyword && (Value.Value == "float" || Value.Value == "integer")));
         }
 
-        public void accept(Visitor<Token> visitor)
+        public override void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }

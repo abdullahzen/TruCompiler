@@ -53,12 +53,30 @@ namespace TruCompiler.Nodes
 
         }
 
+        public Node<Token> GetReturnType()
+        {
+            if (Void != null)
+            {
+                return Void;
+            }
+            return ReturnType;
+        }
+
+        public bool IsVoid()
+        {
+            if (Void != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public bool IsValid()
         {
             return Value.Equals(new Token(Lexeme.keyword, "Function")) && Value.IsValid;
         }
 
-        public void accept(Visitor<Token> visitor)
+        public override void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }

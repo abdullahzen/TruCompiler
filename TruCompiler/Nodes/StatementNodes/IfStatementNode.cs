@@ -30,7 +30,7 @@ namespace TruCompiler.Nodes
             return Value.IsValid;
         }
 
-        public void accept(Visitor<Token> visitor)
+        public override void accept(Visitor<Token> visitor)
         {
             visitor.visit(this);
         }
