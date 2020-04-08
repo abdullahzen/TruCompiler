@@ -54,6 +54,7 @@ namespace TruCompiler.Nodes
                 }
 
             }
+            this.Value.Line = current[0].Value.Line;
         }
 
         public bool IsValid()

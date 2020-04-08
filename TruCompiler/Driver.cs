@@ -145,6 +145,8 @@ namespace TruCompiler
                     SemanticErrors = "";
                     SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(symTablePath);
                     startNode.accept(symbolTableVisitor);
+                    TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
+                    startNode.accept(typeCheckingVisitor);
 
                     
                     if (Directory.Exists(OutputPath))

@@ -26,8 +26,8 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 String.Format("{0,-12}", "| " + Kind) +
                 String.Format("{0,-12}", "| " + Name) +
                 String.Format("{0,-12}", "| " + Type) +
-                String.Format("{0,-8}", "| " + Size) +
-                String.Format("{0,-2}", "| " + Offset) +
+                /*String.Format("{0,-8}", "| " + Size) +
+                String.Format("{0,-2}", "| " + Offset) +*/
                 (ClassType != null ? String.Format("{0,-6}", "| linked to " + ClassType.Name) : "")
                 + "|";
         }

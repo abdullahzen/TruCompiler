@@ -20,6 +20,7 @@ namespace TruCompiler.Nodes
             {
                 Name = this.AddChild(new IdNode(this, current[0]), true).Value.Value;
             }
+            this.Value.Line = current.Value.Line;
         }
         public VariableNode(Node<Token> parent, Node<Token> current, Node<Token> other) : base(parent, new Node<Token>(new Token(Lexeme.keyword, "Variable")))
         {
@@ -54,6 +55,7 @@ namespace TruCompiler.Nodes
                 Name = this.AddChild(new IdNode(this, current), true).Value.Value;
                 ArraySizeValue = (ArraySizeNode)this.AddChild(new ArraySizeNode(this, other), true);
             }
+            this.Value.Line = current.Value.Line;
         }
 
         public bool IsValid()

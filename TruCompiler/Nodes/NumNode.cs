@@ -19,7 +19,7 @@ namespace TruCompiler.Nodes
                 var integer = 0;
                 int.TryParse(current.Value.Value, out integer);
                 IntValue = integer;
-                Type = "int";
+                Type = "integer";
             } else
             {
                 float floating = 0;

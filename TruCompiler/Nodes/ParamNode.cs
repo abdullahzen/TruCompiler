@@ -24,6 +24,8 @@ namespace TruCompiler.Nodes
             {
                 ArraySize = null;
             }
+            this.Value.Line = current[0].Value.Line;
+            this.Parent.Value.Line = current[0].Value.Line;
         }
 
         public bool IsValid()

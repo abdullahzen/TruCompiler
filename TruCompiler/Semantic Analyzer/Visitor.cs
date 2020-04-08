@@ -25,6 +25,14 @@ namespace TruCompiler.Semantic_Analyzer
         public abstract void visit(MultOpNode node);
         public abstract void visit(NumNode node);
         public abstract void visit(AssignStatementNode node);
+        public abstract void visit(ArithExprNode node);
+        public abstract void visit(MainNode node);
+        public abstract void visit(FunctionCallNode node);
+        public abstract void visit(IdNode node);
+        public abstract void visit(ReturnStatementNode node);
+        public abstract void visit(WriteStatementNode node);
+        public abstract void visit(RelExprNode node);
+
 
     }
 }

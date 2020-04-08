@@ -85,6 +85,10 @@ namespace TruCompiler.Nodes
                     this.AddChild(ReturnType, false);
                 }
             }
+            if (current.Children.Count > 0)
+            {
+                this.Parent.Value.Line = current[0].Value.Line;
+            }
         }
 
         public bool IsValid()

@@ -109,7 +109,7 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             }
 
             result += "\n" + lineSpacing + "=====================================================\n";
-            result += lineSpacing + String.Format("{0,-25}", "| table: " + Name) + String.Format("{0,-27}", " scope offset: " + Size) + "|\n";
+            result += lineSpacing + String.Format("{0,-25}", "| table: " + Name) + /*String.Format("{0,-27}", " scope offset: " + Size)*/ "|\n";
             result += lineSpacing + "=====================================================\n";
             
             for (int i = 0; i < SymList.Count; i++)

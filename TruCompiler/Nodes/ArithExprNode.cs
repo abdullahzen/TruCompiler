@@ -53,6 +53,12 @@ namespace TruCompiler.Nodes
                     this.AddChild(new AddOpNode(this, left, right, op), false);
                 }
             }
+            if (current.Children.Count > 0)
+            {
+                this.Parent.Value.Line = current[0].Value.Line;
+                this.Value.Line = current[0].Value.Line;
+            }
+
         }
 
         public bool IsValid()

@@ -50,6 +50,7 @@ namespace TruCompiler.Nodes
                     this.AddChild(ReturnType, false);
                 }
             }
+            this.Value.Line = current[0].Value.Line;
 
         }
 

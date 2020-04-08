@@ -28,7 +28,7 @@
 |    |    |           | parameter | A         | float     |
 |    |    |           | parameter | B         | float     |
 |    |    |           | local     | new_function| LINEAR    | linked to LINEAR|
-|    |    |           | retval    | t7        | LINEAR    |
+|    |    |           | retval    | t12       | LINEAR    |
 |    |    =====================================================
 |    | public    | function  | evaluate  | (float)   | float       |
 |    |    =====================================================
@@ -42,20 +42,51 @@
 |    |    |           | retval    | t6        | float     |
 |    |    =====================================================
 |    =====================================================
+| class     | QUADRATIC | inherits POLYNOMIAL       |
+|    =====================================================
+|    | table: QUADRATIC       |
+|    =====================================================
+|    | private   | variable  | a         | float     |
+|    | private   | variable  | b         | float     |
+|    | private   | variable  | c         | float     |
+|    | public    | function  | build     | (float,float,float)  | QUADRATIC   |
+|    |    =====================================================
+|    |    | table: build           |
+|    |    =====================================================
+|    |    |           | parameter | A         | float     |
+|    |    |           | parameter | B         | float     |
+|    |    |           | parameter | C         | float     |
+|    |    |           | local     | new_function| QUADRATIC | linked to QUADRATIC|
+|    |    |           | retval    | t13       | QUADRATIC |
+|    |    =====================================================
+|    | public    | function  | evaluate  | (float)   | float       |
+|    |    =====================================================
+|    |    | table: evaluate        |
+|    |    =====================================================
+|    |    |           | parameter | x         | float     |
+|    |    |           | local     | result    | float     |
+|    |    |           | tempvar   | t7        | float     |
+|    |    |           | tempvar   | t8        | float     |
+|    |    |           | tempvar   | t9        | float     |
+|    |    |           | tempvar   | t10       | float     |
+|    |    |           | retval    | t11       | float     |
+|    |    =====================================================
+|    =====================================================
 |           | function  | main      | ()        | void        |
 |    =====================================================
 |    | table: main            |
 |    =====================================================
 |    | Variable  | local     | f1        | LINEAR    | linked to LINEAR|
+|    | Variable  | local     | f2        | QUADRATIC | linked to QUADRATIC|
 |    | Variable  | local     | counter   | integer   |
-|    |           | litval    | t8        | integer   |
-|    |           | litval    | t9        | float     |
-|    |           | retval    | t10       | LINEAR    |
-|    |           | litval    | t11       | float     |
-|    |           | litval    | t12       | float     |
-|    |           | litval    | t13       | float     |
-|    |           | retval    | t14       | LINEAR    |
-|    |           | litval    | t15       | integer   |
-|    |           | litval    | t16       | integer   |
+|    |           | litval    | t14       | integer   |
+|    |           | litval    | t15       | float     |
+|    |           | retval    | t16       | LINEAR    |
+|    |           | litval    | t17       | float     |
+|    |           | litval    | t18       | float     |
+|    |           | litval    | t19       | float     |
+|    |           | retval    | t20       | LINEAR    |
+|    |           | litval    | t21       | integer   |
+|    |           | litval    | t22       | integer   |
 |    =====================================================
 =====================================================

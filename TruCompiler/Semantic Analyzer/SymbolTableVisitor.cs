@@ -160,10 +160,45 @@ namespace TruCompiler.Semantic_Analyzer
 			{
 				paramsList.Add(param);
 			}
+
+			//Check for duplicate functions and aallow overloaded
+			foreach (Entry e in node.SymbolTable.SymList)
+			{
+				if (e.Kind == "function" && e.Name == name)
+				{
+					if (paramsList.Count == ((FunctionEntry)e).Params.Count)
+					{
+						Driver.SemanticErrors += String.Format("\nSemantic Error : Duplicate Function {0} found at line {1}", name, node.Value.Line);
+						return;
+					} else
+					{
+						Driver.SemanticErrors += String.Format("\nSemantic (Warning) : Overloaded Function {0} found at line {1}", name, node.Value.Line);
+					}
+				}
+			}
+
 			node.Entry = new FunctionEntry(visibility, type, name, paramsList, localFunctionTable);
 			
 			node.SymbolTable.addEntry(node.Entry);
 			node.SymbolTable = localFunctionTable;
+
+
+			//Check for shadowed members
+			ClassEntry memberClass = (ClassEntry)node.SymbolTable.SearchName(node.SymbolTable.UpperTable.Name);
+			if (memberClass != null)
+			{
+				foreach(SymbolTable classSymbol in memberClass.InheritedClasses)
+				{
+					foreach(Entry e in classSymbol.SymList)
+					{
+						if (e.Kind == "function" && e.Name == name)
+						{
+							Driver.SemanticErrors += String.Format("\nSemantic (Warning) : Function {0} in class {1} at line {2} is shadowing the same member from inherited class {3}", name, memberClass.Name, node.Value.Line, classSymbol.Name);
+						}
+					}
+				}
+			}
+
 		}
 
 		public override void visit(VariableDeclNode node)
@@ -206,12 +241,43 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 			
 			string name = node.Name.IdValue;
-			node.Entry = new VariableEntry(visibility, "variable", type, name, null);
+			//Check for duplicate vairables
+			foreach(Entry e in node.SymbolTable.SymList)
+			{
+				if (e.Kind == "variable" && e.Name == name)
+				{
+					Driver.SemanticErrors += String.Format("\nSemantic Error : Duplicate Variable {0} found at line {1}", name, node.Value.Line);
+					return;
+				}
+			}
+
+			string varType = "variable";
+			if (node.Parent.Value.Value == "local") {
+				varType = "local";
+			}
+
+			node.Entry = new VariableEntry(visibility, varType, type, name, null);
 			if (classType != null)
 			{
 				((VariableEntry)node.Entry).ClassType = classType;
 			}
 			node.SymbolTable.addEntry(node.Entry);
+
+			//Check for shadowed members
+			ClassEntry memberClass = (ClassEntry)node.SymbolTable.SearchName(node.SymbolTable.UpperTable.Name);
+			if (memberClass != null)
+			{
+				foreach (SymbolTable classSymbol in memberClass.InheritedClasses)
+				{
+					foreach (Entry e in classSymbol.SymList)
+					{
+						if (e.Kind == "variable" && e.Name == name)
+						{
+							Driver.SemanticErrors += String.Format("\nSemantic (Warning) : Variable {0} in class {1} at line {2} is shadowing the same member from inherited class {3}", name, memberClass.Name, node.Value.Line, classSymbol.Name);
+						}
+					}
+				}
+			}
 		}
 
 		public override void visit(FuncDefsNode node)
@@ -261,14 +327,34 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 			if (localFunctionTable == null)
 			{
+
 				localFunctionTable = new SymbolTable(1, name, node.SymbolTable);
 				List<ParamNode> paramsList = new List<ParamNode>();
 				foreach (ParamNode param in head.FParams.Params)
 				{
 					paramsList.Add(param);
 				}
+
+				//Check for duplicate functions and aallow overloaded
+				foreach (Entry e in node.SymbolTable.SymList)
+				{
+					if (e.Kind == "function" && e.Name == name)
+					{
+						if (paramsList.Count == ((FunctionEntry)e).Params.Count)
+						{
+							Driver.SemanticErrors += String.Format("\nSemantic Error : Duplicate Function {0} found at line {1}", name, node.Value.Line);
+							return;
+						}
+						else
+						{
+							Driver.SemanticErrors += String.Format("\nSemantic (Warning) : Overloaded Function {0} found at line {1}", name, node.Value.Line);
+						}
+					}
+				}
+
 				node.Entry = new FunctionEntry(type, name, paramsList, localFunctionTable);
-				localFunctionTable.addEntry(node.Entry);
+				node.SymbolTable.addEntry(node.Entry);
+
 			}
 			node.SymbolTable = localFunctionTable;
 			node.FunctionHead.SymbolTable = node.SymbolTable;
@@ -332,6 +418,7 @@ namespace TruCompiler.Semantic_Analyzer
 
 		public override void visit(AssignStatementNode node)
 		{
+			node.Type = GetVariableType(node.Left, node);
 			foreach (Node<Token> child in node.Children)
 			{
 				child.SymbolTable = node.SymbolTable;
@@ -339,13 +426,119 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 		}
 
-		/*public override void visit(MainNode node)
+		public override void visit(ArithExprNode node)
 		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+			GetType(node);
+		}
 
-		}*/
+		public override void visit(FunctionCallNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+			node.Type = GetFunctionCallType(node, node);
+			String tempvarname = this.GetNewTempName();
+			node.TempVarName = tempvarname;
+			string type = node.Type;
+
+			node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
+			node.SymbolTable.addEntry(node.Entry);
+		}
+
+		public override void visit(ReturnStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+			ArithExprNode arith = node.Expression.ArithExpr;
+			if (arith != null)
+			{
+				node.Type = GetType(arith);
+				String tempvarname = this.GetNewTempName();
+				node.TempVarName = tempvarname;
+				string type = node.Type;
+				node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
+				node.SymbolTable.addEntry(node.Entry);
+			}
+		}
+
+		public override void visit(WriteStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+			ArithExprNode arith = node.Expression.ArithExpr;
+			if (arith != null)
+			{
+				node.Type = GetType(arith);
+				String tempvarname = this.GetNewTempName();
+				node.TempVarName = tempvarname;
+				string type = node.Type;
+				node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
+				node.SymbolTable.addEntry(node.Entry);
+			}
+		}
+
+		public override void visit(RelExprNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+			ArithExprNode arith1 = node.LeftArithExpr;
+			ArithExprNode arith2 = node.RightArithExpr;
+
+			if (arith1 != null && arith2 != null)
+			{
+				node.Type = GetType(arith1);
+				GetType(arith2);
+			}
+		}
+
+		public override void visit(MainNode node)
+		{
+			FuncBodyNode mainFunction = node.FuncBody;
+			string type = "void";
+			string name = "main";
+			SymbolTable localFunctionTable = new SymbolTable(1, name, node.SymbolTable);
+			List<ParamNode> paramsList = new List<ParamNode>();
+		
+			node.Entry = new FunctionEntry(type, name, paramsList, localFunctionTable);
+
+			node.SymbolTable.addEntry(node.Entry);
+			node.SymbolTable = localFunctionTable;
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+		}
 
 
-		public string GetType(ArithExprNode node)
+		public override void visit(IdNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+			node.TempVarName = node.IdValue;
+		}
+
+
+		public static string GetType(ArithExprNode node)
 		{
 			string type = "";
 			if (node.Children.Count > 0)
@@ -356,82 +549,15 @@ namespace TruCompiler.Semantic_Analyzer
 						switch (node[0].Value.Value)
 						{
 							case "Signed":
-								type = GetType(((ArithExprNode)((SignNode)node[0]).Factor));
+								type = ((NumNode)((SignNode)node[0]).Factor).Type;
 								node.Type = type;
 								break;
 							case "FunctionCall":
-								FunctionCallNode functionCall = (FunctionCallNode)node[0];
-								Node<Token> temp = node;
-								while(temp.Parent != null)
-								{
-									temp = temp.Parent;
-								}
-								FuncDefsNode funcs = ((ProgNode)temp[0]).FunctionDefinitions;
-
-								if (funcs != null && funcs.Children.Count > 0)
-								{
-									FuncDefNode func = (FuncDefNode)funcs.Children.Find(f => f.Entry.Name == functionCall.Name.IdValue);
-									if (func != null && func.Entry != null)
-									{
-										type = func.Entry.Type;
-										node.Type = type;
-									} else
-									{
-										Driver.SemanticErrors += String.Format("\nSemantic Error : Call to non-existing Function {0} at line {1}", functionCall.Name.IdValue, functionCall.Name.Value.Line);
-										type = "invalidType";
-									}
-								} else
-								{
-									Driver.SemanticErrors += String.Format("\nSemantic Error : Call to non-existing Function {0} at line {1}", functionCall.Name.IdValue, functionCall.Name.Value.Line);
-									type = "invalidType";
-								}
+								type = GetFunctionCallType((FunctionCallNode)node[0], node);
 								break;
 							case "Variable":
 								VariableNode variable = (VariableNode)node[0];
-								if (variable.Children.Count == 1)
-								{
-									Entry entry = node.SymbolTable.SearchName(variable.Name);
-									if (entry != null)
-									{
-										type = entry.Type;
-										node.Type = type;
-									}else
-									{
-										Driver.SemanticErrors += String.Format("\nSemantic Error : Variable {0} at line {1} is not defined in the current scope", variable.Name, variable.Value.Line);
-										type = "invalidType";
-									}
-								} else if (variable.Children.Count > 1)
-								{
-									if (variable.Children.FindLast(c => true).Value.Value == "ArraySizeValue")
-									{
-
-									} else
-									{
-										string firstVar = ((IdNode)variable[0]).IdValue;
-										Entry entry = node.SymbolTable.SearchName(firstVar);
-										if (entry != null)
-										{
-											int count = variable.Children.Count;
-											int index = 1;
-											VariableEntry tempEntry = (VariableEntry)entry;
-											while (count != 0)
-											{
-												if (tempEntry.ClassType != null)
-												{
-													tempEntry = (VariableEntry)tempEntry.ClassType.SearchName(((IdNode)variable[index]).IdValue);
-												}
-											}
-
-											type = tempEntry.Type;
-											node.Type = type;
-										}
-										else
-										{
-											Driver.SemanticErrors += String.Format("\nSemantic Error : Variable {0} at line {1} is not defined in the current scope", firstVar, variable.Value.Line);
-											type = "invalidType";
-										}
-									}
-								}
+								type = GetVariableType(variable, node);
 								break;
 						}
 						break;
@@ -440,7 +566,7 @@ namespace TruCompiler.Semantic_Analyzer
 						type = node[0].Type;
 						break;
 					case Lexeme.intnum:
-						node[0].Type = "int";
+						node[0].Type = "integer";
 						type = node[0].Type;
 						break;
 				}
@@ -448,152 +574,136 @@ namespace TruCompiler.Semantic_Analyzer
 			return type;
 		}
 
-
-		/*
-				public void visit(StatBlockNode p_node)
+		public static string GetVariableType(VariableNode variable, Node<Token> node)
+		{
+			string type = "";
+			if (variable.Children.Count == 1)
+			{
+				Entry entry = node.SymbolTable.SearchName(variable.Name);
+				if (entry != null)
 				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-				};
-
-				public void visit(ProgramBlockNode p_node)
+					type = entry.Type;
+					node.Type = type;
+				}
+				else
 				{
-					SymTab localtable = new SymTab(1, "program", p_node.m_symtab);
-					p_node.m_symtabentry = new FuncEntry("void", "program", new Vector<VarEntry>(), localtable);
-					p_node.m_symtab.addEntry(p_node.m_symtabentry);
-					p_node.m_symtab = localtable;
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
+					Driver.SemanticErrors += String.Format("\nSemantic Error : Variable {0} at line {1} is not defined in the current scope", variable.Name, node.Value.Line);
+					type = "invalidType";
+				}
+			}
+			else if (variable.Children.Count > 1)
+			{
+				if (variable.Children.FindLast(c => true).Value.Value == "ArraySizeValue")
+				{
+					List<Node<Token>> subvars = new List<Node<Token>>();
+					variable.Children.ForEach(c => subvars.Add(c));
+					subvars.RemoveAt(subvars.Count - 1);
+					string firstVar = ((IdNode)variable[0]).IdValue;
+					Entry entry = node.SymbolTable.SearchName(firstVar);
+					if (entry != null)
 					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
+						int count = subvars.Count;
+						int index = 1;
+						VariableEntry tempEntry = (VariableEntry)entry;
+						while (count != 0)
+						{
+							if (tempEntry.ClassType != null)
+							{
+								tempEntry = (VariableEntry)tempEntry.ClassType.SearchName(((IdNode)subvars[index]).IdValue);
+							}
+							if (tempEntry == null)
+							{
+								Driver.SemanticErrors += String.Format("\nSemantic Error : {0} is not a member of the object {1} at line {2}", ((IdNode)subvars[index]).IdValue, firstVar, node.Value.Line);
+								type = "invalidType";
+								break;
+							}
+							count--;
+							index++;
+						}
+						if (tempEntry != null)
+						{
+							type = tempEntry.Type;
+							node.Type = type;
+						}
 					}
-				};
+					else
+					{
+						Driver.SemanticErrors += String.Format("\nSemantic Error : Variable {0} at line {1} is not defined in the current scope", firstVar, node.Value.Line);
+						type = "invalidType";
+					}
+				}
+				else
+				{
+					string firstVar = ((IdNode)variable[0]).IdValue;
+					Entry entry = node.SymbolTable.SearchName(firstVar);
+					if (entry != null)
+					{
+						int count = variable.Children.Count;
+						int index = 1;
+						VariableEntry tempEntry = (VariableEntry)entry;
+						while (count != 0)
+						{
+							if (tempEntry.ClassType != null)
+							{
+								tempEntry = (VariableEntry)tempEntry.ClassType.SearchName(((IdNode)variable[index]).IdValue);
+							}
+							if (tempEntry == null)
+							{
+								Driver.SemanticErrors += String.Format("\nSemantic Error : {0} is not a member of the object {1} at line {2}", ((IdNode)variable[index]).IdValue, firstVar, node.Value.Line);
+								type = "invalidType";
+								break;
+							}
+							count--;
+							index++;
+						}
+						if (tempEntry != null)
+						{
+							type = tempEntry.Type;
+							node.Type = type;
+						}
+					}
+					else
+					{
+						Driver.SemanticErrors += String.Format("\nSemantic Error : Variable {0} at line {1} is not defined in the current scope", firstVar, node.Value.Line);
+						type = "invalidType";
+					}
+				}
+			}
+			return type;
+		}
 
+		public static string GetFunctionCallType(FunctionCallNode functionCall, Node<Token> node)
+		{
+			string type = "";
+			Node<Token> temp = node;
+			while (temp.Parent != null)
+			{
+				temp = temp.Parent;
+			}
+			FuncDefsNode funcs = ((ProgNode)temp[0]).FunctionDefinitions;
 
-
+			if (funcs != null && funcs.Children.Count > 0)
+			{
+				FuncDefNode func = (FuncDefNode)funcs.Children.Find(f => (f.Entry != null) ? f.Entry.Name == functionCall.Name.IdValue : false);
 				
-
-				public void visit(VarDeclNode p_node)
+				if (func != null && func.Entry != null)
 				{
-					
+					type = func.Entry.Type;
+					node.Type = type;
 				}
-
-			
-
-				public void visit(DimListNode p_node)
+				else
 				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-				};
-
-				public void visit(FuncDefListNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-				};
-
-				public void visit(IdNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-					p_node.m_moonVarName = p_node.m_data;
-				};
-
-				public void visit(Node p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-				};
-
-				public void visit(PutStatNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-				};
-
-				public void visit(TypeNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-				};
-				public void visit(ParamListNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
+					Driver.SemanticErrors += String.Format("\nSemantic Error : Call to undeclared Function {0} at line {1}", functionCall.Name.IdValue, functionCall.Name.Value.Line);
+					type = "invalidType";
 				}
+			}
+			else
+			{
+				Driver.SemanticErrors += String.Format("\nSemantic Error : Call to undeclared Function {0} at line {1}", functionCall.Name.IdValue, functionCall.Name.Value.Line);
+				type = "invalidType";
+			}
+			return type;
+		}
 
-				public void visit(DimNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-					{
-						child.m_symtab = p_node.m_symtab;
-						child.accept(this);
-					}
-				};
-
-				public void visit(FuncCallNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-						child.accept(this);
-					String tempvarname = this.getNewTempVarName();
-					p_node.m_moonVarName = tempvarname;
-					String vartype = p_node.getType();
-					p_node.m_symtabentry = new VarEntry("retval", vartype, p_node.m_moonVarName, new Vector<Integer>());
-					p_node.m_symtab.addEntry(p_node.m_symtabentry);
-				};
-
-				public void visit(ReturnStatNode p_node)
-				{
-					// propagate accepting the same visitor to all the children
-					// this effectively achieves Depth-First AST Traversal
-					for (Node child : p_node.getChildren())
-						child.accept(this);
-				};*/
 	}
 }

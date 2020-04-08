@@ -14,6 +14,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
         public FunctionEntry(string type, string name, List<ParamNode> paramaters, SymbolTable table) : base("function", type, name, table)
         {
             Params = paramaters;
+            foreach (ParamNode p in Params)
+            {
+                SubTable.addEntry(new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, null));
+            }
         }
 
         public FunctionEntry(string visibility, string type, string name, List<ParamNode> paramaters, SymbolTable table) : base("function", type, name, table)
@@ -45,7 +49,7 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             {
                 Params.ForEach(p =>
                 {
-                    result += p.Type.Value.Value + " " + p.Name.IdValue + ",";
+                    result += p.Type.Value.Value + ",";
                 });
                 result = result.TrimEnd(',');
             }

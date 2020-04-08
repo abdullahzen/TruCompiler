@@ -18,4 +18,11 @@
     <ProjectReference Include="..\TruCompiler\TruCompiler.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Expected\Test 2\" />
+    <Folder Include="Expected\Test 3\" />
+    <Folder Include="Input\Test 2\" />
+    <Folder Include="Input\Test 3\" />
+  </ItemGroup>
+
 </Project>
