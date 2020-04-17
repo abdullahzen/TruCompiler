@@ -43,7 +43,9 @@ namespace TruCompilerTests.SemanticAnalyzer
             OutputPath = @".\Test_3_Results\\";
             symtableResult = FileWriter.Read(OutputPath + FileName + ".outsymboltable");
 
+
             errorsResult = FileWriter.Read(OutputPath + FileName + ".outsemanticerrors");
+
 
             FileName = FileName.Split('.')[0];
             using (StreamReader reader = new StreamReader(expectedFolder + FileName + ".outsymboltable"))

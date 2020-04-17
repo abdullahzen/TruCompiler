@@ -21,6 +21,14 @@ namespace TruCompiler.CodeGeneration
             set { _StatementNumID = value; }
         }
 
+        private static string _Component = "Program";
+
+        public static string Component
+        {
+            get { return _Component; }
+            set { _Component = value; }
+        }
+
         public override void visit(Node<Token> node)
         {
             foreach (var child in node.Children){child.accept(this);}
@@ -69,14 +77,36 @@ namespace TruCompiler.CodeGeneration
 
         public override void visit(FuncDefNode node)
         {
+            Component = "Functions";
+            string functionTag = "";
+            if (node.FunctionHead.ClassName == null || node.FunctionHead.ClassName.Value.Value == "")
+            {
+                GeneratedCode[Component] += String.Format("% Free function {0} %\n", node.FunctionHead.FunctionName.IdValue);
+                
+            } else
+            {
+                GeneratedCode[Component] += String.Format("% Function {0} in class {1} %\n", node.FunctionHead.FunctionName.IdValue, node.FunctionHead.ClassName.IdValue);
+                functionTag = "class_" + node.FunctionHead.ClassName.IdValue + "_";
+            }
+            functionTag += node.FunctionHead.FunctionName.IdValue + "_" + node.FunctionHead.ReturnType.Type;
+            node.FunctionHead.FParams.Params.ForEach(p =>
+            {
+                functionTag += "_param_" + p.Type.Type;
+                GeneratedCode["Data"] += ReserveData(p.Entry);
+            });
+            GeneratedCode[Component] += functionTag + "\n";
             foreach (var child in node.Children){child.accept(this);}
+            GeneratedCode[Component] += String.Format("% End of function {0} definition %\n\n", node.FunctionHead.FunctionName.IdValue);
+            Component = "Program";
+            node.Entry.Tag = functionTag;
+            AddedFunctions.Add(functionTag);
         }
 
         public override void visit(AddOpNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
             Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
-            GeneratedCode["Program"] += AddOp(node.Left[0].Entry, node.Right[0].Entry, node.Operation.Value.Value, node.Entry);
+            GeneratedCode[Component] += AddOp(node.Left[0].Entry, node.Right[0].Entry, node.Operation.Value.Value, node.Entry);
         }
 
         public override void visit(FuncBodyNode node)
@@ -88,14 +118,14 @@ namespace TruCompiler.CodeGeneration
         {
             foreach (var child in node.Children){child.accept(this);}
             Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
-            GeneratedCode["Program"] += MultOp(node.Left[0].Entry, node.Right[0].Entry, node.Operation.Value.Value, node.Entry);
+            GeneratedCode[Component] += MultOp(node.Left[0].Entry, node.Right[0].Entry, node.Operation.Value.Value, node.Entry);
         }
 
         public override void visit(NumNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
             Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
-            GeneratedCode["Program"] += StoreLiteralValue(node.Entry);
+            GeneratedCode[Component] += StoreLiteralValue(node.Entry);
         }
 
         public override void visit(AssignStatementNode node)
@@ -106,7 +136,7 @@ namespace TruCompiler.CodeGeneration
             {
                 right = right[0];
             }
-            GeneratedCode["Program"] += AssignSides(node.Left.Entry, right.Entry);
+            GeneratedCode[Component] += AssignSides(node.Left.Entry, right.Entry);
         }
 
         public override void visit(ArithExprNode node)
@@ -121,15 +151,19 @@ namespace TruCompiler.CodeGeneration
 
         public override void visit(MainNode node)
         {
-            GeneratedCode["Program"] += "%- Main Function -%\n";
-            GeneratedCode["Program"] += "%- PROGRAM START -%\nentry\n";
+            GeneratedCode[Component] += "%- Main Function -%\n";
+            GeneratedCode[Component] += "%- PROGRAM START -%\nentry\n";
             foreach (var child in node.Children){child.accept(this);}
-            GeneratedCode["Program"] += "hlt\n%- PROGRAM END -%\n\n";
+            GeneratedCode[Component] += "hlt\n%- PROGRAM END -%\n\n";
         }
 
         public override void visit(FunctionCallNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
+            GeneratedCode[Component] += "%- Start function call to function " + node.Name + " -%\n\n";
+            GeneratedCode[Component] += FunctionCall(node.AParams.Expressions, node.Name.IdValue, node.Entry, node);
+            GeneratedCode[Component] += "%- End of function call to function " + node.Name + " -%\n\n";
+            GeneratedCode["Data"] += ReserveData(node.Entry);
         }
 
         public override void visit(IdNode node)
@@ -139,7 +173,23 @@ namespace TruCompiler.CodeGeneration
 
         public override void visit(ReturnStatementNode node)
         {
-            foreach (var child in node.Children){child.accept(this);}
+            foreach (var child in node.Children) { child.accept(this); }
+            if (node.Expression.Children.Count > 0)
+            {
+                Node<Token> entry = node.Expression;
+                while(entry.Entry == null)
+                {
+                    if (entry.Children.Count > 0)
+                    {
+                        entry = entry[0];
+                    } else
+                    {
+                        break;
+                    }
+                }
+                GeneratedCode[Component] += ReturnFrom(entry.Entry);
+            }
+            GeneratedCode[Component] += String.Format("{0,-8}jr R15\n\n", "");
         }
 
         public override void visit(WriteStatementNode node)
@@ -150,7 +200,7 @@ namespace TruCompiler.CodeGeneration
             {
                 writeNode = writeNode[0];
             }
-            GeneratedCode["Program"] += WriteToConsole(writeNode.Entry);
+            GeneratedCode[Component] += WriteToConsole(writeNode.Entry);
         }
 
         public override void visit(RelExprNode node)
@@ -168,7 +218,7 @@ namespace TruCompiler.CodeGeneration
             }
             if (left != null && right != null)
             {
-                GeneratedCode["Program"] += RelExpr(left, right, node.RelOp.Value.Value, node.Entry);
+                GeneratedCode[Component] += RelExpr(left, right, node.RelOp.Value.Value, node.Entry);
                 Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
             }
         }
@@ -184,23 +234,23 @@ namespace TruCompiler.CodeGeneration
             {
                 node[0].accept(this);
                 //Branch if then
-                GeneratedCode["Program"] += BranchIf(node[0].Entry, endthen);
+                GeneratedCode[Component] += BranchIf(node[0].Entry, endthen);
             }
-            GeneratedCode["Program"] += "% Then branch starts here %\n\n";
+            GeneratedCode[Component] += "% Then branch starts here %\n\n";
             if (node.Children.Count > 1)
             {
                 node[1].accept(this);
             }
-            GeneratedCode["Program"] += "% Then branch ends here %\n\n";
-            GeneratedCode["Program"] += String.Format("{0,-8}j {1}\n", "", endelse);
-            GeneratedCode["Program"] += endthen + "\n\n";
-            GeneratedCode["Program"] += "% Else branch starts here %\n\n";
+            GeneratedCode[Component] += "% Then branch ends here %\n\n";
+            GeneratedCode[Component] += String.Format("{0,-8}j {1}\n", "", endelse);
+            GeneratedCode[Component] += endthen + "\n\n";
+            GeneratedCode[Component] += "% Else branch starts here %\n\n";
             if (node.Children.Count > 2)
             {
                 node[2].accept(this);
             }
-            GeneratedCode["Program"] += "% Else branch ends here %\n\n";
-            GeneratedCode["Program"] += endelse + "\n\n";
+            GeneratedCode[Component] += "% Else branch ends here %\n\n";
+            GeneratedCode[Component] += endelse + "\n\n";
         }
 
         public override void visit(WhileStatementNode node)
@@ -212,19 +262,19 @@ namespace TruCompiler.CodeGeneration
             StatementNumID++;
             if (node.Children.Count > 0)
             {
-                GeneratedCode["Program"] += startwhile + "\n\n";
+                GeneratedCode[Component] += startwhile + "\n\n";
                 node[0].accept(this);
                 //Branch while if condition is false break else continue
-                GeneratedCode["Program"] += BranchWhile(node[0].Entry, endwhile);
+                GeneratedCode[Component] += BranchWhile(node[0].Entry, endwhile);
 
-                GeneratedCode["Program"] += "% While body starts here %\n\n";
+                GeneratedCode[Component] += "% While body starts here %\n\n";
                 if (node.Children.Count > 1)
                 {
                     node[1].accept(this);
                 }
-                GeneratedCode["Program"] += "% While body ends here, loop back %\n\n";
-                GeneratedCode["Program"] += String.Format("{0,-8}j {1}\n", "", startwhile);
-                GeneratedCode["Program"] += endwhile + "\n\n";
+                GeneratedCode[Component] += "% While body ends here, loop back %\n\n";
+                GeneratedCode[Component] += String.Format("{0,-8}j {1}\n", "", startwhile);
+                GeneratedCode[Component] += endwhile + "\n\n";
             }
         }
 
@@ -236,7 +286,7 @@ namespace TruCompiler.CodeGeneration
             {
                 readNode = readNode[0];
             }
-            GeneratedCode["Program"] += ReadFromConsole(readNode.Entry);
+            GeneratedCode[Component] += ReadFromConsole(readNode.Entry);
         }
     }
 }

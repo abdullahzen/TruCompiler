@@ -7,12 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CodeGeneration\lib\GetInt.m" />
     <None Remove="CodeGeneration\lib\moon.exe" />
+    <None Remove="CodeGeneration\lib\newline.m" />
     <None Remove="CodeGeneration\lib\PutInt.m" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="CodeGeneration\lib\GetInt.m">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="CodeGeneration\lib\moon.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeGeneration\lib\newline.m">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="CodeGeneration\lib\PutInt.m">

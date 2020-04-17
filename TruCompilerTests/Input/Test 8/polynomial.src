@@ -1,0 +1,23 @@
+﻿class RR {
+  private integer d[];
+  public float s[4][5];
+  private integer o;
+};
+
+add(integer x, integer y) : integer       
+  local
+    integer n;                                   
+  do  
+    n = x + y;
+    return(n);
+  end;
+
+// ====== main ====== //
+main
+  local
+    integer x;
+    integer y;
+  do
+    x = add(2+2+1*1,1);
+    write(x);
+  end;

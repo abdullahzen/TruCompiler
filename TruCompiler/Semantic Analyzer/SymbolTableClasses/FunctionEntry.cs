@@ -32,7 +32,8 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 {
                     classType = table.SearchName(p.Type.Value.Value).SubTable;
                 }
-                SubTable.addEntry(new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, dims, classType));
+                p.Entry = new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, dims, classType, name);
+                SubTable.addEntry(p.Entry);
             }
         }
 

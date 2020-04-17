@@ -1,61 +1,68 @@
 
-=====================================================
-| table: global          |
-=====================================================
-| class     | POLYNOMIAL|
-|    =====================================================
-|    | table: POLYNOMIAL      |
-|    =====================================================
-|    | public    | function  | evaluate  | (float)   | float       |
-|    |    =====================================================
-|    |    | table: evaluate        |
-|    |    =====================================================
-|    |    |           | parameter | x         | float     |
-|    |    |           | litval    | t1        | integer   |
-|    |    |           | retval    | t2        | integer   |
-|    |    =====================================================
-|    =====================================================
-| class     | LINEAR    | inherits POLYNOMIAL       |
-|    =====================================================
-|    | table: LINEAR          |
-|    =====================================================
-|    | private   | variable  | a         | float     |
-|    | private   | variable  | b         | float     |
-|    | public    | function  | build     | (float,float)  | LINEAR      |
-|    |    =====================================================
-|    |    | table: build           |
-|    |    =====================================================
-|    |    |           | parameter | A         | float     |
-|    |    |           | parameter | B         | float     |
-|    |    |           | local     | new_function| LINEAR    | linked to LINEAR|
-|    |    |           | retval    | t7        | LINEAR    |
-|    |    =====================================================
-|    | public    | function  | evaluate  | (float)   | float       |
-|    |    =====================================================
-|    |    | table: evaluate        |
-|    |    =====================================================
-|    |    |           | parameter | x         | float     |
-|    |    |           | local     | result    | float     |
-|    |    |           | litval    | t3        | float     |
-|    |    |           | tempvar   | t4        | float     |
-|    |    |           | tempvar   | t5        | float     |
-|    |    |           | retval    | t6        | float     |
-|    |    =====================================================
-|    =====================================================
-|           | function  | main      | ()        | void        |
-|    =====================================================
-|    | table: main            |
-|    =====================================================
-|    | Variable  | local     | f1        | LINEAR    | linked to LINEAR|
-|    | Variable  | local     | counter   | integer   |
-|    |           | litval    | t8        | integer   |
-|    |           | litval    | t9        | float     |
-|    |           | retval    | t10       | LINEAR    |
-|    |           | litval    | t11       | float     |
-|    |           | litval    | t12       | float     |
-|    |           | litval    | t13       | float     |
-|    |           | retval    | t14       | LINEAR    |
-|    |           | litval    | t15       | integer   |
-|    |           | litval    | t16       | integer   |
-|    =====================================================
-=====================================================
+======================================================================
+| table: global             scope size: 0                            |
+======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|                | class     | POLYNOMIAL|
+|    ======================================================================
+|    | table: POLYNOMIAL         scope size: 4                            |
+|    ======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|    | public          | function  | evaluate (float)  | evaluate  | float     | 4     |       |
+|    |    ======================================================================
+|    |    | table: evaluate           scope size: 8                            |
+|    |    ======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|    |    |           | parameter | x         | param_x   | float     | 4     |       |
+|    |    |           | litval    | t1        | lit_t1    | integer   | 4     | 0     |
+|    |    ======================================================================
+|    ======================================================================
+|                | class     | LINEAR    | inherits POLYNOMIAL       |
+|    ======================================================================
+|    | table: LINEAR             scope size: 12                           |
+|    ======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|    | private   | variable  | a         | class_LINEAR_var_a| float     | 4     |       |
+|    | private   | variable  | b         | class_LINEAR_var_b| float     | 4     |       |
+|    | public          | function  | build (float,float)  | build     | LINEAR    | 0     |       |
+|    |    ======================================================================
+|    |    | table: build              scope size: 20                           |
+|    |    ======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|    |    |           | parameter | A         | param_A   | float     | 4     |       |
+|    |    |           | parameter | B         | param_B   | float     | 4     |       |
+|    |    |           | local     | new_function| class_build_var_new_function| LINEAR    | 12    |       | linked to LINEAR|
+|    |    ======================================================================
+|    | public          | function  | evaluate (float)  | evaluate  | float     | 4     |       |
+|    |    ======================================================================
+|    |    | table: evaluate           scope size: 20                           |
+|    |    ======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|    |    |           | parameter | x         | param_x   | float     | 4     |       |
+|    |    |           | local     | result    | class_evaluate_var_result| float     | 4     |       |
+|    |    |           | litval    | t2        | lit_t2    | float     | 4     | 0     |
+|    |    |           | tempvar   | t3        | t3        | float     | 4     |       |
+|    |    |           | tempvar   | t4        | t4        | float     | 4     |       |
+|    |    ======================================================================
+|    ======================================================================
+|                 | function  | main ()  | main      | void      | 0     |       |
+|    ======================================================================
+|    | table: main               scope size: 56                           |
+|    ======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|    | Variable  | local     | f1        | var_f1    | LINEAR    | 12    |       | linked to LINEAR|
+|    | Variable  | local     | counter   | var_counter| integer   | 4     |       |
+|    |           | litval    | t5        | lit_t5    | integer   | 4     | 2     |
+|    |           | litval    | t6        | lit_t6    | float     | 4     | 3.5   |
+|    |           | retval    | retval_t7 | retval_t7 | LINEAR    | 0     |       |
+|    |           | litval    | t8        | lit_t8    | float     | 4     | 2     |
+|    |           | litval    | t9        | lit_t9    | float     | 4     | 1     |
+|    |           | litval    | t10       | lit_t10   | float     | 4     | 0     |
+|    |           | retval    | retval_t11| retval_t11| LINEAR    | 0     |       |
+|    |           | litval    | t12       | lit_t12   | integer   | 4     | 1     |
+|    |           | litval    | t13       | lit_t13   | integer   | 4     | 10    |
+|    |           | rel_tempvar| rel_t14   | rel_t14   | integer   | 4     |       |
+|    |           | retval    | retval_t15| retval_t15| float     | 4     |       |
+|    |           | retval    | retval_t16| retval_t16| float     | 4     |       |
+|    ======================================================================
+======================================================================

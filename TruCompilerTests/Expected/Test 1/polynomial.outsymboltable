@@ -1,13 +1,25 @@
 
-=====================================================
-| table: global           scope offset: 0           |
-=====================================================
-| Variable  | variable  | counter   | integer   | 0     | 0|
-|           | litval    | t1        | int       | 0     | 0|
-|           | litval    | t2        | float     | 0     | 0|
-|           | litval    | t3        | float     | 0     | 0|
-|           | litval    | t4        | float     | 0     | 0|
-|           | litval    | t5        | float     | 0     | 0|
-|           | litval    | t6        | int       | 0     | 0|
-|           | litval    | t7        | int       | 0     | 0|
-=====================================================
+======================================================================
+| table: global             scope size: 0                            |
+======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|                 | function  | main ()  | main      | void      | 0     |       |
+|    ======================================================================
+|    | table: main               scope size: 36                           |
+|    ======================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+|    | Variable  | local     | counter   | var_counter| integer   | 4     |       |
+|    |           | litval    | t1        | lit_t1    | integer   | 4     | 2     |
+|    |           | litval    | t2        | lit_t2    | float     | 4     | 3.5   |
+|    |           | retval    | retval_t3 | retval_t3 | invalidType| 0     |       |
+|    |           | litval    | t4        | lit_t4    | float     | 4     | 2     |
+|    |           | litval    | t5        | lit_t5    | float     | 4     | 1     |
+|    |           | litval    | t6        | lit_t6    | float     | 4     | 0     |
+|    |           | retval    | retval_t7 | retval_t7 | invalidType| 0     |       |
+|    |           | litval    | t8        | lit_t8    | integer   | 4     | 1     |
+|    |           | litval    | t9        | lit_t9    | integer   | 4     | 10    |
+|    |           | rel_tempvar| rel_t10   | rel_t10   | integer   | 4     |       |
+|    |           | retval    | retval_t11| retval_t11| invalidType| 0     |       |
+|    |           | retval    | retval_t12| retval_t12| invalidType| 0     |       |
+|    ======================================================================
+======================================================================

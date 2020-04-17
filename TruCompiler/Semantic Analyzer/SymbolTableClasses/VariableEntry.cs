@@ -51,6 +51,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             {
                 Tag = "lit_" + Name;
             }
+            if (Kind == "parameter")
+            {
+                Tag = "param_" + Name;
+            }
             if (ClassType != null && (Dims == null || Dims.Count == 0))
             {
                 Size = ClassType.Size;
@@ -60,6 +64,37 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 Size = ClassType.Size;
                 Size = GetSize();
             } else
+            {
+                Size = GetSize();
+            }
+        }
+
+        public VariableEntry(string kind, string type, string name, List<int> dims, SymbolTable classType, string functionName) : base(kind, type, name, null)
+        {
+            Dims = dims;
+            ClassType = classType;
+            if (Kind == "local" || Kind == "variable")
+            {
+                Tag = "var_" + Name;
+            }
+            if (Kind == "litval")
+            {
+                Tag = "lit_" + Name;
+            }
+            if (Kind == "parameter")
+            {
+                Tag = functionName + "_param_" + Name;
+            }
+            if (ClassType != null && (Dims == null || Dims.Count == 0))
+            {
+                Size = ClassType.Size;
+            }
+            else if (ClassType != null && Dims != null && Dims.Count > 0)
+            {
+                Size = ClassType.Size;
+                Size = GetSize();
+            }
+            else
             {
                 Size = GetSize();
             }

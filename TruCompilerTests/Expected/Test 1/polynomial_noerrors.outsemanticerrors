@@ -1,0 +1,4 @@
+
+Semantic (Warning) : Function evaluate in class LINEAR at line 11 is shadowing the same member from inherited class POLYNOMIAL
+Semantic (Warning) : Function evaluate in class QUADRATIC at line 20 is shadowing the same member from inherited class POLYNOMIAL
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 76

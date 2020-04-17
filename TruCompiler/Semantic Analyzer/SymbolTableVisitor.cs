@@ -464,7 +464,7 @@ namespace TruCompiler.Semantic_Analyzer
 				child.accept(this);
 			}
 			node.Type = GetFunctionCallType(node, node);
-			String tempvarname = GetNewTempName();
+			String tempvarname = "retval_" + GetNewTempName();
 			node.TempVarName = tempvarname;
 			string type = node.Type;
 
@@ -483,11 +483,11 @@ namespace TruCompiler.Semantic_Analyzer
 			if (arith != null)
 			{
 				node.Type = GetType(arith);
-				//String tempvarname = GetNewTempName();
-				//node.TempVarName = tempvarname;
-				//string type = node.Type;
-				//node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
-				//node.SymbolTable.addEntry(node.Entry);
+				/*String tempvarname = "ret_val" + GetNewTempName();
+				node.TempVarName = tempvarname;
+				string type = node.Type;
+				node.Entry = new VariableEntry("ret_val", type, node.TempVarName, null, null);
+				node.SymbolTable.addEntry(node.Entry);*/
 			}
 		}
 

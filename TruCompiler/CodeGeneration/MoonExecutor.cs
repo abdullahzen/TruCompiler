@@ -13,12 +13,21 @@ namespace TruCompiler.CodeGeneration
         public List<string> Output { get; set; }
         public List<string> UsefulOutput { get; set; }
         public const string MOON_EXE = ".\\CodeGeneration\\lib\\moon.exe";
-        
+        public bool input { get; set; }
+
         public MoonExecutor(string inputFile)
         {
             InputFile = inputFile;
             Output = new List<string>();
             UsefulOutput = new List<string>();
+        }
+
+        public MoonExecutor(string inputFile, bool input)
+        {
+            InputFile = inputFile;
+            Output = new List<string>();
+            UsefulOutput = new List<string>();
+            this.input = input;
         }
 
         public void Execute()
@@ -29,10 +38,19 @@ namespace TruCompiler.CodeGeneration
                 CreateNoWindow = true,
                 FileName = "C:\\Windows\\System32\\cmd.exe",
                 RedirectStandardOutput = true,
+                RedirectStandardInput = true,
                 Arguments = "/c " + MOON_EXE + " " + InputFile,
-                WorkingDirectory = Directory.GetCurrentDirectory()
+                WorkingDirectory = Directory.GetCurrentDirectory(),
+                
             };
             p.Start();
+            if (input)
+            {
+                p.StandardInput.AutoFlush = true;
+                p.StandardInput.WriteLine(89);
+                p.StandardInput.WriteLine(10);
+            }
+            
             p.WaitForExit();
             StreamReader r = p.StandardOutput;
             while (!r.EndOfStream)
