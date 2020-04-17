@@ -16,7 +16,23 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             Params = paramaters;
             foreach (ParamNode p in Params)
             {
-                SubTable.addEntry(new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, null));
+                List<int> dims = new List<int>();
+                if (p.ArraySize != null)
+                {
+                    foreach (ArraySizeNode arr in p.ArraySize)
+                    {
+                        if (arr.ArraySizeValue != null)
+                        {
+                            dims.Add(arr.ArraySizeValue);
+                        }
+                    }
+                }
+                SymbolTable classType = null;
+                if (p.Type.Value.Lexeme == Lexical_Analyzer.Tokens.Lexeme.id)
+                {
+                    classType = table.SearchName(p.Type.Value.Value).SubTable;
+                }
+                SubTable.addEntry(new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, dims, classType));
             }
         }
 
@@ -26,18 +42,37 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             Visibility = visibility;
             foreach(ParamNode p in Params)
             {
-                SubTable.addEntry(new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, null));
+                List<int> dims = new List<int>();
+                if (p.ArraySize != null)
+                {
+                    foreach (ArraySizeNode arr in p.ArraySize)
+                    {
+                        if (arr.ArraySizeValue != null)
+                        {
+                            dims.Add(arr.ArraySizeValue);
+                        }
+                    }
+                }
+                SymbolTable classType = null;
+                if (p.Type.Value.Lexeme == Lexical_Analyzer.Tokens.Lexeme.id)
+                {
+                    classType = table.SearchName(p.Type.Value.Value).SubTable;
+                }
+                SubTable.addEntry(new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, dims, classType));
             }
         }
 
         public override string ToString()
         {
             return
-                String.Format("{0,-12}", "| " + Visibility) +
+                String.Format("{0,-18}", "| " + Visibility) +
                 String.Format("{0,-12}", "| " + Kind) +
-                String.Format("{0,-12}", "| " + Name) +
+                String.Format("{0,-4}", "| " + Name) +
                 GetParamsString() +
-                String.Format("{0,-14}", "| " + Type) +
+                String.Format("{0,-12}", "| " + Tag) +
+                String.Format("{0,-12}", "| " + Type) +
+                String.Format("{0,-8}", "| " + Size) +
+                String.Format("{0,-8}", "| " + Notes) +
                 "|" +
                 SubTable;
         }
@@ -54,7 +89,7 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 result = result.TrimEnd(',');
             }
 
-            result = String.Format("{0,-12}", "| (" + result + ")  ");
+            result = String.Format("{0,-4}", " (" + result + ")  ");
             return result;
         }
     }

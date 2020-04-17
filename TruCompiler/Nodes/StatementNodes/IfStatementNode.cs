@@ -19,10 +19,16 @@ namespace TruCompiler.Nodes
                 current[2],
                 new ArithExprNode(this, current[3]));
             this.AddChild(RelExpr, false);
-            ThenStatBlock = new StatBlockNode(this, current[5], "ThenStatBlock");
-            this.AddChild(ThenStatBlock, false);
-            ElseStatBlock = new StatBlockNode(this, current[7], "ElseStatBlock");
-            this.AddChild(ElseStatBlock, false);
+            if (current.Children.Count > 5 && current[5].Value.Value == "StatBlock")
+            {
+                ThenStatBlock = new StatBlockNode(this, current[5], "ThenStatBlock");
+                this.AddChild(ThenStatBlock, false);
+            }
+            if (current.Children.Count > 7 && current[7].Value.Value == "StatBlock")
+            {
+                ElseStatBlock = new StatBlockNode(this, current[7], "ElseStatBlock");
+                this.AddChild(ElseStatBlock, false);
+            }
         }
 
         public bool IsValid()

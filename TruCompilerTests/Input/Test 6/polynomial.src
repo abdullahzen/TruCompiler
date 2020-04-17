@@ -1,0 +1,26 @@
+﻿class RR {
+  private integer d[];
+  public float s[4][5];
+  private integer o;
+};
+
+// ====== main ====== //
+main
+  local
+    integer x;
+    integer y;
+    integer z[2][];
+    float s[4][5];
+    RR ss[10];
+    RR obj;
+  do
+    x = 10;
+    x = x + 5 + 6 - 3 * 10;
+    write(x / 3);
+    read(y);
+    read(z);
+    write(y+z);
+    write(y-z);
+    write(y*z);
+    write(y/z);
+  end;

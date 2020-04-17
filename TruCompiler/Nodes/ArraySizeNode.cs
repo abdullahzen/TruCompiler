@@ -14,9 +14,12 @@ namespace TruCompiler.Nodes
         public ArraySizeNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
             var intvalue = 0;
-            int.TryParse(current[0].Value.Value, out intvalue);
-            ArraySizeValue = intvalue;
-            this.AddChild(current[0], true);
+            if (current.Children.Count > 0)
+            {
+                int.TryParse(current[0].Value.Value, out intvalue);
+                ArraySizeValue = intvalue;
+                this.AddChild(current[0], true);
+            }
         }
 
         public bool IsValid()

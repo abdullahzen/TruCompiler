@@ -19,7 +19,7 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
 
         public override string ToString()
         {
-            return String.Format("{0,-12}", "| " + Kind) +
+            return String.Format("{0,-17}{1,-12}", "|", "| " + Kind) +
                             String.Format("{0,-12}", "| " + Name) +
                             GetStringOfInheritedClasses() + 
                             "|" +

@@ -10,7 +10,7 @@ namespace TruCompiler.Semantic_Analyzer
 {
     public class SymbolTableVisitor : Visitor<Token>
     {
-		public int TempNum { get; set; }
+		public static int TempNum { get; set; }
 		public string Output { get; set; }
 
 		public SymbolTableVisitor()
@@ -25,7 +25,7 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 		}
 
-		public string GetNewTempName()
+		public static string GetNewTempName()
 		{
 			TempNum++;
 			return "t" + TempNum.ToString();
@@ -212,6 +212,7 @@ namespace TruCompiler.Semantic_Analyzer
 
 			string type = node.Type.Value.Value;
 			SymbolTable classType = null;
+			ClassNode classNode = null;
 			if (node.Type.Value.Lexeme == Lexeme.id)
 			{
 				Node<Token> temp = node;
@@ -222,7 +223,7 @@ namespace TruCompiler.Semantic_Analyzer
 				ClassListNode classList = ((ProgNode)temp[0]).ClassList;
 				if (classList != null && classList.Classes.Count > 0)
 				{
-					ClassNode classNode = classList.Classes.Find(c => c.Name.IdValue == type);
+					classNode = classList.Classes.Find(c => c.Name.IdValue == type);
 					if (classNode != null && classNode.Entry != null)
 					{
 						classType = classNode.Entry.SubTable;
@@ -256,11 +257,20 @@ namespace TruCompiler.Semantic_Analyzer
 				varType = "local";
 			}
 
-			node.Entry = new VariableEntry(visibility, varType, type, name, null);
-			if (classType != null)
+			List<int> dims = new List<int>();
+			if (node.ArraySize != null)
 			{
-				((VariableEntry)node.Entry).ClassType = classType;
+				foreach(ArraySizeNode arr in node.ArraySize)
+				{
+					if (arr.ArraySizeValue != null)
+					{
+						dims.Add(arr.ArraySizeValue);
+					}
+				}
 			}
+			
+			node.Entry = new VariableEntry(visibility, varType, type, name, dims, node.SymbolTable.Name, classType);
+			
 			node.SymbolTable.addEntry(node.Entry);
 
 			//Check for shadowed members
@@ -330,9 +340,12 @@ namespace TruCompiler.Semantic_Analyzer
 
 				localFunctionTable = new SymbolTable(1, name, node.SymbolTable);
 				List<ParamNode> paramsList = new List<ParamNode>();
-				foreach (ParamNode param in head.FParams.Params)
+				if (head != null && head.FParams != null && head.FParams.Params != null)
 				{
-					paramsList.Add(param);
+					foreach (ParamNode param in head.FParams.Params)
+					{
+						paramsList.Add(param);
+					}
 				}
 
 				//Check for duplicate functions and aallow overloaded
@@ -380,10 +393,10 @@ namespace TruCompiler.Semantic_Analyzer
 				child.accept(this);
 			}
 
-			String tempvarname = this.GetNewTempName();
+			String tempvarname = GetNewTempName();
 			node.TempVarName = tempvarname;
 			string type = GetType((ArithExprNode)node.Left);
-			node.Entry = new VariableEntry("tempvar", type, node.TempVarName, null);
+			node.Entry = new VariableEntry("tempvar", type, node.TempVarName, null, null);
 			node.SymbolTable.addEntry(node.Entry);
 		}
 
@@ -394,11 +407,11 @@ namespace TruCompiler.Semantic_Analyzer
 				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
-			String tempvarname = this.GetNewTempName();
+			String tempvarname = GetNewTempName();
 			node.TempVarName = tempvarname;
 			string type = GetType((ArithExprNode)node.Left);
 
-			node.Entry = new VariableEntry("tempvar", type, node.TempVarName, null);
+			node.Entry = new VariableEntry("tempvar", type, node.TempVarName, null, null);
 			node.SymbolTable.addEntry(node.Entry);
 		}
 
@@ -409,10 +422,17 @@ namespace TruCompiler.Semantic_Analyzer
 				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
-			String tempvarname = this.GetNewTempName();
+			String tempvarname = GetNewTempName();
 			node.TempVarName = tempvarname;
 			string type = node.Type;
-			node.Entry = new VariableEntry("litval", type, node.TempVarName, null);
+			node.Entry = new VariableEntry("litval", type, node.TempVarName, null, null);
+			if (node.Type == "integer")
+			{
+				node.Entry.Notes = node.IntValue.ToString();
+			} else
+			{
+				node.Entry.Notes = node.FloatValue.ToString();
+			}
 			node.SymbolTable.addEntry(node.Entry);
 		}
 
@@ -444,11 +464,11 @@ namespace TruCompiler.Semantic_Analyzer
 				child.accept(this);
 			}
 			node.Type = GetFunctionCallType(node, node);
-			String tempvarname = this.GetNewTempName();
+			String tempvarname = GetNewTempName();
 			node.TempVarName = tempvarname;
 			string type = node.Type;
 
-			node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
+			node.Entry = new VariableEntry("retval", type, node.TempVarName, null, null);
 			node.SymbolTable.addEntry(node.Entry);
 		}
 
@@ -463,11 +483,11 @@ namespace TruCompiler.Semantic_Analyzer
 			if (arith != null)
 			{
 				node.Type = GetType(arith);
-				String tempvarname = this.GetNewTempName();
-				node.TempVarName = tempvarname;
-				string type = node.Type;
-				node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
-				node.SymbolTable.addEntry(node.Entry);
+				//String tempvarname = GetNewTempName();
+				//node.TempVarName = tempvarname;
+				//string type = node.Type;
+				//node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
+				//node.SymbolTable.addEntry(node.Entry);
 			}
 		}
 
@@ -482,11 +502,11 @@ namespace TruCompiler.Semantic_Analyzer
 			if (arith != null)
 			{
 				node.Type = GetType(arith);
-				String tempvarname = this.GetNewTempName();
-				node.TempVarName = tempvarname;
+				//String tempvarname = GetNewTempName();
+				//node.TempVarName = tempvarname;
 				string type = node.Type;
-				node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
-				node.SymbolTable.addEntry(node.Entry);
+				//node.Entry = new VariableEntry("retval", type, node.TempVarName, null);
+				//node.SymbolTable.addEntry(node.Entry);
 			}
 		}
 
@@ -505,6 +525,20 @@ namespace TruCompiler.Semantic_Analyzer
 				node.Type = GetType(arith1);
 				GetType(arith2);
 			}
+			String tempvarname = "rel_" + GetNewTempName();
+			node.TempVarName = tempvarname;
+			node.Entry = new VariableEntry("rel_tempvar", "integer", node.TempVarName, null, null);
+			node.SymbolTable.addEntry(node.Entry);
+		}
+
+		public override void visit(VariableNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+			node.Entry = node.SymbolTable.SearchName(node.Name);
 		}
 
 		public override void visit(MainNode node)
@@ -535,6 +569,33 @@ namespace TruCompiler.Semantic_Analyzer
 				child.accept(this);
 			}
 			node.TempVarName = node.IdValue;
+		}
+
+		public override void visit(ReadStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+		}
+
+		public override void visit(WhileStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
+		}
+
+		public override void visit(IfStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.SymbolTable = node.SymbolTable;
+				child.accept(this);
+			}
 		}
 
 

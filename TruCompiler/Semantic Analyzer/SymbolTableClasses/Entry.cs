@@ -14,6 +14,8 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
         public int Offset { get; set; }
         public SymbolTable SubTable { get; set; }
         public List<int> Dims { get; set; }
+        public string Notes { get; set; }
+        public string Tag { get; set; }
 
         public Entry()
         {
@@ -26,6 +28,11 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             Type = type;
             Name = name;
             SubTable = subTable;
+            if (type.Equals("integer") || type.Equals("float"))
+            {
+                Size = 4;
+            }
+            Tag = Name;
         }
     }
 }

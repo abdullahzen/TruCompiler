@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using TruCompiler.CodeGeneration;
 using TruCompiler.FileManagement;
 using TruCompiler.Lexical_Analyzer;
 using TruCompiler.Nodes;
@@ -25,18 +26,32 @@ namespace TruCompiler
         public static int ASTIndex { get; set; }
         public static string SemanticErrors { get; set; }
         public static IFile FileWriter { get; set; }
+        public static Dictionary<string, string> GeneratedCode {get; set;}
+        public static HashSet<string> AddedProcedures { get; set; }
+        public static HashSet<string> AddedFunctions { get; set; }
         public Driver(string[] inputFiles, string outputPath)
         {
-            InputFiles = inputFiles;
-            OutputPath = outputPath;
-            FileWriter = new FileWriter();
+            this.Initialize(inputFiles, outputPath);
         }
 
         public Driver(IFile fileWriter, string[] inputFiles, string outputPath)
         {
+            this.Initialize(inputFiles, outputPath);
+            FileWriter = fileWriter;
+        }
+        
+        public void Initialize(string[] inputFiles, string outputPath)
+        {
             InputFiles = inputFiles;
             OutputPath = outputPath;
-            FileWriter = fileWriter;
+            FileWriter = new FileWriter();
+            GeneratedCode = new Dictionary<string, string>();
+            GeneratedCode.Add("Functions", "%- Functions -%\n");
+            GeneratedCode.Add("Program", "%- Program -%\n");
+            GeneratedCode.Add("Data", "%- Data -%\n");
+            GeneratedCode.Add("Procedures", "%- Procedures -%\n");
+            AddedProcedures = new HashSet<string>();
+            AddedFunctions = new HashSet<string>();
         }
         public void Compile()
         {
@@ -154,6 +169,23 @@ namespace TruCompiler
                         string outsemanticerros = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outsemanticerrors";
 
                         WriteToFile(outsemanticerros, SemanticErrors);
+                    }
+
+                    //CodeGeneration
+                    CodeGenerationVisitor codeGenVisitor = new CodeGenerationVisitor();
+                    startNode.accept(codeGenVisitor);
+
+                    string generatedCodeFile = "";
+                    foreach(var key in GeneratedCode.Keys)
+                    {
+                        generatedCodeFile += GeneratedCode[key] + "\n";
+                    }
+                    generatedCodeFile = generatedCodeFile.Trim('\n');
+                    if (Directory.Exists(OutputPath))
+                    {
+                        string outCodeGen = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".m";
+
+                        WriteToFile(outCodeGen, generatedCodeFile);
                     }
 
 

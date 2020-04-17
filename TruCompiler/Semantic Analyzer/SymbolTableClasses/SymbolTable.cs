@@ -38,6 +38,7 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
         public void addEntry(Entry entry)
         {
             SymList.Add(entry);
+            Size += entry.Size;
         }
 
         public Entry SearchName(string name)
@@ -99,6 +100,16 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             return result;
         }
 
+        public int getSize()
+        {
+            int s = 0;
+            for (int i = 0; i < SymList.Count; i++)
+            {
+                s += SymList[i].Size;
+            }
+            return s;
+        }
+
         public override string ToString()
         {
             string result = "";
@@ -108,16 +119,23 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 lineSpacing += "|    ";
             }
 
-            result += "\n" + lineSpacing + "=====================================================\n";
-            result += lineSpacing + String.Format("{0,-25}", "| table: " + Name) + /*String.Format("{0,-27}", " scope offset: " + Size)*/ "|\n";
-            result += lineSpacing + "=====================================================\n";
-            
+            result += "\n" + lineSpacing + "======================================================================\n";
+            result += lineSpacing + String.Format("{0,-27}", "| table: " + Name) + String.Format("{0,-42}", " scope size: " + getSize()) + "|\n";
+            result += lineSpacing + "======================================================================\n";
+            result += String.Format("{0,-5}", "| ") +
+             String.Format("{0,-12}", "| " + "VISIBILITY") +
+             String.Format("{0,-12}", "| " + "KIND") +
+             String.Format("{0,-12}", "| " + "NAME") +
+             String.Format("{0,-12}", "| " + "TAG") +
+             String.Format("{0,-12}", "| " + "TYPE") +
+             String.Format("{0,-8}", "| " + "SIZE") +
+             String.Format("{0,-8}", "| " + "NOTES") + "|\n";
             for (int i = 0; i < SymList.Count; i++)
             {
                 result += lineSpacing + SymList[i].ToString() + '\n';
             }
 
-            result += lineSpacing + "=====================================================";
+            result += lineSpacing + "======================================================================";
             return result;
         }
     }

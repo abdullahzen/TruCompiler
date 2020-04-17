@@ -17,7 +17,11 @@ namespace TruCompiler.Nodes
             {
                 RelExpr = new RelExprNode(new ArithExprNode(this, current[1]), current[2], new ArithExprNode(this, current[3]));
                 this.AddChild(RelExpr, true);
-                BodyStatBlock = new StatBlockNode(this, current[4],"WhileStatBlock");
+                if (current.Children.Count > 4)
+                {
+                    BodyStatBlock = new StatBlockNode(this, current[4], "WhileStatBlock");
+                    this.AddChild(BodyStatBlock, true);
+                }
             }
         }
 

@@ -1,0 +1,9 @@
+// ====== main ====== //
+main
+  local
+    integer x;
+  do
+    x = 10;
+    x = x + 5;
+    write(x);
+  end;

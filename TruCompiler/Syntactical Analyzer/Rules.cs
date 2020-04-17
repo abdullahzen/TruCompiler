@@ -1039,7 +1039,7 @@ namespace TruCompiler.Syntactical_Analyzer
         {
             Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
-            if (lookahead.Equals(new Token(Lexeme.eq)))
+            if (lookahead.Equals(new Token(Lexeme.eqeq)))
             {
                 node = node.AddChild(RelOp());
                 node = node.AddChild(ArithExpr());
@@ -1086,10 +1086,10 @@ namespace TruCompiler.Syntactical_Analyzer
         {
             Node<Token> node = new Node<Token>();
             Token lookahead = TokenScanner.Peek();
-            if (lookahead.Equals(new Token(Lexeme.eq)))
+            if (lookahead.Equals(new Token(Lexeme.eqeq)))
             {
                 node = node.AddChild(TokenScanner.Peek().Clone());
-                Match(new Token(Lexeme.eq));
+                Match(new Token(Lexeme.eqeq));
                 return node;
             }
             else if (lookahead.Equals(new Token(Lexeme.noteq)))

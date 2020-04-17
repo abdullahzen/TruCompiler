@@ -11,14 +11,18 @@ namespace TruCompiler.Nodes
     {
         public TypeNode Type { get; set; }
         public IdNode Name { get; set; }
-        public ArraySizeNode ArraySize { get; set; }
+        public List<ArraySizeNode> ArraySize { get; set; }
         public VariableDeclNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
             Type = (TypeNode)this.AddChild(new TypeNode(this, current[0]), true);
             Name = (IdNode)this.AddChild(new IdNode(this, current[1]), true);
             if (current.Children.Count > 2)
             {
-                ArraySize = (ArraySizeNode)this.AddChild(new ArraySizeNode(this, current[2]), true);
+                ArraySize = new List<ArraySizeNode>();
+                for (int i = 2; i < current.Children.Count; i++)
+                {
+                    ArraySize.Add((ArraySizeNode)this.AddChild(new ArraySizeNode(this, current[i]), true));
+                }
             } else
             {
                 ArraySize = null;

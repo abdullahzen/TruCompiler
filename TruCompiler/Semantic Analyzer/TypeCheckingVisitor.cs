@@ -27,13 +27,34 @@ namespace TruCompiler.Semantic_Analyzer
 			if (String.IsNullOrEmpty(leftType))
 			{
 				node.Left.Type = GetVariableType(node.Left, node);
-				leftType = node.Left.Type;
+				if (String.IsNullOrEmpty(node.Left.Type))
+				{
+					Node<Token> temp = node.Left;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					leftType = temp.Type;
+					node.Left.Type = leftType;
+				} else
+				{
+					leftType = node.Left.Type;
+				}
 			}
 			if (String.IsNullOrEmpty(rightType))
 			{
-				if (node.Right.ArithExpr != null)
+				node.Right.Type = GetType(node.Right.ArithExpr);
+				if (String.IsNullOrEmpty(node.Right.Type))
 				{
-					node.Right.Type = GetType(node.Right.ArithExpr);
+					Node<Token> temp = node.Right;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					rightType = temp.Type;
+					node.Right.Type = rightType;
+				} else
+				{
 					rightType = node.Right.Type;
 				}
 			}
@@ -55,19 +76,42 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 			String leftType = node.LeftArithExpr.Type;
 			String rightType = node.RightArithExpr.Type;
-			//if (String.IsNullOrEmpty(leftType))
-			//{
+			if (String.IsNullOrEmpty(leftType))
+			{
 				node.LeftArithExpr.Type = GetType(node.LeftArithExpr);
-				leftType = node.LeftArithExpr.Type;
-			//}
-			/*if (String.IsNullOrEmpty(rightType))
-			{*/
-				if (node.RightArithExpr != null)
+				if (String.IsNullOrEmpty(node.LeftArithExpr.Type))
 				{
-					node.RightArithExpr.Type = GetType(node.RightArithExpr);
+					Node<Token> temp = node.LeftArithExpr;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					leftType = temp.Type;
+					node.LeftArithExpr.Type = leftType;
+				}
+				else
+				{
+					leftType = node.LeftArithExpr.Type;
+				}
+			}
+			if (String.IsNullOrEmpty(rightType))
+			{
+				node.RightArithExpr.Type = GetType(node.RightArithExpr);
+				if (String.IsNullOrEmpty(node.RightArithExpr.Type))
+				{
+					Node<Token> temp = node.RightArithExpr;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					rightType = temp.Type;
+					node.RightArithExpr.Type = rightType;
+				}
+				else
+				{
 					rightType = node.RightArithExpr.Type;
 				}
-			//}
+			}
 
 			if (leftType == rightType)
 				node.Type = leftType;
@@ -88,19 +132,42 @@ namespace TruCompiler.Semantic_Analyzer
 
 			String leftType = node.Left.Type;
 			String rightType = node.Right.Type;
-			/*if (String.IsNullOrEmpty(leftType))
-			{*/
+			if (String.IsNullOrEmpty(leftType))
+			{
 				node.Left.Type = GetType((ArithExprNode)node.Left);
-				leftType = node.Left.Type;
-			//}
-			//if (String.IsNullOrEmpty(rightType))
-			//{
-				if (node.Right != null)
+				if (String.IsNullOrEmpty(node.Left.Type))
 				{
-					node.Right.Type = GetType((ArithExprNode)node.Right);
+					Node<Token> temp = node.Left;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					leftType = temp.Type;
+					node.Left.Type = leftType;
+				}
+				else
+				{
+					leftType = node.Left.Type;
+				}
+			}
+			if (String.IsNullOrEmpty(rightType))
+			{
+				node.Right.Type = GetType((ArithExprNode)node.Right);
+				if (String.IsNullOrEmpty(node.Right.Type))
+				{
+					Node<Token> temp = node.Right;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					rightType = temp.Type;
+					node.Right.Type = rightType;
+				}
+				else
+				{
 					rightType = node.Right.Type;
 				}
-			//}
+			}
 
 			if (leftType == rightType)
 				node.Type = leftType;
@@ -122,19 +189,42 @@ namespace TruCompiler.Semantic_Analyzer
 
 			String leftType = node.Left.Type;
 			String rightType = node.Right.Type;
-			/*if (String.IsNullOrEmpty(leftType))
-			{*/
+			if (String.IsNullOrEmpty(leftType))
+			{
 				node.Left.Type = GetType((ArithExprNode)node.Left);
-				leftType = node.Left.Type;
-			/*}
-			if (String.IsNullOrEmpty(rightType))
-			{*/
-				if (node.Right != null)
+				if (String.IsNullOrEmpty(node.Left.Type))
 				{
-					node.Right.Type = GetType((ArithExprNode)node.Right);
+					Node<Token> temp = node.Left;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					leftType = temp.Type;
+					node.Left.Type = leftType;
+				}
+				else
+				{
+					leftType = node.Left.Type;
+				}
+			}
+			if (String.IsNullOrEmpty(rightType))
+			{
+				node.Right.Type = GetType((ArithExprNode)node.Right);
+				if (String.IsNullOrEmpty(node.Right.Type))
+				{
+					Node<Token> temp = node.Right;
+					while (String.IsNullOrEmpty(temp.Type))
+					{
+			            if(temp.Children.Count > 0){temp = temp[0];} else {break;}
+					}
+					rightType = temp.Type;
+					node.Right.Type = rightType;
+				}
+				else
+				{
 					rightType = node.Right.Type;
 				}
-			//}
+			}
 
 			if (leftType == rightType)
 				node.Type = leftType;
@@ -163,6 +253,31 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 		}
 
+		public override void visit(WhileStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+
+				child.accept(this);
+			}
+		}
+
+		public override void visit(ReadStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+
+				child.accept(this);
+			}
+		}
+
+		public override void visit(IfStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.accept(this);
+			}
+		}
 
 		public override void visit(ClassListNode node)
 		{
@@ -277,6 +392,15 @@ namespace TruCompiler.Semantic_Analyzer
 		}
 
 		public override void visit(ReturnStatementNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+
+				child.accept(this);
+			}
+		}
+
+		public override void visit(VariableNode node)
 		{
 			foreach (Node<Token> child in node.Children)
 			{
