@@ -422,7 +422,7 @@ namespace TruCompiler.CodeGeneration
         {
             if (!Driver.AddedProcedures.Contains("PutInt"))
             {
-                Driver.GeneratedCode["Procedures"] += File.ReadAllText(".\\CodeGeneration\\lib\\PutInt.m") + "\n";
+                Driver.GeneratedCode["Procedures"] += File.ReadAllText(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\CodeGeneration\\lib\\PutInt.m") + "\n";
                 Driver.AddedProcedures.Add("PutInt");
             }
         }
@@ -431,7 +431,7 @@ namespace TruCompiler.CodeGeneration
         {
             if (!Driver.AddedProcedures.Contains("GetInt"))
             {
-                Driver.GeneratedCode["Procedures"] += File.ReadAllText(".\\CodeGeneration\\lib\\GetInt.m") + "\n";
+                Driver.GeneratedCode["Procedures"] += File.ReadAllText(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\CodeGeneration\\lib\\GetInt.m") + "\n";
                 Driver.AddedProcedures.Add("GetInt");
             }
         }
@@ -440,7 +440,7 @@ namespace TruCompiler.CodeGeneration
         {
             if (!Driver.AddedProcedures.Contains("newline"))
             {
-                Driver.GeneratedCode["Procedures"] += File.ReadAllText(".\\CodeGeneration\\lib\\newline.m") + "\n";
+                Driver.GeneratedCode["Procedures"] += File.ReadAllText(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\CodeGeneration\\lib\\newline.m") + "\n";
                 Driver.AddedProcedures.Add("newline");
             }
         }

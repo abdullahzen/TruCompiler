@@ -221,9 +221,12 @@ namespace TruCompiler
 
                             WriteToFile(outCodeGen, generatedCodeFile);
                         }
-                    } catch (Exception)
+                    } catch (Exception e)
                     {
                         Console.WriteLine("No code was generated due to fatal compilation errors in the previous phases.");
+                        Console.WriteLine(e.ToString());
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine(e.StackTrace);
                     }
                 }
             } catch (Exception e)

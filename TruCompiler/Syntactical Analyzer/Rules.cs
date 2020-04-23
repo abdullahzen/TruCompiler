@@ -1522,6 +1522,9 @@ namespace TruCompiler.Syntactical_Analyzer
                 node.Value = TokenScanner.Peek().Clone();
                 Match(new Token(Lexeme.intnum));
                 return node;
+            } else if (lookahead.Equals(new Token(Lexeme.id))) {
+                node.AddChild(Expr());
+                return node;
             } else
             {
                 return node;

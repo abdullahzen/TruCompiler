@@ -106,9 +106,12 @@ namespace TruCompiler.CodeGeneration
                     }
                     else if (node.Entry.Type != null)
                     {
-                        node.Entry.Size = node.SymbolTable.SearchName(node.Entry.Type).SubTable.Size;
-                        node.Entry.Offset = offset;
-                        offset -= node.Entry.Size;
+                        if (node.SymbolTable.SearchName(node.Entry.Type) != null)
+                        {
+                            node.Entry.Size = node.SymbolTable.SearchName(node.Entry.Type).SubTable.Size;
+                            node.Entry.Offset = offset;
+                            offset -= node.Entry.Size;
+                        }
                     }
                 }
                 foreach (Entry e in node.SymbolTable.SymList)

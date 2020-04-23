@@ -16,7 +16,11 @@ namespace TruCompiler.Nodes
             Params = new List<ParamNode>();
             current.Children.ForEach(c =>
             {
-                Params.Add((ParamNode)this.AddChild(new ParamNode(this, c), true));
+                ParamNode p = (ParamNode)this.AddChild(new ParamNode(this, c), true);
+                if (p.Children.Count != 0)
+                {
+                    Params.Add(p);
+                }
             });
         }
 

@@ -480,7 +480,7 @@ namespace TruCompiler.Semantic_Analyzer
 
 			node.Type = GetFunctionCallType(node, node, baseClass);
 
-			if (String.IsNullOrEmpty(node.Type))
+			if (node.Type == "invalidType")
 			{
 				Driver.SemanticErrors += String.Format("\nSemantic Error: Function {0} not defined at line {1}", node.Name.IdValue, node.Name.Value.Line);
 				return;

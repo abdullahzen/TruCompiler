@@ -335,10 +335,10 @@ namespace TruCompiler.Lexical_Analyzer
         private static List<string> SplitSingleWord(string value)
         {
             List<string> splitString = new List<string>();
-            String[] reservedkeywords = {"if", "then", "else", "while", "class", "integer", "float", "do",
+            String[] reservedkeywords = {"(", ")", "==", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "=", "{", "}", "[", "]",
+            ";", ",", "::", ":", ".", "if", "then", "else", "while", "class", "integer", "float", "do",
             "end", "public", "private", "or", "and", "not", "read", "write", "return", "main", "inherits",
-            "local", "void", "==", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "=", "(", ")", "{", "}", "[", "]",
-            ";", ",", "::", ":", "."};
+            "local", "void"};
 
             foreach (string reserved in reservedkeywords)
             {

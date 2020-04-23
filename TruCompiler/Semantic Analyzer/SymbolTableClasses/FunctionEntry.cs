@@ -16,6 +16,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             Params = paramaters;
             foreach (ParamNode p in Params)
             {
+                if (p.Type == null)
+                {
+                    continue;
+                }
                 List<int> dims = new List<int>();
                 if (p.ArraySize != null)
                 {
@@ -28,7 +32,7 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                     }
                 }
                 SymbolTable classType = null;
-                if (p.Type.Value.Lexeme == Lexical_Analyzer.Tokens.Lexeme.id)
+                if (p.Type != null && p.Type.Value.Lexeme == Lexical_Analyzer.Tokens.Lexeme.id)
                 {
                     classType = table.SearchName(p.Type.Value.Value).SubTable;
                 }
@@ -94,7 +98,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             {
                 Params.ForEach(p =>
                 {
-                    result += p.Type.Value.Value + ",";
+                    if (p.Type != null)
+                    {
+                        result += p.Type.Value.Value + ",";
+                    }
                 });
                 result = result.TrimEnd(',');
             }

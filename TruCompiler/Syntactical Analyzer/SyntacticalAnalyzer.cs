@@ -18,21 +18,24 @@ namespace TruCompiler.Syntactical_Analyzer
 
         public static void CleanEmptyChildren(Node<Token> node, ref Node<Token> newnode)
         {
-            if (node.Value != null)
+            if (node != null && node.Value != null)
             {
                 newnode.Parent = node.Parent;
                 newnode.Value = node.Value;
             }
-            foreach (var child in node.Children)
+            if (node != null)
             {
-                var temp = new Node<Token>();
-                if (child.Value != null)
+                foreach (var child in node.Children)
                 {
-                    temp = newnode.AddChild(child.Value.Clone(), true);
-                }
-                if (child.Children.Count > 0)
-                {
-                    CleanEmptyChildren(child, ref temp);
+                    var temp = new Node<Token>();
+                    if (child.Value != null)
+                    {
+                        temp = newnode.AddChild(child.Value.Clone(), true);
+                    }
+                    if (child.Children.Count > 0)
+                    {
+                        CleanEmptyChildren(child, ref temp);
+                    }
                 }
             }
             return;

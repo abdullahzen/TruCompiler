@@ -14,19 +14,27 @@ namespace TruCompiler.Nodes
         public List<ArraySizeNode> ArraySize { get; set; }
         public ParamNode(Node<Token> parent, Node<Token> current) : base(parent, current)
         {
-            Type = (TypeNode)this.AddChild(new TypeNode(this, current[0]), true);
-            Name = (IdNode)this.AddChild(new IdNode(this, current[1]), true);
-            if (current.Children.Count > 2)
+            if (current.Children.Count > 1)
             {
-                ArraySize = new List<ArraySizeNode>();
-                for (int i = 2; i < current.Children.Count; i++)
+                Type = (TypeNode)this.AddChild(new TypeNode(this, current[0]), true);
+                Name = (IdNode)this.AddChild(new IdNode(this, current[1]), true);
+                if (current.Children.Count > 2)
                 {
-                    ArraySize.Add((ArraySizeNode)this.AddChild(new ArraySizeNode(this, current[i]), true));
+                    ArraySize = new List<ArraySizeNode>();
+                    for (int i = 2; i < current.Children.Count; i++)
+                    {
+                        ArraySize.Add((ArraySizeNode)this.AddChild(new ArraySizeNode(this, current[i]), true));
+                    }
+                }
+                else
+                {
+                    ArraySize = null;
                 }
             } else
             {
-                ArraySize = null;
+                parent.RemoveChild(current);
             }
+            
             this.Value.Line = current[0].Value.Line;
             this.Parent.Value.Line = current[0].Value.Line;
         }
