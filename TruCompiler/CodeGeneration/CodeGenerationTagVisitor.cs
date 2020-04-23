@@ -6,12 +6,12 @@ using TruCompiler.Semantic_Analyzer;
 using TruCompiler.Syntactical_Analyzer;
 using static TruCompiler.Lexical_Analyzer.Tokens;
 using static TruCompiler.Driver;
-using static TruCompiler.CodeGeneration.CodeGenerationHelper;
+using static TruCompiler.CodeGeneration.CodeGenerationTagHelper;
 using TruCompiler.Semantic_Analyzer.SymbolTableClasses;
 
 namespace TruCompiler.CodeGeneration
 {
-    public class CodeGenerationVisitor : Visitor<Token>
+    public class CodeGenerationTagVisitor : Visitor<Token>
     {
         private static int _StatementNumID = 1;
 
@@ -63,11 +63,21 @@ namespace TruCompiler.CodeGeneration
         {
             foreach (var child in node.Children){child.accept(this);}
         }
+        public override void visit(ExprNode node)
+        {
+            foreach (Node<Token> child in node.Children)
+            {
+                child.accept(this);
+            }
+        }
 
         public override void visit(VariableDeclNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
-            Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry); 
+            if (node.Entry != null)
+            {
+                Driver.GeneratedCode["Data"] += CodeGenerationTagHelper.ReserveData(node.Entry);
+            }
         }
 
         public override void visit(FuncDefsNode node)
@@ -77,35 +87,39 @@ namespace TruCompiler.CodeGeneration
 
         public override void visit(FuncDefNode node)
         {
-            Component = "Functions";
-            string functionTag = "";
-            if (node.FunctionHead.ClassName == null || node.FunctionHead.ClassName.Value.Value == "")
+            if (node.SymbolTable != null && node.Entry != null)
             {
-                GeneratedCode[Component] += String.Format("% Free function {0} %\n", node.FunctionHead.FunctionName.IdValue);
-                
-            } else
-            {
-                GeneratedCode[Component] += String.Format("% Function {0} in class {1} %\n", node.FunctionHead.FunctionName.IdValue, node.FunctionHead.ClassName.IdValue);
-                functionTag = "class_" + node.FunctionHead.ClassName.IdValue + "_";
+                Component = "Functions";
+                string functionTag = "";
+                if (node.FunctionHead.ClassName == null || node.FunctionHead.ClassName.Value.Value == "")
+                {
+                    GeneratedCode[Component] += String.Format("% Free function {0} %\n", node.FunctionHead.FunctionName.IdValue);
+
+                }
+                else
+                {
+                    GeneratedCode[Component] += String.Format("% Function {0} in class {1} %\n", node.FunctionHead.FunctionName.IdValue, node.FunctionHead.ClassName.IdValue);
+                    functionTag = "class_" + node.FunctionHead.ClassName.IdValue + "_";
+                }
+                functionTag += node.FunctionHead.FunctionName.IdValue + "_" + node.FunctionHead.ReturnType.Type;
+                node.FunctionHead.FParams.Params.ForEach(p =>
+                {
+                    functionTag += "_param_" + p.Type.Type;
+                    GeneratedCode["Data"] += ReserveData(p.Entry);
+                });
+                GeneratedCode[Component] += functionTag + "\n";
+                foreach (var child in node.Children) { child.accept(this); }
+                GeneratedCode[Component] += String.Format("% End of function {0} definition %\n\n", node.FunctionHead.FunctionName.IdValue);
+                Component = "Program";
+                node.Entry.Tag = functionTag;
+                AddedFunctions.Add(functionTag);
             }
-            functionTag += node.FunctionHead.FunctionName.IdValue + "_" + node.FunctionHead.ReturnType.Type;
-            node.FunctionHead.FParams.Params.ForEach(p =>
-            {
-                functionTag += "_param_" + p.Type.Type;
-                GeneratedCode["Data"] += ReserveData(p.Entry);
-            });
-            GeneratedCode[Component] += functionTag + "\n";
-            foreach (var child in node.Children){child.accept(this);}
-            GeneratedCode[Component] += String.Format("% End of function {0} definition %\n\n", node.FunctionHead.FunctionName.IdValue);
-            Component = "Program";
-            node.Entry.Tag = functionTag;
-            AddedFunctions.Add(functionTag);
         }
 
         public override void visit(AddOpNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
-            Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
+            Driver.GeneratedCode["Data"] += CodeGenerationTagHelper.ReserveData(node.Entry);
             GeneratedCode[Component] += AddOp(node.Left[0].Entry, node.Right[0].Entry, node.Operation.Value.Value, node.Entry);
         }
 
@@ -117,14 +131,14 @@ namespace TruCompiler.CodeGeneration
         public override void visit(MultOpNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
-            Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
+            Driver.GeneratedCode["Data"] += CodeGenerationTagHelper.ReserveData(node.Entry);
             GeneratedCode[Component] += MultOp(node.Left[0].Entry, node.Right[0].Entry, node.Operation.Value.Value, node.Entry);
         }
 
         public override void visit(NumNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
-            Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
+            Driver.GeneratedCode["Data"] += CodeGenerationTagHelper.ReserveData(node.Entry);
             GeneratedCode[Component] += StoreLiteralValue(node.Entry);
         }
 
@@ -134,7 +148,13 @@ namespace TruCompiler.CodeGeneration
             Node<Token> right = node.Right;
             while (right.Entry == null)
             {
-                right = right[0];
+                if (right.Children.Count > 0)
+                {
+                    right = right[0];
+                } else
+                {
+                    return;
+                }
             }
             GeneratedCode[Component] += AssignSides(node.Left.Entry, right.Entry);
         }
@@ -160,10 +180,13 @@ namespace TruCompiler.CodeGeneration
         public override void visit(FunctionCallNode node)
         {
             foreach (var child in node.Children){child.accept(this);}
-            GeneratedCode[Component] += "%- Start function call to function " + node.Name + " -%\n\n";
-            GeneratedCode[Component] += FunctionCall(node.AParams.Expressions, node.Name.IdValue, node.Entry, node);
-            GeneratedCode[Component] += "%- End of function call to function " + node.Name + " -%\n\n";
-            GeneratedCode["Data"] += ReserveData(node.Entry);
+            if (node.Entry != null)
+            {
+                GeneratedCode[Component] += "%- Start function call to function " + node.Name + " -%\n\n";
+                GeneratedCode[Component] += FunctionCall(node.AParams.Expressions, node.Name.IdValue, node.Entry, node);
+                GeneratedCode[Component] += "%- End of function call to function " + node.Name + " -%\n\n";
+                GeneratedCode["Data"] += ReserveData(node.Entry);
+            }
         }
 
         public override void visit(IdNode node)
@@ -198,7 +221,13 @@ namespace TruCompiler.CodeGeneration
             Node<Token> writeNode = node;
             while(writeNode.Entry == null)
             {
-                writeNode = writeNode[0];
+                if (writeNode.Children.Count > 0)
+                {
+                    writeNode = writeNode[0];
+                } else
+                {
+                    return;
+                }
             }
             GeneratedCode[Component] += WriteToConsole(writeNode.Entry);
         }
@@ -219,7 +248,7 @@ namespace TruCompiler.CodeGeneration
             if (left != null && right != null)
             {
                 GeneratedCode[Component] += RelExpr(left, right, node.RelOp.Value.Value, node.Entry);
-                Driver.GeneratedCode["Data"] += CodeGenerationHelper.ReserveData(node.Entry);
+                Driver.GeneratedCode["Data"] += CodeGenerationTagHelper.ReserveData(node.Entry);
             }
         }
 
@@ -284,7 +313,14 @@ namespace TruCompiler.CodeGeneration
             Node<Token> readNode = node;
             while (readNode.Entry == null)
             {
-                readNode = readNode[0];
+                if (readNode.Children.Count > 0)
+                {
+                    readNode = readNode[0];
+                }
+                else
+                {
+                    return;
+                }
             }
             GeneratedCode[Component] += ReadFromConsole(readNode.Entry);
         }

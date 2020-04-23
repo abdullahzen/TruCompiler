@@ -9,7 +9,7 @@ using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler.CodeGeneration
 {
-    public class CodeGenerationHelper
+    public class CodeGenerationTagHelper
     {
         public static Dictionary<string, bool> AvailableRegisters = new Dictionary<string, bool>
         { 
@@ -173,57 +173,52 @@ namespace TruCompiler.CodeGeneration
         public static string FunctionCall(List<ExprNode> expresions, string name, Entry returnVal, FunctionCallNode node)
         {
             string r = GetNextAvailableRegister();
-            FunctionEntry linkedFuncEntry = null;
+            List<String> paramsTypes = new List<string>();
+            node.AParams.Expressions.ForEach(p => paramsTypes.Add(p.Type));
+            FunctionEntry linkedFuncEntry = (FunctionEntry)node.SymbolTable.SearchFunctionNameAndParams(name, node.AParams.Expressions.Count, paramsTypes, node.Type);
+            if (node.Children.Count > 2 && linkedFuncEntry == null)
+            {
+                VariableEntry v = (VariableEntry)node.SymbolTable.SearchName(((IdNode)node[node.Children.Count - 3]).IdValue);
+                linkedFuncEntry = (FunctionEntry)v.ClassType.SearchFunctionNameAndParams(name, node.AParams.Expressions.Count, paramsTypes, node.Type);
+            }
             string result = "";
-            Node<Token> temp = node;
-            while (temp.Parent != null)
+            if (linkedFuncEntry != null)
             {
-                temp = temp.Parent;
-            }
-            FuncDefsNode funcs = ((ProgNode)temp[0]).FunctionDefinitions;
-
-            if (funcs != null && funcs.Children.Count > 0)
-            {
-                FuncDefNode func = (FuncDefNode)funcs.Children.Find(f => (f.Entry != null) ? f.Entry.Name == node.Name.IdValue : false);
-
-                if (func != null && func.Entry != null)
+                for (int i = 0; i < expresions.Count; i++)
                 {
-                    linkedFuncEntry = (FunctionEntry)func.Entry;
-                }
-            }
-
-            for (int i = 0; i < expresions.Count; i++)
-            {
-                result += "%- Passing function params -%\n";
-                if (expresions[i].Children.Count > 0)
-                {
-                    Node<Token> entry = expresions[i];
-                    while(entry.Entry == null)
+                    result += "%- Passing function params -%\n";
+                    if (expresions[i].Children.Count > 0)
                     {
-                        if (entry.Children.Count > 0)
+                        Node<Token> entry = expresions[i];
+                        while (entry.Entry == null)
                         {
-                            entry = entry[0];
-                        } else
-                        {
-                            break;
+                            if (entry.Children.Count > 0)
+                            {
+                                entry = entry[0];
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
+
+                        result += String.Format(
+                                "{0,-8}lw {1},{2}(R0)\n" +
+                                "{3,-8}sw {4}(R0),{1}\n\n",
+                                "", r, entry.Entry.Tag,
+                                "", linkedFuncEntry.Params[i].Entry.Tag);
                     }
 
-                    result += String.Format(
-                            "{0,-8}lw {1},{2}(R0)\n" +
-                            "{3,-8}sw {4}(R0),{1}\n\n",
-                            "", r, entry.Entry.Tag,
-                            "", linkedFuncEntry.Params[i].Entry.Tag);
                 }
-                
+                result += String.Format("%- Calling function -%\n" +
+                    "{0,-8}jl R15,{1}\n" +
+                    "{2,-8}sw {3}(R0),R1\n\n",
+                    "", linkedFuncEntry.Tag,
+                    "", returnVal.Tag);
+                AvailableRegisters[r] = true;
+                return result;
             }
-            result += String.Format("%- Calling function -%\n" +
-                "{0,-8}jl R15,{1}\n" + 
-                "{2,-8}sw {3}(R0),R1\n\n",
-                "", linkedFuncEntry.Tag,
-                "", returnVal.Tag);
-            AvailableRegisters[r] = true;
-            return result;
+            return "";
         }
 
         public static string MultOp(Entry left, Entry right, string op, Entry temp)

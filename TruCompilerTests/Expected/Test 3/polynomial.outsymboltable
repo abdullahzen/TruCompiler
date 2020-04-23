@@ -1,100 +1,109 @@
 
-======================================================================
-| table: global             scope size: 0                            |
-======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
+===============================================================================================
+| table: global             scope size: 0          | scope offset: 0                          |
+===============================================================================================
 |                | class     | POLYNOMIAL|
-|    ======================================================================
-|    | table: POLYNOMIAL         scope size: 4                            |
-|    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    | public          | function  | evaluate (float)  | evaluate  | float     | 4     |       |
-|    |    ======================================================================
-|    |    | table: evaluate           scope size: 8                            |
-|    |    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    |    |           | parameter | x         | param_x   | float     | 4     |       |
-|    |    |           | litval    | t1        | lit_t1    | integer   | 4     | 0     |
-|    |    ======================================================================
-|    ======================================================================
+|    ===============================================================================================
+|    | table: POLYNOMIAL         scope size: 0          | scope offset: 0                          |
+|    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    | public          | function  | evaluate (float)  | evaluate            | float     | 4     |       |
+|    |    ===============================================================================================
+|    |    | table: evaluate           scope size: 12         | scope offset: -12                        |
+|    |    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    |    |           | parameter | x         | param_x             | float     | 4     | -4    |       |
+|    |    |           | litval    | t1        | lit_t1              | integer   | 4     | -8    | 0     |
+|    |    ===============================================================================================
+|
+|    ===============================================================================================
+|
 |                | class     | LINEAR    | inherits POLYNOMIAL       |
-|    ======================================================================
-|    | table: LINEAR             scope size: 12                           |
-|    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    | private   | variable  | a         | class_LINEAR_var_a| float     | 4     |       |
-|    | private   | variable  | b         | class_LINEAR_var_b| float     | 4     |       |
-|    | public          | function  | build (float,float)  | build     | LINEAR    | 0     |       |
-|    |    ======================================================================
-|    |    | table: build              scope size: 20                           |
-|    |    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    |    |           | parameter | A         | param_A   | float     | 4     |       |
-|    |    |           | parameter | B         | param_B   | float     | 4     |       |
-|    |    |           | local     | new_function| class_build_var_new_function| LINEAR    | 12    |       | linked to LINEAR|
-|    |    ======================================================================
-|    | public          | function  | evaluate (float)  | evaluate  | float     | 4     |       |
-|    |    ======================================================================
-|    |    | table: evaluate           scope size: 20                           |
-|    |    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    |    |           | parameter | x         | param_x   | float     | 4     |       |
-|    |    |           | local     | result    | class_evaluate_var_result| float     | 4     |       |
-|    |    |           | litval    | t2        | lit_t2    | float     | 4     | 0     |
-|    |    |           | tempvar   | t3        | t3        | float     | 4     |       |
-|    |    |           | tempvar   | t4        | t4        | float     | 4     |       |
-|    |    ======================================================================
-|    ======================================================================
+|    ===============================================================================================
+|    | table: LINEAR             scope size: 8          | scope offset: -8                         |
+|    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    | private   | variable  | b         | member_LINEAR_var_b | float     | 4     | 0     |       |
+|    | private   | variable  | a         | member_LINEAR_var_a | float     | 4     | -4    |       |
+|    | public          | function  | build (float,float)  | build               | LINEAR    | 8     |       |
+|    |    ===============================================================================================
+|    |    | table: build              scope size: 24         | scope offset: -24                        |
+|    |    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    |    |           | local     | new_function| var_new_function    | LINEAR    | 8     | -8    |       | linked to LINEAR|
+|    |    |           | parameter | A         | param_A             | float     | 4     | -16   |       |
+|    |    |           | parameter | B         | param_B             | float     | 4     | -20   |       |
+|    |    ===============================================================================================
+|
+|    | public          | function  | evaluate (float)  | evaluate            | float     | 4     |       |
+|    |    ===============================================================================================
+|    |    | table: evaluate           scope size: 24         | scope offset: -24                        |
+|    |    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    |    |           | local     | result    | var_result          | float     | 4     | -4    |       |
+|    |    |           | parameter | x         | param_x             | float     | 4     | -8    |       |
+|    |    |           | litval    | t2        | lit_t2              | float     | 4     | -12   | 0     |
+|    |    |           | tempvar   | t3        | t3                  | float     | 4     | -16   |       |
+|    |    |           | tempvar   | t4        | t4                  | float     | 4     | -20   |       |
+|    |    ===============================================================================================
+|
+|    ===============================================================================================
+|
 |                | class     | QUADRATIC | inherits POLYNOMIAL       |
-|    ======================================================================
-|    | table: QUADRATIC          scope size: 16                           |
-|    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    | private   | variable  | a         | class_QUADRATIC_var_a| float     | 4     |       |
-|    | private   | variable  | b         | class_QUADRATIC_var_b| float     | 4     |       |
-|    | private   | variable  | c         | class_QUADRATIC_var_c| float     | 4     |       |
-|    | public          | function  | build (float,float,float)  | build     | QUADRATIC | 0     |       |
-|    |    ======================================================================
-|    |    | table: build              scope size: 28                           |
-|    |    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    |    |           | parameter | A         | param_A   | float     | 4     |       |
-|    |    |           | parameter | B         | param_B   | float     | 4     |       |
-|    |    |           | parameter | C         | param_C   | float     | 4     |       |
-|    |    |           | local     | new_function| class_build_var_new_function| QUADRATIC | 16    |       | linked to QUADRATIC|
-|    |    ======================================================================
-|    | public          | function  | evaluate (float)  | evaluate  | float     | 4     |       |
-|    |    ======================================================================
-|    |    | table: evaluate           scope size: 24                           |
-|    |    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    |    |           | parameter | x         | param_x   | float     | 4     |       |
-|    |    |           | local     | result    | class_evaluate_var_result| float     | 4     |       |
-|    |    |           | tempvar   | t5        | t5        | float     | 4     |       |
-|    |    |           | tempvar   | t6        | t6        | float     | 4     |       |
-|    |    |           | tempvar   | t7        | t7        | float     | 4     |       |
-|    |    |           | tempvar   | t8        | t8        | float     | 4     |       |
-|    |    ======================================================================
-|    ======================================================================
-|                 | function  | main ()  | main      | void      | 0     |       |
-|    ======================================================================
-|    | table: main               scope size: 72                           |
-|    ======================================================================
-|    | VISIBILITY| KIND      | NAME      | TAG       | TYPE      | SIZE  | NOTES |
-|    | Variable  | local     | f1        | var_f1    | LINEAR    | 12    |       | linked to LINEAR|
-|    | Variable  | local     | f2        | var_f2    | QUADRATIC | 16    |       | linked to QUADRATIC|
-|    | Variable  | local     | counter   | var_counter| integer   | 4     |       |
-|    |           | litval    | t9        | lit_t9    | integer   | 4     | 2     |
-|    |           | litval    | t10       | lit_t10   | float     | 4     | 3.5   |
-|    |           | retval    | retval_t11| retval_t11| LINEAR    | 0     |       |
-|    |           | litval    | t12       | lit_t12   | float     | 4     | 2     |
-|    |           | litval    | t13       | lit_t13   | float     | 4     | 1     |
-|    |           | litval    | t14       | lit_t14   | float     | 4     | 0     |
-|    |           | retval    | retval_t15| retval_t15| LINEAR    | 0     |       |
-|    |           | litval    | t16       | lit_t16   | integer   | 4     | 1     |
-|    |           | litval    | t17       | lit_t17   | integer   | 4     | 10    |
-|    |           | rel_tempvar| rel_t18   | rel_t18   | integer   | 4     |       |
-|    |           | retval    | retval_t19| retval_t19| float     | 4     |       |
-|    |           | retval    | retval_t20| retval_t20| float     | 4     |       |
-|    ======================================================================
-======================================================================
+|    ===============================================================================================
+|    | table: QUADRATIC          scope size: 12         | scope offset: -12                        |
+|    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    | private   | variable  | c         | member_QUADRATIC_var_c| float     | 4     | 0     |       |
+|    | private   | variable  | b         | member_QUADRATIC_var_b| float     | 4     | -4    |       |
+|    | private   | variable  | a         | member_QUADRATIC_var_a| float     | 4     | -8    |       |
+|    | public          | function  | build (float,float,float)  | build               | QUADRATIC | 12    |       |
+|    |    ===============================================================================================
+|    |    | table: build              scope size: 36         | scope offset: -36                        |
+|    |    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    |    |           | local     | new_function| var_new_function    | QUADRATIC | 12    | -12   |       | linked to QUADRATIC|
+|    |    |           | parameter | A         | param_A             | float     | 4     | -24   |       |
+|    |    |           | parameter | B         | param_B             | float     | 4     | -28   |       |
+|    |    |           | parameter | C         | param_C             | float     | 4     | -32   |       |
+|    |    ===============================================================================================
+|
+|    | public          | function  | evaluate (float)  | evaluate            | float     | 4     |       |
+|    |    ===============================================================================================
+|    |    | table: evaluate           scope size: 28         | scope offset: -28                        |
+|    |    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    |    |           | local     | result    | var_result          | float     | 4     | -4    |       |
+|    |    |           | parameter | x         | param_x             | float     | 4     | -8    |       |
+|    |    |           | tempvar   | t5        | t5                  | float     | 4     | -12   |       |
+|    |    |           | tempvar   | t6        | t6                  | float     | 4     | -16   |       |
+|    |    |           | tempvar   | t7        | t7                  | float     | 4     | -20   |       |
+|    |    |           | tempvar   | t8        | t8                  | float     | 4     | -24   |       |
+|    |    ===============================================================================================
+|
+|    ===============================================================================================
+|
+|                 | function  | main ()  | main                | void      | 0     |       |
+|    ===============================================================================================
+|    | table: main               scope size: 68         | scope offset: -68                        |
+|    ===============================================================================================
+|    | VISIBILITY| KIND      | NAME      | TAG                 | TYPE      | SIZE  | OFFSET| NOTES |
+|    | Variable  | local     | counter   | var_counter         | integer   | 4     | -4    |       |
+|    | Variable  | local     | f2        | var_f2              | QUADRATIC | 12    | -8    |       | linked to QUADRATIC|
+|    | Variable  | local     | f1        | var_f1              | LINEAR    | 8     | -20   |       | linked to LINEAR|
+|    |           | litval    | t9        | lit_t9              | integer   | 4     | -28   | 2     |
+|    |           | litval    | t10       | lit_t10             | float     | 4     | -32   | 3.5   |
+|    |           | retval    | retval_t11| retval_t11          | LINEAR    | 0     | -36   |       |
+|    |           | litval    | t12       | lit_t12             | float     | 4     | -36   | -2    |
+|    |           | litval    | t13       | lit_t13             | float     | 4     | -40   | 1     |
+|    |           | litval    | t14       | lit_t14             | float     | 4     | -44   | 0     |
+|    |           | retval    | retval_t15| retval_t15          | QUADRATIC | 0     | -48   |       |
+|    |           | litval    | t16       | lit_t16             | integer   | 4     | -48   | 1     |
+|    |           | litval    | t17       | lit_t17             | integer   | 4     | -52   | 10    |
+|    |           | rel_tempvar| rel_t18   | rel_t18             | integer   | 4     | -56   |       |
+|    |           | retval    | retval_t19| retval_t19          | float     | 4     | -60   |       |
+|    |           | retval    | retval_t20| retval_t20          | float     | 4     | -64   |       |
+|    ===============================================================================================
+|
+===============================================================================================
+|

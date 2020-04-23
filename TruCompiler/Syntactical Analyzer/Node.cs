@@ -9,7 +9,7 @@ using static TruCompiler.Lexical_Analyzer.Tokens;
 
 namespace TruCompiler.Syntactical_Analyzer
 {
-    public class Node<T>
+    public unsafe class Node<T>
     {
         private T _value;
         private List<Node<T>> _children = new List<Node<T>>();
@@ -18,6 +18,7 @@ namespace TruCompiler.Syntactical_Analyzer
         public Entry Entry { get; set; }
         public string TempVarName { get; set; }
         public string Type { get; set; }
+        public SymbolTable LocalTempSymbolTable { get; set; }
         public Node()
         {
         }

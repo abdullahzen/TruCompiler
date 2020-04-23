@@ -1,0 +1,27 @@
+
+Semantic Error : Function evaluate at line 24 is not declared in corresponding class POLYNOMIAL
+Semantic Error : Base class POLYNOMIAL not found for the subclass LINEAR at line 6
+Semantic Error : Base class POLYNOMIAL not found for the subclass QUADRATIC at line 14
+Semantic Error : Function evaluate at line 24 is not declared in corresponding class POLYNOMIAL
+Semantic Error : Variable a at line 34 is not defined in the current scope
+Semantic Error : Variable b at line 34 is not defined in the current scope
+Semantic Error : Variable a at line 34 is not defined in the current scope
+Semantic Error : Variable a at line 42 is not defined in the current scope
+Semantic Error : Variable b at line 43 is not defined in the current scope
+Semantic Error : Variable c at line 44 is not defined in the current scope
+Semantic Error : a is not a member of the object new_function at line 52
+Semantic Error : b is not a member of the object new_function at line 53
+Semantic Error : a is not a member of the object new_function at line 61
+Semantic Error : b is not a member of the object new_function at line 62
+Semantic Error : c is not a member of the object new_function at line 63
+Semantic Error : AddOp error left expression and right expression are not the same type at line 34
+Semantic Error : MultOp error left expression and right expression are not the same type at line 34
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 34
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 42
+Semantic Error : AddOp error left expression and right expression are not the same type at line 43
+Semantic Error : AddOp error left expression and right expression are not the same type at line 44
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 52
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 53
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 61
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 62
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 63

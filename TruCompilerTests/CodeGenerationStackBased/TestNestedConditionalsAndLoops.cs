@@ -7,7 +7,7 @@ using TruCompiler;
 using TruCompiler.CodeGeneration;
 using TruCompiler.FileManagement;
 
-namespace TruCompilerTests.CodeGeneration
+namespace TruCompilerTests.CodeGenerationStackBased
 {
     [TestClass]
     public class TestNestedConditionalsAndLoops
@@ -22,16 +22,16 @@ namespace TruCompilerTests.CodeGeneration
         public void TestInitialize()
         {
             InputFiles = new string[1];
-            InputFiles[0] = "..\\..\\..\\Input\\Test 7\\polynomial.src";
+            InputFiles = new string[1]; InputFiles[0] = "..\\..\\..\\Input\\Test 7\\polynomial.src";
             OutputPath = ".\\Test_7_Results\\";
             FileName = "polynomial.src";
-            FileWriter = new StubbedFileWriter();
         }
 
 
         [TestMethod]
         public void ComplexNestedConditionalsAndLoopsTest()
         {
+            FileWriter = new StubbedFileWriter();
             if (!Directory.Exists(OutputPath))
             {
                 Directory.CreateDirectory(OutputPath);
@@ -41,7 +41,7 @@ namespace TruCompilerTests.CodeGeneration
             string generatedCode = "";
 
             OutputPath = @".\Test_7_Results\\";
-            string codeFile = OutputPath + FileName + ".m";
+            string codeFile = OutputPath + FileName + "_stack.m";
             generatedCode = FileWriter.Read(codeFile);
             File.WriteAllText(codeFile, generatedCode);
 

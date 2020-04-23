@@ -20,15 +20,15 @@ namespace TruCompilerTests.SemanticAnalyzer
         public void TestInitialize()
         {
             InputFiles = new string[1];
-            InputFiles[0] = "..\\..\\..\\Input\\Test 1\\polynomial.src";
+            InputFiles = new string[1]; InputFiles[0] = "..\\..\\..\\Input\\Test 1\\polynomial.src";
             OutputPath = ".\\Test_1_Results\\";
             FileName = "polynomial.src";
-            FileWriter = new StubbedFileWriter();
         }
 
         [TestMethod]
         public void BaseClassNotFoundSemanticTest()
         {
+            FileWriter = new StubbedFileWriter();
             if (!Directory.Exists(OutputPath))
             {
                 Directory.CreateDirectory(OutputPath);
@@ -61,7 +61,8 @@ namespace TruCompilerTests.SemanticAnalyzer
         [TestMethod]
         public void BaseClassFoundSemanticWithNoErrorsTest()
         {
-            InputFiles[0] = "..\\..\\..\\Input\\Test 1\\polynomial_noerrors.src";
+            FileWriter = new StubbedFileWriter();
+            InputFiles = new string[1]; InputFiles[0] = "..\\..\\..\\Input\\Test 1\\polynomial_noerrors.src";
             FileName = "polynomial_noerrors.src";
             if (!Directory.Exists(OutputPath))
             {

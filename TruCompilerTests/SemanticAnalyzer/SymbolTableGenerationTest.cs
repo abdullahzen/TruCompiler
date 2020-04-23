@@ -20,15 +20,15 @@ namespace TruCompilerTests.SemanticAnalyzer
         public void TestInitialize()
         {
             InputFiles = new string[1];
-            InputFiles[0] = "..\\..\\..\\Input\\Test 3\\polynomial.src";
+            InputFiles = new string[1]; InputFiles[0] = "..\\..\\..\\Input\\Test 3\\polynomial.src";
             OutputPath = ".\\Test_3_Results\\";
             FileName = "polynomial.src";
-            FileWriter = new StubbedFileWriter();
         }
 
         [TestMethod]
         public void GenerateSymbolTableWithNoSemanticErrorsTest()
         {
+            FileWriter = new StubbedFileWriter();
             if (!Directory.Exists(OutputPath))
             {
                 Directory.CreateDirectory(OutputPath);

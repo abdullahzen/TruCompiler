@@ -1,0 +1,15 @@
+
+Semantic (Warning) : Function evaluate in class LINEAR at line 11 is shadowing the same member from inherited class POLYNOMIAL
+Semantic Error : Base class QUADRATIC not found for the subclass QUADRATIC at line 14
+Semantic Error : Variable a at line 42 is not defined in the current scope
+Semantic Error : Variable b at line 43 is not defined in the current scope
+Semantic Error : Variable c at line 44 is not defined in the current scope
+Semantic Error : a is not a member of the object new_function at line 61
+Semantic Error : b is not a member of the object new_function at line 62
+Semantic Error : c is not a member of the object new_function at line 63
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 42
+Semantic Error : AddOp error left expression and right expression are not the same type at line 43
+Semantic Error : AddOp error left expression and right expression are not the same type at line 44
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 61
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 62
+Semantic Error : AssignmentStatment error left expression and right expression are not the same type at line 63

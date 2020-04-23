@@ -11,18 +11,9 @@ namespace TruCompiler.Semantic_Analyzer
     public class SymbolTableVisitor : Visitor<Token>
     {
 		public static int TempNum { get; set; }
-		public string Output { get; set; }
 
 		public SymbolTableVisitor()
 		{
-		}
-
-		public SymbolTableVisitor(string output)
-		{
-			if (!String.IsNullOrEmpty(output))
-			{
-				Output = output;
-			}
 		}
 
 		public static string GetNewTempName()
@@ -35,23 +26,15 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
 
 		public override void visit(ProgNode node)
 		{
-			node.SymbolTable = new SymbolTable(0, "global", null);
-			
 			foreach(Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
-			}
-			if (!String.IsNullOrEmpty(Output))
-			{
-				Driver.WriteToFile(Output, node.SymbolTable.ToString());
 			}
 		}
 
@@ -60,7 +43,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach(Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 
@@ -69,7 +51,6 @@ namespace TruCompiler.Semantic_Analyzer
 		public override void visit(ClassNode node)
 		{
 			string className = node.Name.IdValue;
-			SymbolTable localClassTable = new SymbolTable(1, className, node.SymbolTable);
 			List<SymbolTable> inheritedClasses = new List<SymbolTable>();
 			if (node.InheritanceList != null)
 			{
@@ -99,24 +80,25 @@ namespace TruCompiler.Semantic_Analyzer
 				}
 				if (node.HasCircularInheritance())
 				{
+					node.SymbolTable.UpperTable.SymList.Remove(node.Entry);
 					Driver.SemanticErrors += String.Format("\nSemantic Error : Circular inheritance found on subclass {0} at line {1}", node.Name.IdValue, node.Value.Line);
 					return;
 				}
 			}
 
-			node.Entry = new ClassEntry(className, inheritedClasses, localClassTable);
-			if (node.SymbolTable.SearchName(className) != null)
+			((ClassEntry)node.Entry).InheritedClasses = inheritedClasses;
+			SymbolTable upper = node.SymbolTable.UpperTable;
+			List<Entry> originalList = new List<Entry>();
+			upper.SymList.ForEach(e => { originalList.Add(e); });
+			upper.SymList.Remove(node.Entry);
+			if (upper.SearchName(className) != null)
 			{
 				Driver.SemanticErrors += String.Format("\nSemantic Error : Double class definitions found for class {0} at line {1}", node.Name.IdValue, node.Value.Line);
-			} else
-			{
-				node.SymbolTable.addEntry(node.Entry);
-				node.SymbolTable = localClassTable;
 			}
+			upper.SymList = originalList;
 
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -125,7 +107,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -134,7 +115,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -154,7 +134,6 @@ namespace TruCompiler.Semantic_Analyzer
 				type = node.ReturnType.Value.Value;
 			}
 			string name = node.Name.IdValue;
-			SymbolTable localFunctionTable = new SymbolTable(2, name, node.SymbolTable);
 			List<ParamNode> paramsList = new List<ParamNode>();
 			foreach (ParamNode param in node.FParams.Params)
 			{
@@ -162,7 +141,11 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 
 			//Check for duplicate functions and aallow overloaded
-			foreach (Entry e in node.SymbolTable.SymList)
+			List<Entry> originalList = node.SymbolTable.UpperTable.SymList;
+			List<Entry> upperList = new List<Entry>();
+			originalList.ForEach(e => { upperList.Add(e); });
+			upperList.Remove(node.Entry);
+			foreach (Entry e in upperList)
 			{
 				if (e.Kind == "function" && e.Name == name)
 				{
@@ -176,13 +159,7 @@ namespace TruCompiler.Semantic_Analyzer
 					}
 				}
 			}
-
-			node.Entry = new FunctionEntry(visibility, type, name, paramsList, localFunctionTable);
 			
-			node.SymbolTable.addEntry(node.Entry);
-			node.SymbolTable = localFunctionTable;
-
-
 			//Check for shadowed members
 			ClassEntry memberClass = (ClassEntry)node.SymbolTable.SearchName(node.SymbolTable.UpperTable.Name);
 			if (memberClass != null)
@@ -270,20 +247,23 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 			
 			node.Entry = new VariableEntry(visibility, varType, type, name, dims, node.SymbolTable.Name, classType);
-			
-			node.SymbolTable.addEntry(node.Entry);
+			node.Name.Entry = node.Entry;
+			node.SymbolTable.addFirstEntry(node.Entry);
 
 			//Check for shadowed members
 			ClassEntry memberClass = (ClassEntry)node.SymbolTable.SearchName(node.SymbolTable.UpperTable.Name);
 			if (memberClass != null)
 			{
-				foreach (SymbolTable classSymbol in memberClass.InheritedClasses)
+				if (memberClass.InheritedClasses != null)
 				{
-					foreach (Entry e in classSymbol.SymList)
+					foreach (SymbolTable classSymbol in memberClass.InheritedClasses)
 					{
-						if (e.Kind == "variable" && e.Name == name)
+						foreach (Entry e in classSymbol.SymList)
 						{
-							Driver.SemanticErrors += String.Format("\nSemantic (Warning) : Variable {0} in class {1} at line {2} is shadowing the same member from inherited class {3}", name, memberClass.Name, node.Value.Line, classSymbol.Name);
+							if (e.Kind == "variable" && e.Name == name)
+							{
+								Driver.SemanticErrors += String.Format("\nSemantic (Warning) : Variable {0} in class {1} at line {2} is shadowing the same member from inherited class {3}", name, memberClass.Name, node.Value.Line, classSymbol.Name);
+							}
 						}
 					}
 				}
@@ -294,7 +274,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -302,7 +281,6 @@ namespace TruCompiler.Semantic_Analyzer
 		public override void visit(FuncDefNode node)
 		{
 			FuncHeadNode head = node.FunctionHead;
-			SymbolTable localFunctionTable = null;
 			string type = "";
 			string name = "";
 			name = head.FunctionName.IdValue;
@@ -319,14 +297,24 @@ namespace TruCompiler.Semantic_Analyzer
 				if (classList != null && classList.Classes.Count > 0)
 				{
 					ClassNode classNode = classList.Classes.Find(c => c.Name.IdValue == head.ClassName.IdValue);
-					if (classNode != null && classNode.Entry != null)
-					{
-						node.Entry = classNode.Entry.SubTable.SymList.Find(e => e.Name == name);
-						localFunctionTable = node.Entry.SubTable;
-					} else
+					if (classNode == null || classNode.Entry == null)
 					{
 						Driver.SemanticErrors += String.Format("\nSemantic Error : Function {0} at line {1} is not declared in corresponding class {2}", head.FunctionName.IdValue, head.FunctionName.Value.Line, head.ClassName.IdValue);
 						return;
+					} else
+					{
+						List<String> paramsTypes = new List<String>();
+						head.FParams.Params.ForEach(p => paramsTypes.Add(p.Type.Type));
+						FunctionEntry linkedFuncEntry = (FunctionEntry)node.SymbolTable.SearchFunctionNameAndParams(name, head.FParams.Params.Count, paramsTypes, head.ReturnType.Type);
+						if (linkedFuncEntry != null)
+						{
+							node.Entry = linkedFuncEntry;
+							
+						} else
+						{
+							Driver.SemanticErrors += String.Format("\nSemantic Error : Function {0} at line {1} is not declared in corresponding class {2}", head.FunctionName.IdValue, head.FunctionName.Value.Line, head.ClassName.IdValue);
+							return;
+						}
 					}
 				}
 				else
@@ -335,10 +323,8 @@ namespace TruCompiler.Semantic_Analyzer
 					return;
 				}
 			}
-			if (localFunctionTable == null)
+			if (freeFunction)
 			{
-
-				localFunctionTable = new SymbolTable(1, name, node.SymbolTable);
 				List<ParamNode> paramsList = new List<ParamNode>();
 				if (head != null && head.FParams != null && head.FParams.Params != null)
 				{
@@ -364,15 +350,17 @@ namespace TruCompiler.Semantic_Analyzer
 						}
 					}
 				}
-
-				node.Entry = new FunctionEntry(type, name, paramsList, localFunctionTable);
-				node.SymbolTable.addEntry(node.Entry);
+			}
+			if (node.Entry != null)
+			{
+				head.FParams.Params = ((FunctionEntry)node.Entry).Params;
+				node.FunctionHead.SymbolTable = node.SymbolTable;
+				node.FunctionBody.SymbolTable = node.SymbolTable;
+				node.FunctionBody.accept(this);
+			} else
+			{
 
 			}
-			node.SymbolTable = localFunctionTable;
-			node.FunctionHead.SymbolTable = node.SymbolTable;
-			node.FunctionBody.SymbolTable = node.SymbolTable;
-			node.FunctionBody.accept(this);
 		}
 
 
@@ -380,7 +368,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -389,7 +376,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach(Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 
@@ -404,7 +390,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 			String tempvarname = GetNewTempName();
@@ -419,7 +404,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 			String tempvarname = GetNewTempName();
@@ -436,12 +420,21 @@ namespace TruCompiler.Semantic_Analyzer
 			node.SymbolTable.addEntry(node.Entry);
 		}
 
+		public override void visit(ExprNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.accept(this);
+			}
+			node.Type = node[0].Type;
+		}
+
+
 		public override void visit(AssignStatementNode node)
 		{
 			node.Type = GetVariableType(node.Left, node);
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -450,33 +443,65 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 			GetType(node);
+			if (node.Children.Count > 0 && node[0].Value.Value == "Signed")
+			{
+				node[0][1].Entry.Notes = node[0][0].Value.Value + node[0][1].Entry.Notes;
+				node.Entry = node[0][1].Entry;
+			}
 		}
 
 		public override void visit(FunctionCallNode node)
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
-			node.Type = GetFunctionCallType(node, node);
+			SymbolTable symbolTable = node.SymbolTable;
+			string baseClass = "";
+			if (node.Children.Count > 2)
+			{
+				for(int i = 0; i < node.Children.Count - 2; i++)
+				{
+					Entry e = symbolTable.SearchName(node[i].Value.Value);
+					if (e != null)
+					{
+						baseClass = e.Type;
+					} else
+					{
+						Driver.SemanticErrors += String.Format("\nSemantic Error: variable or member {0} not defined at line {1}", node[i].Value.Value, node[i].Value.Line);
+						return;
+					}
+					symbolTable = symbolTable.SearchNameTable(node[i].Value.Value);
+				}
+			} 
+
+			node.Type = GetFunctionCallType(node, node, baseClass);
+
+			if (String.IsNullOrEmpty(node.Type))
+			{
+				Driver.SemanticErrors += String.Format("\nSemantic Error: Function {0} not defined at line {1}", node.Name.IdValue, node.Name.Value.Line);
+				return;
+			}
+
 			String tempvarname = "retval_" + GetNewTempName();
 			node.TempVarName = tempvarname;
 			string type = node.Type;
 
 			node.Entry = new VariableEntry("retval", type, node.TempVarName, null, null);
 			node.SymbolTable.addEntry(node.Entry);
+			if (symbolTable != null)
+			{
+				node.SymbolTable = symbolTable;
+			}
 		}
 
 		public override void visit(ReturnStatementNode node)
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 			ArithExprNode arith = node.Expression.ArithExpr;
@@ -495,7 +520,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 			ArithExprNode arith = node.Expression.ArithExpr;
@@ -514,7 +538,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 			ArithExprNode arith1 = node.LeftArithExpr;
@@ -535,27 +558,65 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
+
 			node.Entry = node.SymbolTable.SearchName(node.Name);
+			if (node.Entry == null || node.Children.Count > 1)
+			{
+				var temp = node[0];
+				var tempEntry = node.SymbolTable.SearchName(((IdNode)node[0]).IdValue);
+				node[0].Entry = tempEntry;
+				for(int i = 1; i < node.Children.Count; i++)
+				{
+					if (node[i].Value.Value != "ArraySizeValue")
+					{
+						if (tempEntry == null)
+						{
+							Driver.SemanticErrors += String.Format("Semantic Error: Variable {0} reference is null at line {1}.", ((IdNode)temp).IdValue , temp.Value.Line);
+							node.Entry = null;
+							Entry removedEntry = null;
+							foreach(Entry entry in node.SymbolTable.UpperTable.SymList)
+							{
+								if (entry.SubTable != null && entry.SubTable == node.SymbolTable)
+								{
+									removedEntry = entry;
+									break;
+								}
+							}
+							if (removedEntry != null)
+							{
+								node.SymbolTable.UpperTable.SymList.Remove(removedEntry);
+								Node<Token> tempNode = node;
+								while (tempNode.Value.Value != "Function")
+								{
+									tempNode = tempNode.Parent;
+								}
+								tempNode.Entry = null;
+								tempNode.SymbolTable = tempNode.SymbolTable.UpperTable;
+							}
+							break;
+						}
+						if (((VariableEntry)tempEntry).ClassType != null)
+						{
+							node.Entry = ((VariableEntry)tempEntry).ClassType.SearchName(((IdNode)node[i]).IdValue);
+							node[i].Entry = node.Entry;
+						}
+					} else
+					{
+						node.Entry = tempEntry;
+						break;
+					}
+					temp = node[i];
+					tempEntry = node.Entry;
+				}
+			}
 		}
 
 		public override void visit(MainNode node)
 		{
-			FuncBodyNode mainFunction = node.FuncBody;
-			string type = "void";
-			string name = "main";
-			SymbolTable localFunctionTable = new SymbolTable(1, name, node.SymbolTable);
-			List<ParamNode> paramsList = new List<ParamNode>();
-		
-			node.Entry = new FunctionEntry(type, name, paramsList, localFunctionTable);
-
-			node.SymbolTable.addEntry(node.Entry);
-			node.SymbolTable = localFunctionTable;
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -565,7 +626,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 			node.TempVarName = node.IdValue;
@@ -575,7 +635,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -584,7 +643,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -593,7 +651,6 @@ namespace TruCompiler.Semantic_Analyzer
 		{
 			foreach (Node<Token> child in node.Children)
 			{
-				child.SymbolTable = node.SymbolTable;
 				child.accept(this);
 			}
 		}
@@ -612,9 +669,35 @@ namespace TruCompiler.Semantic_Analyzer
 							case "Signed":
 								type = ((NumNode)((SignNode)node[0]).Factor).Type;
 								node.Type = type;
+
 								break;
 							case "FunctionCall":
-								type = GetFunctionCallType((FunctionCallNode)node[0], node);
+								SymbolTable symbolTable = node.SymbolTable;
+								string baseClass = "";
+								if (node[0].Children.Count > 2)
+								{
+									for (int i = 0; i < node[0].Children.Count - 2; i++)
+									{
+										Entry e = symbolTable.SearchName(node[0][i].Value.Value);
+										if (e != null)
+										{
+											baseClass = e.Type;
+										}
+										else
+										{
+											Driver.SemanticErrors += String.Format("\nSemantic Error: variable or member {0} not defined at line {1}", node[0][i].Value.Value, node[0][i].Value.Line);
+											type = "invalidType";
+										}
+										symbolTable = symbolTable.SearchNameTable(node[0][i].Value.Value);
+									}
+								}
+								if (type != "invalidType")
+								{
+									type = GetFunctionCallType((FunctionCallNode)node[0], node, baseClass);
+									node.Type = type;
+									node[0].Type = type;
+								}
+
 								break;
 							case "Variable":
 								VariableNode variable = (VariableNode)node[0];
@@ -645,6 +728,7 @@ namespace TruCompiler.Semantic_Analyzer
 				{
 					type = entry.Type;
 					node.Type = type;
+					variable.Type = type;
 				}
 				else
 				{
@@ -685,6 +769,7 @@ namespace TruCompiler.Semantic_Analyzer
 						{
 							type = tempEntry.Type;
 							node.Type = type;
+							variable.Type = type;
 						}
 					}
 					else
@@ -721,6 +806,7 @@ namespace TruCompiler.Semantic_Analyzer
 						{
 							type = tempEntry.Type;
 							node.Type = type;
+							variable.Type = type;
 						}
 					}
 					else
@@ -733,7 +819,7 @@ namespace TruCompiler.Semantic_Analyzer
 			return type;
 		}
 
-		public static string GetFunctionCallType(FunctionCallNode functionCall, Node<Token> node)
+		public static string GetFunctionCallType(FunctionCallNode functionCall, Node<Token> node, string baseClass)
 		{
 			string type = "";
 			Node<Token> temp = node;
@@ -745,14 +831,37 @@ namespace TruCompiler.Semantic_Analyzer
 
 			if (funcs != null && funcs.Children.Count > 0)
 			{
-				FuncDefNode func = (FuncDefNode)funcs.Children.Find(f => (f.Entry != null) ? f.Entry.Name == functionCall.Name.IdValue : false);
-				
+				FuncDefNode func = (FuncDefNode)funcs.Children.Find(f => IsFunctionEqual((FuncDefNode)f, functionCall, baseClass));
+
 				if (func != null && func.Entry != null)
 				{
 					type = func.Entry.Type;
 					node.Type = type;
+					functionCall.Type = type;
 				}
-				else
+				else if (!String.IsNullOrEmpty(baseClass)) {
+					if (node.SymbolTable.SearchName(baseClass) != null)
+					{
+						foreach (SymbolTable c in ((ClassEntry)node.SymbolTable.SearchName(baseClass)).InheritedClasses)
+						{
+							type = GetFunctionCallType(functionCall, node, c.Name);
+							if (type != "invalidType" && !String.IsNullOrEmpty(type))
+							{
+								node.Type = type;
+								functionCall.Type = type;
+								break;
+							}
+						}
+					} else
+					{
+						type = "invalidType";
+					}
+					
+					if (type == "invalidType")
+					{
+						Driver.SemanticErrors += String.Format("\nSemantic Error : Call to undeclared Function {0} at line {1}", functionCall.Name.IdValue, functionCall.Name.Value.Line);
+					}
+				} else
 				{
 					Driver.SemanticErrors += String.Format("\nSemantic Error : Call to undeclared Function {0} at line {1}", functionCall.Name.IdValue, functionCall.Name.Value.Line);
 					type = "invalidType";
@@ -766,5 +875,25 @@ namespace TruCompiler.Semantic_Analyzer
 			return type;
 		}
 
+		public static bool IsFunctionEqual(FuncDefNode f, FunctionCallNode functionCall, string baseClass)
+		{
+			if (f.Entry != null)
+			{
+				if (f.Entry.Name != functionCall.Name.IdValue)
+				{
+					return false;
+				}
+				else if (((FunctionEntry)f.Entry).Params.Count != functionCall.AParams.Children.Count)
+				{
+					return false;
+				}
+				else if (!String.IsNullOrEmpty(baseClass) && f.FunctionHead.ClassName.IdValue != baseClass)
+				{
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
 	}
 }

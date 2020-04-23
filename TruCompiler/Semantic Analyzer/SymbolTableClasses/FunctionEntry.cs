@@ -35,6 +35,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 p.Entry = new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, dims, classType, name);
                 SubTable.addEntry(p.Entry);
             }
+            if (type == "void")
+            {
+                Size = 0;
+            }
         }
 
         public FunctionEntry(string visibility, string type, string name, List<ParamNode> paramaters, SymbolTable table) : base("function", type, name, table)
@@ -59,7 +63,12 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 {
                     classType = table.SearchName(p.Type.Value.Value).SubTable;
                 }
-                SubTable.addEntry(new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, dims, classType));
+                p.Entry = new VariableEntry("parameter", p.Type.Type, p.Name.IdValue, dims, classType);
+                SubTable.addEntry(p.Entry);
+            }
+            if (type == "void")
+            {
+                Size = 0;
             }
         }
 
@@ -70,7 +79,7 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 String.Format("{0,-12}", "| " + Kind) +
                 String.Format("{0,-4}", "| " + Name) +
                 GetParamsString() +
-                String.Format("{0,-12}", "| " + Tag) +
+                String.Format("{0,-22}", "| " + Tag) +
                 String.Format("{0,-12}", "| " + Type) +
                 String.Format("{0,-8}", "| " + Size) +
                 String.Format("{0,-8}", "| " + Notes) +

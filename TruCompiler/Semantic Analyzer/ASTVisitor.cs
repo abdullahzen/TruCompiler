@@ -74,6 +74,11 @@ namespace TruCompiler.Semantic_Analyzer
             GenerateDiGraph(node);
         }
 
+        public override void visit(ExprNode node)
+        {
+            GenerateDiGraph(node);
+        }
+
         public override void visit(FuncDefsNode node)
         {
             GenerateDiGraph(node);

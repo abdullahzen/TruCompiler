@@ -43,7 +43,7 @@ namespace TruCompiler.Nodes
 
         public bool HasCircularInheritance()
         {
-            return HasCircularInheritance(new List<ClassNode>());
+            return HasCircularInheritance(null);
         }
 
         public bool HasCircularInheritance(List<ClassNode> visitedClasses)
@@ -52,6 +52,7 @@ namespace TruCompiler.Nodes
             if (visitedClasses == null)
             {
                 visitedClasses = new List<ClassNode>();
+                visitedClasses.Add(this);
             } 
             if (InheritanceList != null && InheritanceList.Children.Count > 0)
             {
@@ -73,9 +74,9 @@ namespace TruCompiler.Nodes
                 }
             } else
             {
-                return false;
+                return hasCircular;
             }
-            return false;
+            return hasCircular;
         }
     }
 }

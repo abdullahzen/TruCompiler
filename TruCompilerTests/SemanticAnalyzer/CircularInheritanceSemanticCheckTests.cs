@@ -20,15 +20,15 @@ namespace TruCompilerTests.SemanticAnalyzer
         public void TestInitialize()
         {
             InputFiles = new string[1];
-            InputFiles[0] = "..\\..\\..\\Input\\Test 2\\polynomial.src";
+            InputFiles = new string[1]; InputFiles[0] = "..\\..\\..\\Input\\Test 2\\polynomial.src";
             OutputPath = ".\\Test_2_Results\\";
             FileName = "polynomial.src";
-            FileWriter = new StubbedFileWriter();
         }
 
         [TestMethod]
         public void SemanticCheckForCircularInheritance()
         {
+            FileWriter = new StubbedFileWriter();
             if (!Directory.Exists(OutputPath))
             {
                 Directory.CreateDirectory(OutputPath);

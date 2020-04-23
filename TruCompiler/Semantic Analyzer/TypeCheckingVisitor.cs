@@ -43,7 +43,7 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 			if (String.IsNullOrEmpty(rightType))
 			{
-				node.Right.Type = GetType(node.Right.ArithExpr);
+				node.Right.Type = node.Right.ArithExpr.Type;
 				if (String.IsNullOrEmpty(node.Right.Type))
 				{
 					Node<Token> temp = node.Right;
@@ -78,7 +78,7 @@ namespace TruCompiler.Semantic_Analyzer
 			String rightType = node.RightArithExpr.Type;
 			if (String.IsNullOrEmpty(leftType))
 			{
-				node.LeftArithExpr.Type = GetType(node.LeftArithExpr);
+				node.LeftArithExpr.Type = node.LeftArithExpr.Type;
 				if (String.IsNullOrEmpty(node.LeftArithExpr.Type))
 				{
 					Node<Token> temp = node.LeftArithExpr;
@@ -96,7 +96,7 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 			if (String.IsNullOrEmpty(rightType))
 			{
-				node.RightArithExpr.Type = GetType(node.RightArithExpr);
+				node.RightArithExpr.Type = node.RightArithExpr.Type;
 				if (String.IsNullOrEmpty(node.RightArithExpr.Type))
 				{
 					Node<Token> temp = node.RightArithExpr;
@@ -400,6 +400,14 @@ namespace TruCompiler.Semantic_Analyzer
 			}
 		}
 
+		public override void visit(ExprNode node)
+		{
+			foreach (Node<Token> child in node.Children)
+			{
+				child.accept(this);
+			}
+		}
+
 		public override void visit(VariableNode node)
 		{
 			foreach (Node<Token> child in node.Children)
@@ -477,7 +485,7 @@ namespace TruCompiler.Semantic_Analyzer
 		public static string GetVariableType(VariableNode variable, Node<Token> node)
 		{
 			string type = "";
-			if (variable.Children.Count == 1)
+			if (variable.Children.Count == 1 && node.SymbolTable != null)
 			{
 				Entry entry = node.SymbolTable.SearchName(variable.Name);
 				if (entry != null)
@@ -535,37 +543,40 @@ namespace TruCompiler.Semantic_Analyzer
 				else
 				{
 					string firstVar = ((IdNode)variable[0]).IdValue;
-					Entry entry = node.SymbolTable.SearchName(firstVar);
-					if (entry != null)
+					if (node.SymbolTable != null)
 					{
-						int count = variable.Children.Count;
-						int index = 1;
-						VariableEntry tempEntry = (VariableEntry)entry;
-						while (count != 0)
+						Entry entry = node.SymbolTable.SearchName(firstVar);
+						if (entry != null)
 						{
-							if (tempEntry.ClassType != null)
+							int count = variable.Children.Count;
+							int index = 1;
+							VariableEntry tempEntry = (VariableEntry)entry;
+							while (count != 0)
 							{
-								tempEntry = (VariableEntry)tempEntry.ClassType.SearchName(((IdNode)variable[index]).IdValue);
+								if (tempEntry.ClassType != null)
+								{
+									tempEntry = (VariableEntry)tempEntry.ClassType.SearchName(((IdNode)variable[index]).IdValue);
+								}
+								if (tempEntry == null)
+								{
+									//Driver.SemanticErrors += String.Format("\nSemantic Error : {0} is not a member of the object {1} at line {2}", ((IdNode)variable[index]).IdValue, firstVar, node.Value.Line);
+									type = "invalidType";
+									break;
+								}
+								count--;
+								index++;
 							}
-							if (tempEntry == null)
+							if (tempEntry != null)
 							{
-								//Driver.SemanticErrors += String.Format("\nSemantic Error : {0} is not a member of the object {1} at line {2}", ((IdNode)variable[index]).IdValue, firstVar, node.Value.Line);
-								type = "invalidType";
-								break;
+								type = tempEntry.Type;
+								node.Type = type;
 							}
-							count--;
-							index++;
 						}
-						if (tempEntry != null)
+						else
 						{
-							type = tempEntry.Type;
-							node.Type = type;
+							//Driver.SemanticErrors += String.Format("\nSemantic Error : Variable {0} at line {1} is not defined in the current scope", firstVar, node.Value.Line);
+							type = "invalidType";
 						}
-					}
-					else
-					{
-						//Driver.SemanticErrors += String.Format("\nSemantic Error : Variable {0} at line {1} is not defined in the current scope", firstVar, node.Value.Line);
-						type = "invalidType";
 					}
 				}
 			}

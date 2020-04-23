@@ -16,10 +16,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
             ClassType = classType;
             if (Kind == "local" || Kind == "variable")
             {
-                if (visibility != null && visibility != "Variable") 
+                if (visibility != null && visibility != "Variable" && visibility != "") 
                 {
                     ClassName = className;
-                    Tag = "class_" + ClassName + "_var_" + Name;
+                    Tag = "member_" + ClassName + "_var_" + Name;
                 } else
                 {
                     Tag = "var_" + Name;
@@ -106,9 +106,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
                 String.Format("{0,-12}", "| " + Visibility) +
                 String.Format("{0,-12}", "| " + Kind) +
                 String.Format("{0,-12}", "| " + Name) +
-                String.Format("{0,-12}", "| " + Tag) +
+                String.Format("{0,-22}", "| " + Tag) +
                 String.Format("{0,-12}", "| " + Type) +
                 String.Format("{0,-8}", "| " + Size) +
+                String.Format("{0,-8}", "| " + Offset) +
                 String.Format("{0,-8}", "| " + Notes) +
                 (ClassType != null ? String.Format("{0,-6}", "| linked to " + ClassType.Name) : "")
                 + "|";
@@ -116,17 +117,10 @@ namespace TruCompiler.Semantic_Analyzer.SymbolTableClasses
 
         public int GetSize()
         {
-            int size = 0;
+            int size = Size;
             if (Dims != null && Dims.Count > 0)
             {
-                Dims.ForEach(d => { if (d != 0) { size += d * Size; } });
-            } else
-            {
-                size = Size;
-            }
-            if (size == 0)
-            {
-                size = Size;
+                Dims.ForEach(d => { if (d != 0) { size *= d; } });
             }
             return size;
         }

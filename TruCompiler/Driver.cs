@@ -158,38 +158,73 @@ namespace TruCompiler
                     }
 
                     SemanticErrors = "";
-                    SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(symTablePath);
+                    SymbolTableFirstRunVisitor symbolTableFirstRunVisitor = new SymbolTableFirstRunVisitor();
+                    startNode.accept(symbolTableFirstRunVisitor);
+                    SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
                     startNode.accept(symbolTableVisitor);
                     TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
                     startNode.accept(typeCheckingVisitor);
+                    ComputeOffsetVisitor computeOffset = new ComputeOffsetVisitor();
+                    startNode.accept(computeOffset);
 
-                    
+
                     if (Directory.Exists(OutputPath))
                     {
                         string outsemanticerros = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".outsemanticerrors";
 
                         WriteToFile(outsemanticerros, SemanticErrors);
+                        WriteToFile(symTablePath, startNode[0].SymbolTable.ToString());
                     }
 
-                    //CodeGeneration
-                    CodeGenerationVisitor codeGenVisitor = new CodeGenerationVisitor();
-                    startNode.accept(codeGenVisitor);
-
-                    string generatedCodeFile = "";
-                    foreach(var key in GeneratedCode.Keys)
+                    try
                     {
-                        generatedCodeFile += GeneratedCode[key] + "\n";
-                    }
-                    generatedCodeFile = generatedCodeFile.Trim('\n');
-                    if (Directory.Exists(OutputPath))
+                        //CodeGeneration using tag
+                        CodeGenerationTagVisitor codeGenVisitor = new CodeGenerationTagVisitor();
+                        startNode.accept(codeGenVisitor);
+
+                        string generatedCodeFile = "";
+                        foreach (var key in GeneratedCode.Keys)
+                        {
+                            generatedCodeFile += GeneratedCode[key] + "\n";
+                        }
+                        generatedCodeFile = generatedCodeFile.Trim('\n');
+                        if (Directory.Exists(OutputPath))
+                        {
+                            string outCodeGen = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + "_tag.m";
+
+                            WriteToFile(outCodeGen, generatedCodeFile);
+                        }
+
+
+
+                        //CodeGeneration using stack
+                        GeneratedCode = new Dictionary<string, string>();
+                        GeneratedCode.Add("Functions", "%- Functions -%\n");
+                        GeneratedCode.Add("Program", "%- Program -%\n");
+                        GeneratedCode.Add("Data", "%- Data -%\n");
+                        GeneratedCode.Add("Procedures", "%- Procedures -%\n");
+                        AddedProcedures = new HashSet<string>();
+                        AddedFunctions = new HashSet<string>();
+
+                        CodeGenerationStackVisitor codeGenVisitorStack = new CodeGenerationStackVisitor();
+                        startNode.accept(codeGenVisitorStack);
+
+                        generatedCodeFile = "";
+                        foreach (var key in GeneratedCode.Keys)
+                        {
+                            generatedCodeFile += GeneratedCode[key] + "\n";
+                        }
+                        generatedCodeFile = generatedCodeFile.Trim('\n');
+                        if (Directory.Exists(OutputPath))
+                        {
+                            string outCodeGen = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + "_stack.m";
+
+                            WriteToFile(outCodeGen, generatedCodeFile);
+                        }
+                    } catch (Exception)
                     {
-                        string outCodeGen = OutputPath + file.Substring(file.LastIndexOf("\\"), file.LastIndexOf(".") - OutputPath.Length) + ".m";
-
-                        WriteToFile(outCodeGen, generatedCodeFile);
+                        Console.WriteLine("No code was generated due to fatal compilation errors in the previous phases.");
                     }
-
-
-
                 }
             } catch (Exception e)
             {
