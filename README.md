@@ -20,5 +20,5 @@
 `dotnet test --configuration Release`
 
 >Please note that all the test cases include accepted, edge and extreme cases in the TruCompilerTests.
-
+>Note that the unit tests for the semantic analyzer need to be re-run individually in order for them to pass, it's due to file access issues on windows.
 Private github repo: https://github.com/abdullahzen/TruCompiler
